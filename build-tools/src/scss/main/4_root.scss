@@ -1,0 +1,88 @@
+:root {
+  --black: #000000;
+  --main-color: #1E1E1E;
+
+  --light-red: #D24545;
+  --red: #F42800;
+  --dark-red: #A20A00;
+
+  --green: #6FBC7B;
+
+  --grey: #DADADA;
+  --dark-grey: #868686;
+  --light-grey: #F5F5F5;
+
+  --white: #FFFFFF;
+
+  --gradient-grey: linear-gradient(90deg, #FFFFFF 18.33%, #F6F6F6 84.5%);
+
+  --button-border-radius: 4px;
+  --border-radius: 8px;
+
+  // Fonts
+  --h1-font-size: 4.25rem;
+  --h1-font-weight: 800;
+  --h1-line-height: 4.25rem;
+  --h1-font-family: "Wix Madefor Display", sans-serif;
+
+  --h2-font-size: 2rem;
+  --h2-font-weight: normal;
+  --h2-line-height: 2rem;
+  --h2-font-family: "Wix Madefor Display", sans-serif;
+
+  --h3-font-size: 1.5rem;
+  --h3-font-weight: normal;
+  --h3-line-height: 1.8rem;
+  --h3-font-family: "Wix Madefor Display", sans-serif;
+
+  --txt-normal-font-size: 1rem;
+  --txt-normal-font-weight: normal;
+  --txt-normal-line-height: 1.3rem;
+
+  --txt-medium-font-size: 1rem;
+  --txt-medium-font-weight: 500;
+  --txt-medium-line-height: 1.4rem;
+
+  --subtitle-font-size: 0.625rem;
+  --subtitle-font-weight: 400;
+  --subtitle-line-height: 0.813rem;
+
+  --txt-s-font-size: 0.875rem;
+  --txt-s-font-weight: 400;
+  --txt-s-line-height: 1.225rem;
+
+  --txt-mobile-s-font-size: 0.875rem;
+  --txt-mobile-s-font-weight: 400;
+  --txt-mobile-s-line-height: 1.138rem;
+
+  --txt-mobile-xs-font-size: 0.75rem;
+  --txt-mobile-xs-font-weight: 400;
+  --txt-mobile-xs-line-height: 0.975rem;
+
+  --button-m-font-size: 1rem;
+  --button-m-font-weight: 600;
+  --button-m-line-height: 1.3rem;
+  --button-m-letter-spacing: 0.01em;
+
+  --button-L-font-size: 1.25rem;
+  --button-L-font-weight: 600;
+  --button-L-line-height: 1.625rem;
+  --button-L-letter-spacing: 0.01em;
+
+  --menu-active-item-font-size: 1rem;
+  --menu-active-item-font-weight: 500;
+  --menu-active-item-line-height: 1.3rem;
+  --menu-active-item-letter-spacing: -0.02em;
+
+  --price-main-font-size: 1rem;
+  --price-main-font-weight: 800;
+  --price-main-line-height: 1.3rem;
+  --price-main-letter-spacing: 0.01em;
+
+  --price-old-font-size: 0.875rem;
+  --price-old-font-weight: 500;
+  --price-old-line-height: 1.138rem;
+  --price-old-letter-spacing: 0.01em;
+
+  --width-page: 1240px;
+}
