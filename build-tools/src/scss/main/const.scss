@@ -121,6 +121,10 @@ main#main {
 
 a {
   color: var(--main-color);
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .wrap-header,
@@ -142,7 +146,7 @@ a {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  justify-content: space-between;
+  //justify-content: space-between;
 }
 
 .in-basket {
@@ -239,23 +243,37 @@ input[type="week"] {
   margin: 24px 0;
 }
 
+.margin-bottom-24 {
+  margin-bottom: 24px;
+}
+
+.margin-top-64 {
+  margin-top: 64px;
+}
+
+.margin-bottom-64 {
+  margin-bottom: 64px;
+}
+
 .style-404 {
   .search-form {
     input.search-field {
-      border: 1px solid var(--green);
+      border: 1px solid var(--red);
     }
 
     input.search-submit {
-      border: 1px solid #b6b6b6;
-      border-radius: 8px;
-      cursor: pointer;
-      position: relative;
-      background-color: var(--dark-green);
+      background-color: var(--dark-red);
       color: var(--white);
-      padding: 19px 1.5rem;
-      font-size: 1rem;
-      font-weight: var(--subtitle-font-weight);
-      line-height: var(--subtitle-line-height);
+      max-width: 245px;
+      width: 100%;
+      border-radius: var(--border-radius);
+      padding: 16px 0;
+      font-size: var(--button-L-font-size);
+      font-weight: var(--button-L-font-weight);
+      line-height: var(--button-L-line-height);
+      letter-spacing: var(--button-L-letter-spacing);
+      border: none;
+      vertical-align: middle;
     }
   }
 }
@@ -332,8 +350,24 @@ input[type="week"] {
   margin-top: 32px;
 }
 
-a {
+a, button {
   &:hover {
     cursor: pointer;
+  }
+}
+
+//скрытие описания категории товара на странице категорий и кол-ва товара в категории или на странице магазина
+#primary .wrap .entry-content .term-description,
+#primary .container .woocommerce-result-count {
+  display: none;
+}
+
+.woocommerce-info {
+  color: var(--red);
+  border: none;
+  background-color: unset;
+
+  &::before {
+    content: none;
   }
 }

@@ -31,6 +31,11 @@ get_header();
 			endwhile; // End of the loop.
 			?>
 		</div>
+		<?php if(is_product_category() || is_shop()): ?>
+			<div class="block-search">
+				<?php echo do_shortcode('[search_block_custom]'); ?>
+			</div>
+		<?php endif; ?>
 	</main><!-- #main -->
 
 <?php

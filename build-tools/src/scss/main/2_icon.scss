@@ -42,6 +42,13 @@
   margin-left: -1em;
   color: rgb(162, 10, 0);
 }
+.icon-Arrow-down:before {
+  content: "\e931";
+}
+.icon-Search-3:before {
+  content: "\e930";
+  color: #d24545;
+}
 .icon-Checkbox-2 .path1:before {
   content: "\e904";
   color: rgb(244, 40, 0);
@@ -72,15 +79,15 @@
   color: #d24545;
 }
 .icon-Checkedno:before {
-  content: "\e90e";
+  content: "\e91d";
   color: #acacac;
 }
 .icon-check-circle-5:before {
-  content: "\e912";
+  content: "\e91c";
   color: #6fbc7b;
 }
 .icon-no-entry-2:before {
-  content: "\e913";
+  content: "\e91b";
   color: #e49f36;
 }
 .icon-close-filled-2:before {
@@ -101,15 +108,15 @@
   color: #6fbc7b;
 }
 .icon-carbon_delivery-3:before {
-  content: "\e91b";
+  content: "\e927";
   color: #d24545;
 }
 .icon-iconoir_box-iso-3:before {
-  content: "\e91c";
+  content: "\e926";
   color: #d24545;
 }
 .icon-house-2:before {
-  content: "\e91d";
+  content: "\e923";
   color: #d24545;
 }
 .icon-deliver-hand-2:before {
@@ -133,7 +140,7 @@
   color: #d24545;
 }
 .icon-Close-3:before {
-  content: "\e923";
+  content: "\e92d";
 }
 .icon-phone-2:before {
   content: "\e90b";
@@ -165,26 +172,47 @@
   content: "\e916";
 }
 .icon-Frame-44:before {
-  content: "\e929";
+  content: "\e92f";
   color: #d24545;
 }
 .icon-Frame-43:before {
-  content: "\e92a";
+  content: "\e92e";
   color: #d24545;
 }
 .icon-Frame-10:before {
-  content: "\e924";
+  content: "\e92c";
 }
 .icon-Frame-11:before {
-  content: "\e925";
+  content: "\e92b";
 }
 .icon-rivet-icons_filter-1:before {
-  content: "\e926";
+  content: "\e92a";
 }
 .icon-Frame-227:before {
-  content: "\e927";
+  content: "\e929";
 }
 .icon-phone-3:before {
   content: "\e928";
   color: #d24545;
+}
+.icon-Icon:before {
+  content: "\e932";
+}
+.icon-Down-2:before {
+  content: "\e924";
+}
+.icon-Close-2:before {
+  content: "\e925";
+  color: #fff;
+}
+.icon-Vector-9:before {
+  content: "\e90e";
+}
+.icon-Vector-13:before {
+  content: "\e912";
+  color: #fff;
+}
+.icon-Vector-14:before {
+  content: "\e913";
+  color: #fff;
 }

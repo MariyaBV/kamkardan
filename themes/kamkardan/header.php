@@ -37,7 +37,7 @@ $options = get_fields('option');
 				<div class="header-block-search">
 					<form role="search" method="get" class="woocommerce-product-search header-search" action="<?php echo esc_url(home_url('/')); ?>">
 						<input type="search" id="woocommerce-product-search-field" class="search-field" placeholder="Поиск вала по номеру" value="<?php echo get_search_query(); ?>" name="s" />
-						<button class="header-search__button" type="submit" value="<?php echo esc_attr_x('Search', 'submit button', 'woocommerce'); ?>"><span class="icon-Search-2"></span></button>
+						<button class="header-search__button" type="submit" value="<?php echo esc_attr_x('Search', 'submit button', 'woocommerce'); ?>"><span class="icon-Search-3"></span></button>
 						<input type="hidden" name="post_type" value="product" />
 					</form>
 				</div>
@@ -101,3 +101,11 @@ $options = get_fields('option');
 			</nav>
 		</div>
 	</header><!-- #masthead -->
+
+	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page()) : ?>
+		<div class="wrap">
+			<?php if (function_exists('yoast_breadcrumb')) {
+				yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
+			} ?>
+		</div>
+	<?php endif; ?>

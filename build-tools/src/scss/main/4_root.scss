@@ -5,12 +5,14 @@
   --light-red: #D24545;
   --red: #F42800;
   --dark-red: #A20A00;
+  --red-price: #D81E1E;
 
   --green: #6FBC7B;
 
   --grey: #DADADA;
   --dark-grey: #868686;
   --light-grey: #F5F5F5;
+  --gray: #9B9B9B;
 
   --white: #FFFFFF;
 
@@ -43,13 +45,17 @@
   --txt-medium-font-weight: 500;
   --txt-medium-line-height: 1.4rem;
 
-  --subtitle-font-size: 0.625rem;
+  --subtitle-font-size: 0.75rem;
   --subtitle-font-weight: 400;
-  --subtitle-line-height: 0.813rem;
+  --subtitle-line-height: 0.975rem;
 
   --txt-s-font-size: 0.875rem;
   --txt-s-font-weight: 400;
   --txt-s-line-height: 1.225rem;
+
+  --txt-xs-font-size: 0.75rem;
+  --txt-xs-font-weight: 400;
+  --txt-xs-line-height: 0.9rem;
 
   --txt-mobile-s-font-size: 0.875rem;
   --txt-mobile-s-font-weight: 400;
@@ -74,10 +80,24 @@
   --menu-active-item-line-height: 1.3rem;
   --menu-active-item-letter-spacing: -0.02em;
 
+  --discount-font-size: 1.5rem;
+  --discount-font-weight: 600;
+  --discount-line-height: 1.94rem;
+  --discount-letter-spacing: 0.02em;
+
   --price-main-font-size: 1rem;
   --price-main-font-weight: 800;
   --price-main-line-height: 1.3rem;
   --price-main-letter-spacing: 0.01em;
+
+  --price-L-font-size: 1.5rem;
+  --price-L-font-weight: 700;
+  --price-L-line-height: 1.8rem;
+
+  --price-s-old-font-size: 1rem;
+  --price-s-old-font-weight: 700;
+  --price-s-old-line-height: 1.3rem;
+  --price-s-old-letter-spacing: 0.02em;
 
   --price-old-font-size: 0.875rem;
   --price-old-font-weight: 500;
