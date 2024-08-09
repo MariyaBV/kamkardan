@@ -57,12 +57,13 @@ $options = get_fields('option');
 						<form id="callbackRequestForm">
 							<button class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></button>
 							<h3 class="callback-form-block__title">Заказать обратный звонок</h3>
+							<input type="hidden" id="callback-type" value="callback_request" />
 							<div class="callback-form-block__block-input">
-								<label class="txt-normal" for="name">Имя <span class="red-text">*</span></label>
+								<label class="txt-normal" for="callback-name">Имя <span class="red-text">*</span></label>
 								<input type="text" id="callback-name" name="name" required>
 							</div>
 							<div class="callback-form-block__block-input">
-								<label class="txt-normal" for="phone">Телефон <span class="red-text">*</span></label>
+								<label class="txt-normal" for="callback-phone">Телефон <span class="red-text">*</span></label>
 								<input type="text" id="callback-phone" name="phone" required>
 							</div>
 							<button class="red-button-medium mrg-0-auto mrg-top-32" type="submit">Отправить</button>

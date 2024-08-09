@@ -241,13 +241,27 @@ function get_menu_items_with_classes($menu_name) {
 
 //ф-я запроса обратного звонка
 function handle_callback_request() {
-    if (isset($_POST['name']) && isset($_POST['phone'])) {
+    if (isset($_POST['name']) && isset($_POST['phone']) && isset($_POST['type'])) {
         $name = sanitize_text_field($_POST['name']);
         $phone = sanitize_text_field($_POST['phone']);
+        $type = sanitize_text_field($_POST['type']);
+
+        $to = 'mari.mv2008@gmail.com'; // ЗАМЕНИТЬ!!!!! на email клиента
         
-        // Отправка данных на email
-        $to = 'mari.mv2008@gmail.com'; //НУЖНО ЗАМЕНИТЬ НА email клиента
-        $subject = 'Запрос на обратный звонок';
+        switch($type) {
+            case 'job_application':
+                $subject = 'Ответ на вакансию';
+                break;
+            case 'callback_request':
+                $subject = 'Запрос на обратный звонок';
+                break;
+            case 'repair_request':
+                $subject = 'Заявка на ремонт';
+                break;
+            default:
+                $subject = 'Новый запрос';
+        }
+        
         $message = 'Имя: ' . $name . "\nТелефон: " . $phone;
         wp_mail($to, $subject, $message);
 
@@ -261,20 +275,21 @@ add_action('wp_ajax_callback_request', 'handle_callback_request');
 add_action('wp_ajax_nopriv_callback_request', 'handle_callback_request');
 
 
+
 function kamkardan_blocks() {
 	// check function exists
 	if (function_exists('acf_register_block')) {
 
 		$blocks = [
-			'slider' => [
-				'description' => __('Блок со слайдером', 'kamkardan'),
-				'title' => __('Блок со слайдером', 'kamkardan'),
-				'keywords' => array('Блок-со-слайдером', 'баннер')
+			'callback-repair' => [
+				'description' => __('Оставить заявку на', 'kamkardan'),
+				'title' => __('Оставить заявку на', 'kamkardan'),
+				'keywords' => array('Оставить-заявку-на-', 'баннер')
 			],
-			'product-category' => [
-				'description' => __('Блок вывода товаров из 1 категории', 'kamkardan'),
-				'title' => __('Блок вывода товаров из 1 категории', 'kamkardan'),
-				'keywords' => array('блок-товаров-1-категории', 'баннер')
+			'images-links' => [
+				'description' => __('Блок c картинками-ссылками', 'kamkardan'),
+				'title' => __('Блок c картинками-ссылками', 'kamkardan'),
+				'keywords' => array('блок-c-картинками-ссылками', 'баннер')
 			],
 			'list-with-img' => [
 				'description' => __('Список с заголовком и картинками', 'kamkardan'),
@@ -287,9 +302,14 @@ function kamkardan_blocks() {
 				'keywords' => array('Список-с-картинкой', 'баннер')
 			],
 			'images-text' => [
-				'description' => __('Блок текст на картинке', 'kamkardan'),
-				'title' => __('Блок текст на картинке', 'kamkardan'),
-				'keywords' => array('Блок-текст-на-картинке', 'баннер')
+				'description' => __('Блок картинки с текстом', 'kamkardan'),
+				'title' => __('Блок картинки с текстом', 'kamkardan'),
+				'keywords' => array('Блок-картинки-с-текстом', 'баннер')
+			],
+			'vacancy' => [
+				'description' => __('Блок вакансии', 'kamkardan'),
+				'title' => __('Блок вакансии', 'kamkardan'),
+				'keywords' => array('Блок-вакансии', 'баннер')
 			]
 		];
 

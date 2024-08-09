@@ -11,10 +11,12 @@ document.getElementById('callbackRequestForm').addEventListener('submit', functi
     
     var name = document.getElementById('callback-name').value;
     var phone = document.getElementById('callback-phone').value;
+    var type = document.getElementById('callback-type').value;
     
     var data = new FormData();
     data.append('name', name);
     data.append('phone', phone);
+    data.append('type', type);
     data.append('action', 'callback_request');
     
     fetch('/wp-admin/admin-ajax.php', {
