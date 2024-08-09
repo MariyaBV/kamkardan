@@ -55,7 +55,7 @@ $options = get_fields('option');
 				<div class="header-block-contacts__callback-form" id="callbackForm" style="display:none;">
 					<div class="callback-form-block">
 						<form id="callbackRequestForm">
-							<button class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></button>
+							<a class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></a>
 							<h3 class="callback-form-block__title">Заказать обратный звонок</h3>
 							<input type="hidden" id="callback-type" value="callback_request" />
 							<div class="callback-form-block__block-input">

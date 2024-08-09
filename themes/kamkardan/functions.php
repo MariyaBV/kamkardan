@@ -245,6 +245,7 @@ function handle_callback_request() {
         $name = sanitize_text_field($_POST['name']);
         $phone = sanitize_text_field($_POST['phone']);
         $type = sanitize_text_field($_POST['type']);
+        $comment = isset($_POST['comment']) ? sanitize_textarea_field($_POST['comment']) : '';
 
         $to = 'mari.mv2008@gmail.com'; // ЗАМЕНИТЬ!!!!! на email клиента
         
@@ -263,6 +264,12 @@ function handle_callback_request() {
         }
         
         $message = 'Имя: ' . $name . "\nТелефон: " . $phone;
+
+        if (!empty($comment)) {
+            $message .= "\nКомментарий: " . $comment;
+        }
+        $message .= "\n";
+
         wp_mail($to, $subject, $message);
 
         wp_send_json_success('Запрос отправлен');

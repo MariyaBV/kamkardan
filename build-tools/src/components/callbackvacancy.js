@@ -1,7 +1,14 @@
-document.getElementById('callbackButtonVacancy').addEventListener('click', function() {
-    document.getElementById('callbackFormVacancy').style.display = 'block';
-});
+var callbackVacancyButtons = document.querySelectorAll('.button-vacancy');
 
-document.getElementById('closeCallbackFormVacancy').addEventListener('click', function() {
-    document.getElementById('callbackFormVacancy').style.display = 'none';
+callbackVacancyButtons.forEach(callbackVacancyButton => { 
+    callbackVacancyButton.addEventListener('click', function() {
+        document.querySelector(`.vacancy-callback.block-callback-form`).style.display = 'block';
+    });
+
+    const closeButton = document.getElementById('closeCallbackFormVacancy');
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            document.querySelector(`.vacancy-callback.block-callback-form`).style.display = 'none';
+        });
+    }
 });

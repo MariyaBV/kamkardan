@@ -3,30 +3,31 @@
 ?>
 
 <div class="vacancy-blocks">
-    <div class="vacancy-blocks__items">
-        <?php foreach ($fields['vacancy-block'] as $item): ?>
+    <?php foreach ($fields['vacancy-block'] as $item): ?>
+        <div class="vacancy-blocks__items">
             <div class="vacancy-blocks__item">
-                <p><?= $item['subtitle']; ?></p>
-                <p><?= $item['text-about-vacancy']; ?></p>
+                <p class="vacancy-blocks__subtitle"><?= $item['subtitle']; ?></p>
+                <p class="txt-normal"><?= $item['text-about-vacancy']; ?></p>
             </div>
             <div class="vacancy-blocks__item">
-                <p>Опыт работы</p>
-                <p><?= $item['work_experience']; ?></p>
+                <p class="vacancy-blocks__subtitle">Опыт работы</p>
+                <p class="txt-normal"><?= $item['work_experience']; ?></p>
             </div>
             <div class="vacancy-blocks__item">
-                <p>Заработная плата</p>
-                <p><?= $item['Wages']; ?></p>
+                <p class="vacancy-blocks__subtitle">Заработная плата</p>
+                <p class="txt-normal"><?= $item['Wages']; ?></p>
             </div>
-            <button class="red-button-L" id="callbackButtonVacancy">Откликнуться</button>
-        <?php endforeach; ?>
-    </div>
+            <a class="red-border-button button-vacancy">Откликнуться</a>
+        </div>
+    <?php endforeach; ?>
+
     
-    <div class="vacancy-callback block-callback-form" id="callbackFormVacancy" style="display:none;">
+    <div class="vacancy-callback block-callback-form" id="<?php echo $block['id']; ?>" style="display:none;">
         <div class="callback-form-block">
             <form id="callback<?php echo $block['id']; ?>">
-                <button class="callback-form-block__close" id="closeCallbackFormVacancy"><span class="icon-Close-3"></span></button>
+                <a class="callback-form-block__close" id="closeCallbackFormVacancy"><span class="icon-Close-3"></span></a>
                 <h3 class="callback-form-block__title">Откликнуться на вакансию</h3>
-                <input type="hidden" id="callback-type-<?php echo $block['id']; ?>" value="callback_request" />
+                <input type="hidden" id="callback-type-<?php echo $block['id']; ?>" value="job_application" />
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-name-<?php echo $block['id']; ?>">Имя <span class="red-text">*</span></label>
                     <input type="text" id="callback-name-<?php echo $block['id']; ?>" name="name" required>

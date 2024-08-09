@@ -1,14 +1,14 @@
 <?php
   $fields = get_fields();
 ?>
-<?php $fields['callback_type'] = 'repair_request'; //Заявка на ремонт ?> 
+<?php //Заявка на ремонт ?> 
 
 <div class="block-callback-form" id="<?php echo $block['id']; ?>">
     <div class="block-callback-form__block">
         <form id="callback<?php echo $block['id']; ?>">
             <h3 class="block-callback-form__title"><?= $fields['title'] ?></h3>
 
-            <input type="hidden" id="callback-type-<?php echo $block['id']; ?>" value="<?= $fields['callback_type']; ?>" />
+            <input type="hidden" id="callback-type-<?php echo $block['id']; ?>" value="repair_request" />
 
             <div class="block-callback-form__block-input">
                 <label class="txt-normal" for="callback-name-<?php echo $block['id']; ?>">Имя <span class="red-text">*</span></label>

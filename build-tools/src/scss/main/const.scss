@@ -364,6 +364,26 @@ input[type="week"] {
   }
 }
 
+.red-border-button {
+  border: 1px solid var(--dark-red);
+  color: var(--dark-red);
+  background-color: transparent;
+  max-width: 165px;
+  width: 100%;
+  padding: 15px 0;
+  font-size: var(--button-m-font-size);
+  font-weight: var(--button-m-font-weight);
+  line-height: var(--button-m-line-height);
+  letter-spacing: var(--button-m-letter-spacing);
+  border-radius: var(--border-radius);
+  display: block;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .mrg-0-auto {
   margin: 0 auto;
 }
