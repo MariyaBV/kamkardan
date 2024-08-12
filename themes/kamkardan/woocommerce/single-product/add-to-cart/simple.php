@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
 
 global $product;
 
+$product_categories = wc_get_product_category_list( $product->get_id(), ', ' );
+$product_categories_plain = strip_tags($product_categories);
+
 if ( ! $product->is_purchasable() ) {
 	return;
 }
@@ -46,7 +49,7 @@ if ( $product->is_in_stock() ) : ?>
 		</div>
 		<div class="block-description-card__item">
 			<span class="icon-bi_check-all"></span>
-			<p>Гарантия на новые карданы - 1 год</p>
+			<p>Гарантия <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)): ?> на новые карданы <?php endif; ?> - 1 год</p>
 		</div>
 	</div>
 	<?php /*do_action( 'woocommerce_after_add_to_cart_form' );*/ ?>

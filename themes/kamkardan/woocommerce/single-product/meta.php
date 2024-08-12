@@ -20,6 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
+
+$product_categories = wc_get_product_category_list( $product->get_id(), ', ' );
+$product_categories_plain = strip_tags($product_categories);
+
 ?>
 
 <div class="product_meta">
@@ -32,12 +36,16 @@ global $product;
 
 	<?php endif; ?>
 
-	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( 'Tag:', 'Tags:', count( $product->get_tag_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
-
+	
+	
 	<div class="product-category__text">
-		<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( 'Подходит для:', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
+		<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( 'Подходит для:', 'Tags:', count( $product->get_tag_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
+		<?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?>
+			<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( 'Подходит для:', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
+		<?php endif; ?>
 		<?php do_action('custom_woocommerce_attr_num_cardan'); ?>
 	</div>
+	
 	<?php
 		echo get_image_from_category();
 	?>

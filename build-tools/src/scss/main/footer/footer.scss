@@ -73,10 +73,11 @@
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: row;
+                gap: 10px;
 
                 li {
                     margin-bottom: 16px;
-                    flex: 50%;
+                    flex: calc(50% - 10px);
 
                     a {
                         color: var(--white);
@@ -86,6 +87,10 @@
                     @media screen and (max-width: 655px) {
                         flex: 100%;
                     }
+                }
+
+                @media screen and (max-width: 655px) {
+                    gap: unset;
                 }
             }
 

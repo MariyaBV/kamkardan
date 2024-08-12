@@ -1,4 +1,4 @@
-#page .single-product {
+#primary {
     #tab-description {
         display: block !important;
     }
@@ -90,6 +90,7 @@
             &__text {
 
                 .posted_in,
+                .tagged_as,
                 .product-attribute-cardan-shaft-number {
                     color: var(--dark-grey);
                     font-family: "wix madefor display", sans-serif;
@@ -181,6 +182,11 @@
     }
 
     .extra_fields {
+
+        &.noselect {
+            margin-top: 15px;
+        }
+
         .extra_fields_group {
             font-weight: bold;
             padding-top: 3px;

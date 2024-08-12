@@ -21,7 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $product;
 $product = wc_get_product(get_the_ID());
-
+$product_categories = wc_get_product_category_list( $product->get_id(), ', ' );
+$product_categories_plain = strip_tags($product_categories);
 ?>
 
     <div class="orderby__block-title-sort">
@@ -30,10 +31,15 @@ $product = wc_get_product(get_the_ID());
             <div class="orderby__title">
                 <?php 
                 if ($product) {
-                    echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( 'Карданы для ', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
+                    if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
+                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( 'Карданы для ', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
+                    } else {
+                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( '', '', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
+                    }
                 } ?>
             </div>
             <?php endif; ?>
+            <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) :?>
             <div class="block-sort">
                 <form class="woocommerce-ordering orderby-block" method="get">
                     <?php
@@ -58,7 +64,7 @@ $product = wc_get_product(get_the_ID());
 
                 <?php echo print_length_filter(); ?>
             </div>
-
+            <?php endif; ?>
     </div> 
     <?php if ( !is_shop() ){ echo get_image_from_category(); } ?>
 </div>

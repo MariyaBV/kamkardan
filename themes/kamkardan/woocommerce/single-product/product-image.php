@@ -24,6 +24,9 @@ if ( ! function_exists( 'wc_get_gallery_image_html' ) ) {
 
 global $product;
 
+$product_categories = wc_get_product_category_list( $product->get_id(), ', ' );
+$product_categories_plain = strip_tags($product_categories);
+
 $columns           = apply_filters( 'woocommerce_product_thumbnails_columns', 4 );
 $post_thumbnail_id = $product->get_image_id();
 $attachment_ids    = $product->get_gallery_image_ids();
@@ -45,5 +48,5 @@ $wrapper_classes   = apply_filters(
             echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . wp_get_attachment_image($post_thumbnail_id, 'large') . genius_display_discount_badge_return() . '</a>';
 		?>
     </div>
-    <p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров вала обращайтесь к менеджерам</p>
+    <p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
 </div>

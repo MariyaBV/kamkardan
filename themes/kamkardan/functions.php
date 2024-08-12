@@ -690,23 +690,25 @@ function display_categories_with_additional_image() {
     if ($terms) {
         echo '<ul class="product-categories">';
         foreach ($terms as $term) {
-            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
-            $image = wp_get_attachment_url($thumbnail_id);
-            $description = term_description($term->term_id, 'product_cat');
-            $additional_image = get_first_image_from_description($description);
-            $term_link = get_term_link($term);
+            if((esc_html($term->name) !== 'Крестовины' ) && (esc_html($term->name) !== 'Комплектующие' ) && (esc_html($term->name) !== 'Подобрать кардан' )){
+                $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+                $image = wp_get_attachment_url($thumbnail_id);
+                $description = term_description($term->term_id, 'product_cat');
+                $additional_image = get_first_image_from_description($description);
+                $term_link = get_term_link($term);
 
-            echo '<li class="product-category">';
-            
-            // Вывод дополнительной картинки из описания если ее нет то выводим основновную миниатюру
-            if ($additional_image) {
-                echo '<img src="' . esc_url($additional_image) . '" alt="' . esc_attr($term->name) . '">';
-            } elseif ($image) {
-                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+                echo '<li class="product-category">';
+                
+                // Вывод дополнительной картинки из описания если ее нет то выводим основновную миниатюру
+                if ($additional_image) {
+                    echo '<img src="' . esc_url($additional_image) . '" alt="' . esc_attr($term->name) . '">';
+                } elseif ($image) {
+                    echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+                }
+                echo '<h3 class="product-category__title">' . esc_html($term->name) . '</h3>';
+                echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
+                echo '</li>';
             }
-            echo '<h3 class="product-category__title">' . esc_html($term->name) . '</h3>';
-            echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
-            echo '</li>';
         }
         echo '</ul>';
     } else {
