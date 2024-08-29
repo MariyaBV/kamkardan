@@ -32,7 +32,7 @@ get_header();
 			?>
 		</div>
 		<?php if(is_product_category() || is_shop()): ?>
-			<div class="block-search">
+			<div class="block-search full-width-block">
 				<?php echo do_shortcode('[search_block_custom]'); ?>
 			</div>
 		<?php endif; ?>

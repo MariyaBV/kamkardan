@@ -14,11 +14,19 @@
         margin: 0 auto;
         gap: 20px;
 
+        @media screen and (max-width: 900px) {
+            flex-direction: column;
+        }
+
         .footer-left {
             flex: 25%;
             display: flex;
             flex-wrap: wrap;
             align-content: space-between;
+
+            @media screen and (max-width: 900px) {
+                flex-direction: column;
+            }
 
             .txt-company-name {
                 font-family: "Wix Madefor Display", sans-serif;
@@ -66,6 +74,10 @@
             gap: 30px;
             flex: 50%;
 
+            @media screen and (max-width: 900px) {
+                order: 3;
+            }
+
 
             ul {
                 list-style: none;
@@ -76,12 +88,13 @@
                 gap: 10px;
 
                 li {
-                    margin-bottom: 16px;
                     flex: calc(50% - 10px);
 
                     a {
                         color: var(--white);
                         text-decoration: none;
+                        padding: 8px 0;
+                        display: block;
                     }
 
                     @media screen and (max-width: 655px) {

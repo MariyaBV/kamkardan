@@ -1,0 +1,19 @@
+.woocommerce nav.woocommerce-pagination {
+    padding: 10px 0;
+    margin-bottom: 64px;
+  
+    a.page-numbers {
+      padding: 4px 7px;
+      text-decoration: none;
+  
+      &:hover {
+        cursor: pointer;
+      }
+  
+      &.current {
+        background: var(--light-red);
+        color: var(--white);
+        border-radius: var(--button-border-radius);
+      }
+    }
+  }

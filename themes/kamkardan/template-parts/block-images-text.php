@@ -1,8 +1,15 @@
 <?php
 $r = get_fields();
-?>
 
-<div class="steps">
+$classBottom = '';
+if ( $r['block_img_text'] == '1' ) {
+    $classBottom = 'bottom';
+}
+
+
+?> 
+
+<div class="steps <?php echo $classBottom; ?>">
     <?php foreach ($r['img-text'] as $item): ?>
         <div class="step-item">
             <img src="<?php echo $item['img']; ?>"  />

@@ -1,7 +1,12 @@
 #catalog-sidebar {
+
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
+
     .category-list {
         padding-left: 0;
-        margin-top: 8px;
+        margin-top: 16px;
 
         li {
             &::marker {
@@ -16,6 +21,10 @@
                 img {
                     max-width: 40px;
                     margin: 0 8px;
+                }
+
+                .cat-name {
+                    text-transform: uppercase;
                 }
             }
 

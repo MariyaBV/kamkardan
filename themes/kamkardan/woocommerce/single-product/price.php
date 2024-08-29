@@ -20,10 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
+$price_html = $product->get_price_html();
 
+if ( !empty($price_html) ) {
+    // Используем регулярное выражение с модификатором s
+    $pattern = '/(<del[^>]*>.*?<\/del>)(.*?)(<ins[^>]*>.*?<\/ins>)/s';
+    $replacement = '$3$2$1'; // Меняем местами del и ins, сохраняя промежуточный контент
+    $price_html = preg_replace($pattern, $replacement, $price_html);
+} else {
+    $price_html = 'Цену уточняйте';
+}
+
+if ( $price_html ): 
 ?>
-<p class="<?php echo esc_attr( apply_filters( 'woocommerce_product_price_class', 'price' ) ); ?>"><?php echo $product->get_price_html(); ?></p>
-
+    <p class="<?php echo esc_attr( apply_filters( 'woocommerce_product_price_class', 'price' ) ); ?>"><?php echo $price_html; ?><?php echo genius_display_discount_badge_return(); ?></p>
+<?php endif; ?>
 <?php
 // Получение данных о запасах
 $stock_status = get_post_meta( $product->get_id(), '_stock_status', true );

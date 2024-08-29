@@ -6,7 +6,7 @@
     <?php foreach ($fields['vacancy-block'] as $item): ?>
         <div class="vacancy-blocks__items">
             <div class="vacancy-blocks__item">
-                <p class="vacancy-blocks__subtitle"><?= $item['subtitle']; ?></p>
+                <p class="vacancy-blocks__subtitle-big"><?= $item['subtitle']; ?></p>
                 <p class="txt-normal"><?= $item['text-about-vacancy']; ?></p>
             </div>
             <div class="vacancy-blocks__item">

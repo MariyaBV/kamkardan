@@ -22,9 +22,14 @@
   --border-radius: 8px;
 
   // Fonts
-  --h1-font-size: 4.25rem;
-  --h1-font-weight: 800;
-  --h1-line-height: 4.25rem;
+  --h1-banner-font-size: 4.25rem;
+  --h1-banner-font-weight: 800;
+  --h1-banner-line-height: 4.25rem;
+  --h1-banner-font-family: "Wix Madefor Display", sans-serif;
+
+  --h1-font-size: 40px;
+  --h1-font-weight: 600;
+  --h1-line-height: 48px;
   --h1-font-family: "Wix Madefor Display", sans-serif;
 
   --h2-font-size: 2rem;
@@ -32,9 +37,9 @@
   --h2-line-height: 2rem;
   --h2-font-family: "Wix Madefor Display", sans-serif;
 
-  --h3-font-size: 1.5rem;
-  --h3-font-weight: normal;
-  --h3-line-height: 1.8rem;
+  --h3-font-size: 24px;
+  --h3-font-weight: 600;
+  --h3-line-height: 28.8px;
   --h3-font-family: "Wix Madefor Display", sans-serif;
 
   --txt-normal-font-size: 1rem;
@@ -69,9 +74,9 @@
   --txt-mobile-xs-font-weight: 400;
   --txt-mobile-xs-line-height: 0.975rem;
 
-  --button-m-font-size: 1rem;
+  --button-m-font-size: 16px;
   --button-m-font-weight: 600;
-  --button-m-line-height: 1.3rem;
+  --button-m-line-height: 20.8px;
   --button-m-letter-spacing: 0.01em;
 
   --button-L-font-size: 1.25rem;
@@ -84,9 +89,9 @@
   --menu-active-item-line-height: 1.3rem;
   --menu-active-item-letter-spacing: -0.02em;
 
-  --discount-font-size: 1.5rem;
+  --discount-font-size: 12px;
   --discount-font-weight: 600;
-  --discount-line-height: 1.94rem;
+  --discount-line-height: 15.6px;
   --discount-letter-spacing: 0.02em;
 
   --price-main-font-size: 1rem;
@@ -107,6 +112,10 @@
   --price-old-font-weight: 500;
   --price-old-line-height: 1.138rem;
   --price-old-letter-spacing: 0.01em;
+
+  --txt-mob-xs-font-size: 12px;
+  --txt-mob-xs-font-weight: 400;
+  --txt-mob-xs-line-height: 15.6px;
 
   --width-page: 1240px;
 }

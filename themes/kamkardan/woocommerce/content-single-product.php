@@ -32,7 +32,7 @@ if ( post_password_required() ) {
 }
 ?>
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
-	<div class="container wrap">
+	<div class="container">
 		<div class="row">
 			<div class="col-md-3 col-sm-0">
 				<?php
@@ -95,6 +95,16 @@ if ( post_password_required() ) {
 
 <?php do_action( 'woocommerce_after_single_product' ); ?>
 
-<div class="block-search">
+<div class="block-search full-width-block">
 	<?php echo do_shortcode('[search_block_custom]'); ?>
 </div>
+
+
+<?php
+	$seo_description = get_field('seo');
+	if ( $seo_description ) {
+		echo '<div class="seo-text txt-s">';
+		echo $seo_description;
+		echo '</div>';
+	}
+?>

@@ -39,7 +39,7 @@ $product_categories_plain = strip_tags($product_categories);
                 } ?>
             </div>
             <?php endif; ?>
-            <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) :?>
+            <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>
             <div class="block-sort">
                 <form class="woocommerce-ordering orderby-block" method="get">
                     <?php
@@ -62,7 +62,7 @@ $product_categories_plain = strip_tags($product_categories);
                     <?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'product-page' ) ); ?>
                 </form>
 
-                <?php echo print_length_filter(); ?>
+                <?php if (strpos($product_categories_plain, 'Крестовины') === false){ echo print_length_filter();} ?>
             </div>
             <?php endif; ?>
     </div> 

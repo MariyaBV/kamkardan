@@ -65,3 +65,20 @@
         }
     }
 }
+
+.block-img-callbackform {
+    gap: 40px;
+
+    .wp-block-column {
+        &:last-child {
+            flex-basis: 36%!important;
+        }
+    }
+
+    .img {
+        img {
+            width: 100%!important;
+            max-width: 728px;
+        }
+    }
+}

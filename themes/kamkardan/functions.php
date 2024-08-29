@@ -317,6 +317,11 @@ function kamkardan_blocks() {
 				'description' => __('Блок вакансии', 'kamkardan'),
 				'title' => __('Блок вакансии', 'kamkardan'),
 				'keywords' => array('Блок-вакансии', 'баннер')
+			],
+			'banner' => [
+				'description' => __('Блок-баннер', 'kamkardan'),
+				'title' => __('Блок баннер', 'kamkardan'),
+				'keywords' => array('Блок-баннер', 'баннер')
 			]
 		];
 
@@ -406,22 +411,22 @@ function genius_alter_price_cart( $cart ) {
     }
 }
 // вывод скидки в % на картинке карточки товара
-add_action( 'woocommerce_before_shop_loop_item_title', 'genius_display_discount_badge', 10 );
-function genius_display_discount_badge() {
-    global $product;
+// add_action( 'woocommerce_before_shop_loop_item_title', 'genius_display_discount_badge', 10 );
+// function genius_display_discount_badge() {
+//     global $product;
     
-    $discount = get_post_meta( $product->get_id(), '_pc_discount', true );
-    if ( $discount && $discount > 0 ) {
-        echo '<span class="discount-badge">-' . esc_html( $discount ) . '%</span>';
-    }
-}
+//     $discount = get_post_meta( $product->get_id(), '_pc_discount', true );
+//     if ( $discount && $discount > 0 ) {
+//         echo '<span class="discount-badge"><span class="square"></span>-' . esc_html( $discount ) . '%</span>';
+//     }
+// }
 
 function genius_display_discount_badge_return() {
     global $product;
 
     $discount = get_post_meta($product->get_id(), '_pc_discount', true);
     if ($discount && $discount > 0) {
-        return '<span class="discount-badge">-' . esc_html($discount) . '%</span>';
+        return '<span class="discount-badge"><span class="square"><span class="circle"></span></span>-' . esc_html($discount) . '%</span>';
     }
     return '';
 }
@@ -489,56 +494,68 @@ class Walker_Category_Thumbnails extends Walker_Category {
     }
 }
 function add_product_category_sidebar() {
-    //if (!is_product()) {
+    // Получаем текущую категорию
+    $current_category = get_queried_object();
+
+    // Список ID категорий, которые нужно исключить (например, крестовины и комплектующие)
+    $excluded_categories = array('crosspieces', 'accessories');
+
+    // Не выводим на страницах крестовины и комплектующие
+    if (is_product_category($excluded_categories)) {
+        return;
+    }
+
+    // Получаем отсортированные категории
+    $sorted_terms = get_sorted_product_categories();
+
+    // Исключаем категории по их ID
+    $excluded_category_ids = array();
+    foreach ($excluded_categories as $slug) {
+        $category = get_term_by('slug', $slug, 'product_cat');
+        if ($category) {
+            $excluded_category_ids[] = $category->term_id;
+        }
+    }
+
+    // Фильтруем отсортированные категории, чтобы исключить нежелательные
+    $filtered_terms = array_filter($sorted_terms, function($term) use ($excluded_category_ids) {
+        return !in_array($term->term_id, $excluded_category_ids);
+    });
+
+    // Если после фильтрации остались категории, выводим их
+    if (!empty($filtered_terms)) {
         ?>
         <aside class="product-category-sidebar">
-            <?php
-            $args = array(
-                'show_option_all'    => '',
-                'show_option_none'   => __('No categories'),
-                'orderby'            => 'name',
-                'order'              => 'ASC',
-                'style'              => 'list',
-                'show_count'         => 0,
-                'hide_empty'         => 1,
-                'use_desc_for_title' => 0,
-                'child_of'           => 0,
-                'feed'               => '',
-                'feed_type'          => '',
-                'feed_image'         => '',
-                'exclude'            => '',
-                'exclude_tree'       => '',
-                'include'            => '',
-                'hierarchical'       => true,
-                'title_li'           => '',
-                'number'             => NULL,
-                'echo'               => 0,
-                'depth'              => 0,
-                'current_category'   => 0,
-                'pad_counts'         => 0,
-                'taxonomy'           => 'product_cat',
-                'walker'             => new Walker_Category_Thumbnails(),
-                'hide_title_if_empty' => false,
-                'separator'          => '<br />',
-            );
-            $categories = wp_list_categories($args);
-            ?>
             <div id="catalog-sidebar" class="category-list-categories mobile">
                 <h3>Карданы</h3>
                 <ul class="category-list">
-                    <?php echo $categories; ?>
+                    <?php
+                    foreach ($filtered_terms as $category) {
+                        $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
+                        $image_url = wp_get_attachment_url($thumbnail_id);
+                        $link = get_term_link($category);
+                        ?>
+                        <li id="cat-item-<?php echo esc_attr($category->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($category->term_id); ?>">
+                            <a class="cat-link" href="<?php echo esc_url($link); ?>">
+                                <img class="cat-image" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>" />
+                                <span class="cat-name"><?php echo esc_html($category->name); ?></span>
+                            </a>
+                        </li>
+                        <?php
+                    }
+                    ?>
                 </ul>
             </div>
         </aside>
         <?php
-    //}
+    }
 }
 //конец делаем sidebar с категориями на странице продукта и продуктов
 
 
 //вывод номера кардана из атрибутов на странице товара и карточке
 function custom_woocommerce_attr_num_cardan() {
-    if ( is_product() || is_shop() || is_product_category() ) {
+    if ( is_product() || is_shop() || is_product_category() || is_front_page()) {
         global $product;
         
         // Получаем все атрибуты товара
@@ -551,7 +568,7 @@ function custom_woocommerce_attr_num_cardan() {
 
             if ( ! empty( $terms ) ) {
                 $value = implode( ', ', $terms );
-                echo '<p class="product-attribute-cardan-shaft-number">Номер кардана: <span>' . esc_html( $value ) . '</span></p>';
+                echo '<p class="product-attribute-cardan-shaft-number">Артикул кардана: <span>' . esc_html( $value ) . '</span></p>';
             }
         }
     }
@@ -559,27 +576,55 @@ function custom_woocommerce_attr_num_cardan() {
 add_action('custom_woocommerce_attr_num_cardan', 'custom_woocommerce_attr_num_cardan');
 add_action('woocommerce_before_shop_loop_item_title', 'custom_woocommerce_attr_num_cardan', 15);
 
-//вывод Длины в сжатом положении, мм: на карточке товара
+//вывод аттрибутов на карточке товаров
+// Функция для вывода атрибутов
+function display_product_attribute($product, $attribute_key) {
+    $attributes = $product->get_attributes();
+
+    // Специальный вывод для применяемости
+    if ( $attribute_key == 'pa_application' && isset( $attributes['pa_application'] ) ) {
+        $terms = wc_get_product_terms( $product->get_id(), 'pa_application', array( 'fields' => 'names' ) );
+        $attribute_name = wc_attribute_label( 'pa_application', $product );
+
+        if ( ! empty( $terms ) ) {
+            $value = implode( ', ', $terms );
+            echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . '<br><span class="product-attribute-application">' . esc_html( $value ) . '</span></p>';
+        }
+    }
+
+    // Вывод для всех остальных атрибутов
+    if ( $attribute_key !== 'pa_application' && isset( $attributes[ $attribute_key ] ) ) {
+        $terms = wc_get_product_terms( $product->get_id(), $attribute_key, array( 'fields' => 'names' ) );
+        $attribute_name = wc_attribute_label( $attribute_key, $product );
+
+        if ( ! empty( $terms ) ) {
+            $value = implode( ', ', $terms );
+            echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . ' <span>' . esc_html( $value ) . '</span></p>';
+        }
+    }
+}
+
 function custom_woocommerce_attr_len_cardan() {
-    if ( is_shop() || is_product_category() ) {
-        global $product;
-        
-        // Получаем все атрибуты товара
-        $attributes = $product->get_attributes();
+    if ( is_shop() || is_product_category() || is_front_page()) {
+        $product = wc_get_product(get_the_ID());
 
-        if ( isset( $attributes['pa_length-compressed-position'] ) ) {
-            $attribute = $attributes['pa_length-compressed-position'];
+        // Массив с ключами нужных атрибутов
+        $attribute_keys = array(
+            'pa_application',
+            'pa_length-compressed-position',
+            'pa_bearing-outerd-mm',
+            'pa_dimensions-at-ends-h-mm'
+        );
 
-            $terms = wc_get_product_terms( $product->get_id(), 'pa_length-compressed-position', array( 'fields' => 'names' ) );
-
-            if ( ! empty( $terms ) ) {
-                $value = implode( ', ', $terms );
-                echo '<p class="product-attribute-length-compressed-position">Длина в сжатом положении, мм: <span>' . esc_html( $value ) . '</span></p>';
-            }
+        // Перебор атрибутов и вывод
+        foreach ( $attribute_keys as $attribute_key ) {
+            display_product_attribute( $product, $attribute_key );
         }
     }
 }
 add_action('woocommerce_after_shop_loop_item_title', 'custom_woocommerce_attr_len_cardan', 15);
+
+
 
 //начало добавляем к поиску поиск по атрибутам
 function custom_search_query($query) {
@@ -677,48 +722,45 @@ function get_first_image_from_description($description) {
 function display_categories_with_additional_image() {
     ob_start(); // Начинаем буферизацию вывода
 
-    $terms = get_terms(array(
-        'taxonomy' => 'product_cat',
-        'parent' => 0,
-        'hide_empty' => false,
-    ));
+    // Получаем отсортированные категории с использованием кастомной функции
+    $terms = get_sorted_product_categories();
 
-    if (is_wp_error($terms)) {
-        return 'Ошибка получения категорий: ' . $terms->get_error_message();
+    if (empty($terms)) {
+        return 'Категории не найдены.';
     }
 
-    if ($terms) {
-        echo '<ul class="product-categories">';
-        foreach ($terms as $term) {
-            if((esc_html($term->name) !== 'Крестовины' ) && (esc_html($term->name) !== 'Комплектующие' ) && (esc_html($term->name) !== 'Подобрать кардан' )){
-                $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
-                $image = wp_get_attachment_url($thumbnail_id);
-                $description = term_description($term->term_id, 'product_cat');
-                $additional_image = get_first_image_from_description($description);
-                $term_link = get_term_link($term);
+    echo '<ul class="product-categories">';
+    foreach ($terms as $term) {
+        // Исключаем категории с названиями 'Крестовины', 'Комплектующие', 'Подобрать кардан'
+        if((esc_html($term->name) !== 'Крестовины') && 
+           (esc_html($term->name) !== 'Комплектующие') && 
+           (esc_html($term->name) !== 'Подобрать кардан')) {
 
-                echo '<li class="product-category">';
-                
-                // Вывод дополнительной картинки из описания если ее нет то выводим основновную миниатюру
-                if ($additional_image) {
-                    echo '<img src="' . esc_url($additional_image) . '" alt="' . esc_attr($term->name) . '">';
-                } elseif ($image) {
-                    echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
-                }
-                echo '<h3 class="product-category__title">' . esc_html($term->name) . '</h3>';
-                echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
-                echo '</li>';
+            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $image = wp_get_attachment_url($thumbnail_id);
+            $description = term_description($term->term_id, 'product_cat');
+            $additional_image = get_first_image_from_description($description);
+            $term_link = get_term_link($term);
+
+            echo '<li class="product-category">';
+            
+            // Вывод дополнительной картинки из описания, если она есть, иначе выводим основную миниатюру
+            if ($additional_image) {
+                echo '<img src="' . esc_url($additional_image) . '" alt="' . esc_attr($term->name) . '">';
+            } elseif ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
             }
+
+            echo '<h3 class="product-category__title">' . esc_html($term->name) . '</h3>';
+            echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
+            echo '</li>';
         }
-        echo '</ul>';
-    } else {
-        echo 'Категории не найдены.';
     }
+    echo '</ul>';
 
     return ob_get_clean(); // Возвращаем буферизированный вывод
 }
 add_shortcode('categories_with_additional_image', 'display_categories_with_additional_image');
-
 //конец вывод 2-й картинки для категорий на стр категорий
 
 function search_block_custom() {
@@ -742,7 +784,7 @@ add_shortcode('search_block_custom', 'search_block_custom');
 // меняем title в карточке товара
 if ( ! function_exists( 'woocommerce_template_loop_product_title' ) ) {
 	function woocommerce_template_loop_product_title() {
-		echo '<h5 class="txt-medium' . esc_attr( apply_filters( 'woocommerce_product_loop_title_classes', 'woocommerce-loop-product__title' ) ) . '">' . get_the_title() . '</h5>';
+		echo '<h5 class="txt-medium ' . esc_attr( apply_filters( 'woocommerce_product_loop_title_classes', 'woocommerce-loop-product__title' ) ) . '">' . get_the_title() . '</h5>';
 	}
 }
 
@@ -982,3 +1024,119 @@ function custom_add_woocomerce_support() {
 	add_theme_support( 'woocommerce' );
 }
 add_action( 'after_setup_theme', 'custom_add_woocomerce_support' );
+
+//выводим 8 лучших карданных валов - исключаем комплектующие и крестовины
+function custom_best_selling_products($atts) {
+    $exclude_categories = array('accessories', 'crosspieces'); //исключаем крестовины и комплектующие
+
+    // Получаем ID категорий для исключения
+    $exclude_ids = array();
+    foreach ($exclude_categories as $category_slug) {
+        $category = get_term_by('slug', $category_slug, 'product_cat');
+        if ($category) {
+            $exclude_ids[] = $category->term_id;
+        }
+    }
+
+    // Настройки для запроса продуктов
+    $args = array(
+        'posts_per_page' => isset($atts['per_page']) ? intval($atts['per_page']) : 8,
+        'post_type' => 'product',
+        'meta_key' => 'total_sales',
+        'orderby' => 'meta_value_num',
+        'order' => 'DESC',
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'id',
+                'terms' => $exclude_ids,
+                'operator' => 'NOT IN',
+            ),
+        ),
+    );
+
+    $query = new WP_Query($args);
+
+    ob_start();
+    if ($query->have_posts()) {
+        woocommerce_product_loop_start();
+        while ($query->have_posts()) {
+            $query->the_post();
+            wc_get_template_part('content', 'product');
+        }
+        woocommerce_product_loop_end();
+    }
+    wp_reset_postdata();
+
+    return ob_get_clean();
+}
+add_shortcode('custom_best_selling_products', 'custom_best_selling_products');
+
+//кастмная сортировка категорий
+function get_sorted_product_categories() {
+    // Определяем слаги категорий, которые должны отображаться последними
+    $specific_slugs = array(
+        'motor-grader',
+        'forklift-truck',
+        'railway-transport',
+        'agricultural-machinery',
+        'tractor',
+        'tram',
+        'trolleybus',
+    );
+
+    $specific_slugs_2 = array(
+        'other-cardan-shafts',
+        'according-to-your-sizes',
+        'select-a-cardan-shaft',
+    );
+
+    // Получаем все категории товаров
+    $terms = get_terms( array(
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => false,
+    ) );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        return array();
+    }
+
+    $russian   = array();
+    $english   = array();
+    $specific  = array();
+
+    foreach ( $terms as $term ) {
+        if ( in_array( $term->slug, $specific_slugs ) ) {
+            // Добавляем в список специфичных категорий
+            $specific[] = $term;
+        } elseif ( in_array( $term->slug, $specific_slugs_2 ) ) {
+            $specific_2[] = $term;
+        } elseif ( preg_match( '/[а-яА-ЯЁё]/u', $term->name ) ) {
+            // Проверяем, содержит ли название категории кириллические символы
+            $russian[] = $term;
+        } else {
+            // Все остальные категории считаем английскими
+            $english[] = $term;
+        }
+    }
+
+    // Устанавливаем локаль для правильной сортировки русских категорий
+    $current_locale = setlocale( LC_COLLATE, 0 ); // Сохраняем текущую локаль
+    setlocale( LC_COLLATE, 'ru_RU.UTF-8' );      // Устанавливаем русскую локаль
+
+    // Сортируем русские категории по алфавиту
+    usort( $russian, function( $a, $b ) {
+        return strcoll( $a->name, $b->name );
+    });
+
+    // Возвращаем локаль к исходному значению
+    setlocale( LC_COLLATE, $current_locale );
+
+    // Сортируем английские категории по алфавиту
+    usort( $english, function( $a, $b ) {
+        return strcasecmp( $a->name, $b->name );
+    });
+
+    // Объединяем все категории в нужном порядке
+    return array_merge( $russian, $english, $specific, $specific_2 );
+}

@@ -45,7 +45,7 @@ $wrapper_classes   = apply_filters(
     <div class="woocommerce-product-gallery__wrapper image-single-product-block__img">
 		<?php
             $full_size_image = wp_get_attachment_image_src($post_thumbnail_id, 'full');
-            echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . wp_get_attachment_image($post_thumbnail_id, 'large') . genius_display_discount_badge_return() . '</a>';
+            echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . wp_get_attachment_image($post_thumbnail_id, 'large') . '</a>'; //. genius_display_discount_badge_return() .
 		?>
     </div>
     <p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>

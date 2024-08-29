@@ -2,11 +2,16 @@
     &__items {
         display: flex;
         align-items: flex-start;
-        margin-bottom: 32px;
-        gap: 30px;
+        margin-bottom: 45px;
+        gap: 20px;
+        justify-content: space-between;
 
         @media screen and (max-width: 860px) {
             flex-wrap: wrap;
+        }
+
+        .button-vacancy {
+            padding: 10px 0;
         }
     }
 
@@ -15,6 +20,18 @@
     }
 
     &__subtitle {
+        font-size: var(--button-m-font-size);
+        font-weight: var(--button-m-font-weight);
+        line-height: var(--button-m-line-height);
+        letter-spacing: var(--button-m-letter-spacing);
+        text-wrap: nowrap;
+
+        @media screen and (max-width: 1024px) {
+            text-wrap: unset;
+        }
+    }
+
+    &__subtitle-big {
         font-size: var(--button-L-font-size);
         font-weight: var(--button-L-font-weight);
         line-height: var(--button-L-line-height);
