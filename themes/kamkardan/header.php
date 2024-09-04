@@ -171,35 +171,19 @@ $options = get_fields('option');
 
 		<div id="block-catalog" class="block-catalog">
 			<div class="wrap-header block-catalog__block">
-<<<<<<< HEAD
-				<a id="close-catalog-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Vector-13"></span><h4>Назад</h4></a>
-=======
 				<?php /*<a id="close-catalog-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Vector-13"></span><h4>Назад</h4></a>*/?>
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 				<div class="block-categories">
 					<?php echo do_shortcode('[kardany_all_subcategories_and_tags]'); ?>
 				</div>
 				<a href="" id="close-catalog-menu"><span class="icon-Close-1 close-catalog-menu"></span></a>
-<<<<<<< HEAD
-			<div>
-		</div>
-	</header><!-- #masthead -->
-
-	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page()) : ?>
-=======
 			</div>
 		</div>
 	</header><!-- #masthead -->
 
 	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page() && !is_singular('product')) : ?>
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 		<div class="wrap-breadcrumbs">
 			<?php if (function_exists('yoast_breadcrumb')) {
 				yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
 			} ?>
 		</div>
-<<<<<<< HEAD
 	<?php endif; ?>
-=======
-	<?php endif; ?>
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f

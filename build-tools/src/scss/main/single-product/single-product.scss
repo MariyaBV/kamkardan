@@ -4,11 +4,8 @@
     }
 
     .block-description-card {
-<<<<<<< HEAD
-=======
         margin-top: 24px;
 
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         &__item {
             display: flex;
             align-items: center;
@@ -52,11 +49,6 @@
                 object-fit: scale-down;
                 margin: 0 auto;
             }
-<<<<<<< HEAD
-        }
-
-        &__text {
-=======
 
             @media screen and (max-width: 768px) {
                 margin: 0 auto;
@@ -65,7 +57,6 @@
 
         &__text {
             margin-top: 8px;
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             color: var(--dark-grey);
             font-size: var(--subtitle-s-font-size);
             font-weight: var(--subtitle-s-font-weight);
@@ -299,13 +290,10 @@
             span.extra_fields_name {
                 display: inline-table;
                 inline-size: 70%;
-<<<<<<< HEAD
-=======
 
                 @media screen and (max-width: 500px) {
                     inline-size: 60%;
                 }
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             }
 
             span.extra_fields_value {

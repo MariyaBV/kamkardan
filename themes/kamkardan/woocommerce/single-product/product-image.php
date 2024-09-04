@@ -48,9 +48,6 @@ $wrapper_classes   = apply_filters(
             echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . wp_get_attachment_image($post_thumbnail_id, 'large') . '</a>'; //. genius_display_discount_badge_return() .
 		?>
     </div>
-<<<<<<< HEAD
-    <p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
-=======
     <div class="__slider slider-mobile">
         <div class="swiper mobile">
             <div class="swiper-container-mobile  product-gallery-swiper-mobile">
@@ -73,5 +70,4 @@ $wrapper_classes   = apply_filters(
         </div>
     </div>
 
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 </div>
