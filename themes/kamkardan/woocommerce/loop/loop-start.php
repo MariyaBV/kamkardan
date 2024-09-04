@@ -18,6 +18,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+$class4ElementsPerLine = '';
 
 $is_crosspieces_category = is_product_category('crosspieces');
 $is_accessories_category = is_product_category('accessories');

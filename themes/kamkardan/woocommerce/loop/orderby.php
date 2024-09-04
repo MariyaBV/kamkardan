@@ -30,13 +30,60 @@ $product_categories_plain = strip_tags($product_categories);
             <?php if ( !is_shop() ): ?>
             <div class="orderby__title">
                 <?php 
-                if ($product) {
+                /*if ($product) {
                     if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
                         echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( 'Карданы для ', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
                     } else {
                         echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( '', '', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
                     }
-                } ?>
+                } */?>
+                <?php 
+                if ($product) {
+                    $categories = get_the_terms($product->get_id(), 'product_cat');
+                    
+                    $is_in_kardany = false;
+                    $subcategory_name = '';
+
+                    // Проходим по категориям, чтобы проверить, есть ли категория "Карданы" или её подкатегории
+                    if ($categories && !is_wp_error($categories)) {
+                        foreach ($categories as $category) {
+                            // Проверяем, является ли категория или её родительская категория "Карданы"
+                            $parent_category = get_term($category->parent, 'product_cat');
+                            if ($category->name === 'Карданы' || ($parent_category && $parent_category->name === 'Карданы')) {
+                                $is_in_kardany = true;
+                                if ($parent_category && $parent_category->name === 'Карданы') {
+                                    $subcategory_name = $category->name;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // Если продукт в категории "Карданы" или её подкатегории
+                    if ($is_in_kardany) {
+                        if ($subcategory_name) {
+                            // Выводим название подкатегории
+                            echo '<h2 class="posted_in">Карданы для ' . esc_html($subcategory_name) . '</h2>';
+                        } else {
+                            // Получаем текущий объект метки (тега)
+                            $current_tag = get_queried_object();
+                            
+                            // Проверяем, что это метка (тег)
+                            if ($current_tag && !is_wp_error($current_tag) && $current_tag->taxonomy === 'product_tag') {
+                                // Выводим название метки
+                                echo '<h2 class="posted_in">Карданы для ' . esc_html($current_tag->name) . '</h2>';
+                            }
+                        }
+                    } else if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
+                        // Выводим название категории, если продукт не в "Карданы", "Крестовины" или "Комплектующие"
+                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( 'Карданы для ', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' );
+                    } else {
+                        // Если продукт в категории "Крестовины" или "Комплектующие", ничего не выводим
+                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( '', '', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' );
+                    }
+                }
+                ?>
+
             </div>
             <?php endif; ?>
             <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>

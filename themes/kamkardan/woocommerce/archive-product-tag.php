@@ -22,7 +22,7 @@ $is_accessories_category = is_product_category('accessories');
 
 ?>
 
-<div class="container">
+<div class="container ">
     <?php if((!$is_crosspieces_category) && (!$is_accessories_category)):?>
     <div class="row">
         <div class="col-md-3 col-sm-0">

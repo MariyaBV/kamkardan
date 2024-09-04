@@ -26,6 +26,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ion_document-outline:before {
+  content: "\e934";
+  color: #868686;
+}
+
 .icon-Property-1Default:before {
   content: "\e900";
 }

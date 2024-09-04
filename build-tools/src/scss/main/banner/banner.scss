@@ -123,13 +123,16 @@
     }
 
     .img-block {
-        max-width: 44.14%;
+        height: 100%;
         position: absolute;
         top: 0;
         right: 0;
+        clip-path: inherit;
 
         img {
             border-bottom-right-radius: 8px;
+            height: 100%;
+            clip-path: polygon(45% 0%,100% 0%,100% 100%,32.5% 100%);
         }
 
         .phone {
@@ -149,7 +152,8 @@
             clip-path: polygon(4.5% 0, 100% 0, 100% 100%, 0 100%);
             border-bottom-right-radius: 8px;
             text-align: center;
-            width: 100%;
+            width: 67.5%;
+            text-wrap: nowrap;
 
             &:hover {
                 cursor: pointer;

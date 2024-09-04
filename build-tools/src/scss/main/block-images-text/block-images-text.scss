@@ -46,7 +46,20 @@
 
         img {
             margin: 0 auto;
+            aspect-ratio: 1 / 1;
+            width: auto;
+            object-fit: cover;
         }
+
+        &.pick-up {
+            hr {
+                border: 1px solid #DADADA;
+            }
+
+            h3 {
+                text-align: center;
+            }
+        } 
 
         @media screen and (max-width: 1024px) {
             width: calc(100% / 3 - 40px);

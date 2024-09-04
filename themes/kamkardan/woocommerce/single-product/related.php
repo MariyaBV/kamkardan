@@ -15,28 +15,48 @@
  * @version     3.9.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+global $product;
+
+$is_crosspieces_category = has_term( 'crosspieces', 'product_cat', $product->get_id() );
+$is_accessories_category = has_term( 'accessories', 'product_cat', $product->get_id() );
+
+$countProduct = 3;
+$class4Prodicts ='';
+
+if ( $is_crosspieces_category || $is_accessories_category ) {
+	$countProduct = 4;
+	$class4Prodicts = 'fourProducts';
 }
 
 if ( $related_products ) : ?>
 
-	<section class="related products">
+	<section class="related products <?php echo $class4Prodicts?>">
 		<h3 class="margin-bottom-16">Может быть интересным</h3>
 
 		<?php
 			woocommerce_product_loop_start();
 
-			// Выбираем 3 случайных товара из $related_products
-			$random_keys = array_rand($related_products, 3);
+			// Общее количество связанных товаров
+			$total_related = count( $related_products );
 
-			foreach ($random_keys as $key) {
-				$related_product = $related_products[$key];
-				
-				$post_object = get_post($related_product->get_id());
-				setup_postdata($GLOBALS['post'] = $post_object); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
+			// Если товаров меньше или равно требуемому количеству, выводим все
+			if ( $total_related <= $countProduct ) {
+				$selected_products = $related_products;
+			} else {
+				// Если товаров больше, выбираем случайные
+				$random_keys = array_rand( $related_products, $countProduct );
+				$selected_products = array_intersect_key( $related_products, array_flip( (array) $random_keys ) );
+			}
 
-				wc_get_template_part('content', 'product');
+			foreach ( $selected_products as $related_product ) {
+				$post_object = get_post( $related_product->get_id() );
+				setup_postdata( $GLOBALS['post'] = $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
+
+				wc_get_template_part( 'content', 'product' );
 			}
 
 			woocommerce_product_loop_end();

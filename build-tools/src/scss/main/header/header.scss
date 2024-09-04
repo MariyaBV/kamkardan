@@ -142,10 +142,8 @@ header#main-header {
             }
 
             .selected-item-menu {
-                font-weight: var(--menu-active-item-font-weight);
-                font-size: var(--menu-active-item-font-size);
-                line-height: var(--menu-active-item-line-height);
-                letter-spacing: var(--menu-active-item-letter-spacing);
+                color: var(--dark-red);
+                font-weight: 500;
 
                 a {
                     color: var(--dark-red);
@@ -193,7 +191,7 @@ header#main-header {
                 box-shadow: 0px 4px 4px -4px #0C0C0D0D;
                 box-shadow: 0px 16px 32px -4px #0C0C0D1A;
 
-            
+
                 li {
                     border-bottom: 1px solid var(--grey);
 
@@ -204,7 +202,7 @@ header#main-header {
                     &::marker {
                         content: none;
                     }
-            
+
                     a {
                         color: var(--main-color);
                         padding: 16px;
@@ -216,7 +214,7 @@ header#main-header {
                         }
                     }
                 }
-            
+
                 &.show {
                     display: block;
                     opacity: 1;
@@ -456,46 +454,6 @@ header#main-header {
     }
 }
 
-#page .block-catalog {
-    background-color: var(--white);
-    width: 100%;
-    opacity: 0;
-    position: absolute;
-    z-index: -1;
-    transition: all 1s ease-out;
-    box-shadow: 0px 24px 24px 0px #00000014;
-    display: none;
-
-    &.visible {
-        opacity: 1;
-        z-index: 111;
-        display: block;
-    }
-
-    &__block {
-        display: flex;
-        gap: 1px;
-        padding-top: 46px;
-        padding-bottom: 46px;
-        position: relative;
-    }
-
-    .close-catalog-menu {
-        position: absolute;
-        top: 46px;
-        right: 15px;
-        font-size: xx-large;
-        color: var(--main-color);
-        cursor: pointer;
-
-        @media screen and (max-width: 960px) {
-            top: 15px;
-        }
-    }
-
-
-}
-
 .header-block-nav {
     display: none;
     position: fixed;
@@ -609,4 +567,95 @@ header#main-header {
     margin: 0 auto 24px; // 0 auto 9px
     padding: 0 40px;
     width: 100%;
+}
+
+#page .block-catalog {
+    max-width: 1160px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    transition: all 1s ease-out;
+    box-shadow: 0px 24px 24px 0px #00000014;
+    display: none;
+    text-transform: uppercase;
+
+    &.visible {
+        opacity: 1;
+        z-index: 111;
+        display: block;
+    }
+
+    &__block {
+        display: flex;
+        gap: 1px;
+        padding: 23px 20px;
+        position: relative;
+    }
+
+    .close-catalog-menu {
+        position: absolute;
+        top: 46px;
+        right: 15px;
+        font-size: xx-large;
+        color: var(--main-color);
+        cursor: pointer;
+
+        @media screen and (max-width: 960px) {
+            top: 15px;
+        }
+
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
+    }
+
+    &__mobile-button-back {
+        display: none;
+
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
+    }
+
+    .block-categories {
+        ul {
+            border-bottom: 1px solid var(--grey);
+            display: flex;
+            flex-wrap: wrap;
+            padding: 16.5px 0;
+
+            &.subcategories-and-specific-categories {
+                border-bottom: none;
+            }
+
+            li {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: calc(100% / 4);
+
+                &::marker {
+                    content: none;
+                }
+
+                img {
+                    max-width: 40px;
+                    margin-right: 10px;
+                }
+
+                a {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
 }

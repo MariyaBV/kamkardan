@@ -26,11 +26,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @see woocommerce_default_product_tabs()
  */
+global $product;
+
 $product_tabs = apply_filters( 'woocommerce_product_tabs', array() );
 
-if (!empty($product_tabs) && isset($product_tabs['description'])) : 
-    $description_tab = $product_tabs['description'];
-	?>
+$product_id = $product->get_id();
+$certificates = get_field('blok_s_sertifikatami', $product_id); 
+$delivery = get_field('delivery', $product_id); 
+$osnovnye_harakteristiki = get_field('osnovnye_harakteristiki', $product_id);
+
+?>
 
 	<div class="woocommerce-tabs wc-tabs-wrapper">
 		<?php /*<ul class="tabs wc-tabs" role="tablist">
@@ -55,11 +60,46 @@ if (!empty($product_tabs) && isset($product_tabs['description'])) :
 
 		<div class="custom-description woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab" id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
 			<div class="description-content">
-				<?php
+			<?php if (!empty($product_tabs) && isset($product_tabs['description'])) {
+				$description_tab = $product_tabs['description'];
 				if (isset($description_tab['callback'])) {
-					call_user_func($description_tab['callback'], 'description', $description_tab);
+					?>
+					<div class="delivery-info">
+						<h3 class="delivery-title">Описание</h3><?php
+						call_user_func($description_tab['callback'], 'description', $description_tab);
+					?></div><?php
 				}
-				?>
+			} ?>
+
+				<?php if ( $osnovnye_harakteristiki ): ?>
+						<div class="delivery-info">
+							<h3 class="delivery-title">Основные характеристики</h3>
+							<p class="delivery"><?= $osnovnye_harakteristiki; ?></p>
+						</div>
+					<?php endif; ?>
+
+				<?php if ( $delivery ): ?>
+					<div class="delivery-info">
+						<h3 class="delivery-title">Доставка</h3>
+						<p class="delivery"><?= $delivery; ?></p>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( $certificates ): ?>
+					<div class="certificates-info">
+						<h3 class="certificates-title">Лицензии и сертификаты</h3>
+						<div class="certificates">
+							<?php foreach ( $certificates as $certificate ): ?>
+								<?php $file_url = $certificate['sertifikat']; ?>
+								<div class="certificate-item">
+									<span class="icon-ion_document-outline"></span>
+									<p><?= $certificate['nazvanie_dokumenta'] ?></p>
+									<a href="<?php echo esc_url($file_url); ?>" target="_blank"></a>
+								</div>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -67,4 +107,4 @@ if (!empty($product_tabs) && isset($product_tabs['description'])) :
 		<?php do_action( 'woocommerce_product_after_tabs' ); ?>
 	</div>
 
-<?php endif; ?>
+

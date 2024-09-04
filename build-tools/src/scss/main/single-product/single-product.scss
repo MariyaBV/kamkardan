@@ -295,10 +295,62 @@
         h3 {
             margin-bottom: 16px;
         }
+
+        p {
+            margin-bottom: 9px;
+        }
     }
 }
 
 .summary.entry-summary .stock.out-of-stock,
 .summary.entry-summary .stock.in-stock {
     display: none;
+}
+
+
+.certificates-info,
+.delivery-info {
+    margin-bottom: 32px;
+
+    p {
+        margin-bottom: 9px;
+    }
+
+    .certificates-title,
+    .delivery-title {
+        margin-bottom: 16px;
+    }
+    .certificates {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 20px;
+    
+        .certificate-item {
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            max-width: 90px;
+            width: 100%;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 15.6px;
+    
+            a {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+    
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+    
+            span {
+                font-size: 50px;
+            }
+        }
+    }
 }

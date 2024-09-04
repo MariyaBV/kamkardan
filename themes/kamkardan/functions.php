@@ -222,22 +222,23 @@ function get_menu_items_with_classes($menu_name) {
     
     global $wp;
     $current_url = home_url(add_query_arg(array(), $wp->request));
-    $current_path = trim(parse_url($current_url, PHP_URL_PATH), '/');
 
     foreach ($menu_items as $menu_item) {
-        $menu_path = trim(parse_url($menu_item->url, PHP_URL_PATH), '/');
-
+        $menu_item_url = rtrim($menu_item->url, '/'); 
+        
         if ($menu_item->url === '#catalog') {
             continue;
         }
 
-        if ($menu_path === $current_path) {
+        // Если текущий URL совпадает с URL элемента меню, добавляем класс
+        if ($menu_item_url === $current_url) {
             $menu_item->classes[] = 'selected-item-menu';
         }
     }
 
     return $menu_items;
 }
+
 
 //ф-я запроса обратного звонка
 function handle_callback_request() {
@@ -493,7 +494,7 @@ class Walker_Category_Thumbnails extends Walker_Category {
         $output .= "</li>\n";
     }
 }
-function add_product_category_sidebar() {
+/*function add_product_category_sidebar() {
     // Получаем текущую категорию
     $current_category = get_queried_object();
 
@@ -549,8 +550,103 @@ function add_product_category_sidebar() {
         </aside>
         <?php
     }
-}
+}*/
 //конец делаем sidebar с категориями на странице продукта и продуктов
+
+//начало вывод меток и подкатегорий категории карданы
+function add_kardany_tags_and_subcategories_sidebar() {
+    // Получаем текущий объект запроса
+    $current_object = get_queried_object();
+    
+    // Начальные значения
+    $current_term_ids = [];
+
+    // Проверяем, является ли текущая страница категорией, меткой или товаром
+    if (is_product_category() || is_product_tag()) {
+        $current_term_ids[] = $current_object->term_id;
+    } elseif (is_product()) {
+        // Если находимся на странице товара, получаем категории и метки товара
+        $product_id = get_the_ID();
+        $product_cats = wp_get_post_terms($product_id, 'product_cat');
+        $product_tags = wp_get_post_terms($product_id, 'product_tag');
+
+        // Добавляем все категории и метки товара в текущие термины
+        foreach ($product_cats as $cat) {
+            $current_term_ids[] = $cat->term_id;
+        }
+        foreach ($product_tags as $tag) {
+            $current_term_ids[] = $tag->term_id;
+        }
+    }
+
+    // Получаем отсортированные подкатегории и метки
+    $terms = get_sorted_product_tags_and_subcategories();
+
+    // Фильтруем метки и подкатегории
+    $tags = array_filter($terms, function($term) {
+        return $term->taxonomy == 'product_tag';
+    });
+
+    $subcategories = array_filter($terms, function($term) {
+        return $term->taxonomy == 'product_cat' && $term->parent != 0;
+    });
+
+    // Если есть метки или подкатегории, выводим их
+    if (!empty($tags) || !empty($subcategories)) {
+        ?>
+        <aside class="product-category-sidebar">
+            <div id="catalog-sidebar" class="category-list-categories mobile">
+                <h3 class="margin-bottom-16">Карданы</h3>
+
+                <?php if (!empty($tags)) : ?>
+                    <ul class="category-list">
+                        <?php foreach ($tags as $tag) : 
+                            // Получаем изображение из ACF поля "logo"
+                            $image_url = get_field('logo', $tag);
+                            $link = get_term_link($tag);
+                            // Проверяем, является ли эта метка текущей
+                            $selected_class = in_array($tag->term_id, $current_term_ids) ? ' selected' : '';
+                        ?>
+                            <li id="tag-item-<?php echo esc_attr($tag->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($tag->term_id); ?><?php echo esc_attr($selected_class); ?>">
+                                <a class="cat-link" href="<?php echo esc_url($link); ?>">
+                                    <?php if ($image_url) : ?>
+                                        <img class="cat-image" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($tag->name); ?>" />
+                                    <?php endif; ?>
+                                    <span class="cat-name"><?php echo esc_html($tag->name); ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+
+                <?php if (!empty($subcategories)) : ?>
+                    <ul class="category-list">
+                        <?php foreach ($subcategories as $subcategory) : 
+                            // Получаем миниатюру подкатегории
+                            $thumbnail_id = get_term_meta($subcategory->term_id, 'thumbnail_id', true);
+                            $image_url = wp_get_attachment_url($thumbnail_id);
+                            $link = get_term_link($subcategory);
+                            // Проверяем, является ли эта подкатегория текущей
+                            $selected_class = in_array($subcategory->term_id, $current_term_ids) ? ' selected' : '';
+                        ?>
+                            <li id="cat-item-<?php echo esc_attr($subcategory->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($subcategory->term_id); ?><?php echo esc_attr($selected_class); ?>">
+                                <a class="cat-link" href="<?php echo esc_url($link); ?>">
+                                    <?php if ($image_url) : ?>
+                                        <img class="cat-image" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($subcategory->name); ?>" />
+                                    <?php endif; ?>
+                                    <span class="cat-name"><?php echo esc_html($subcategory->name); ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </aside>
+        <?php
+    }
+}
+add_shortcode('kardany_tags_and_subcategories', 'add_kardany_tags_and_subcategories_sidebar');
+
 
 
 //вывод номера кардана из атрибутов на странице товара и карточке
@@ -763,6 +859,167 @@ function display_categories_with_additional_image() {
 add_shortcode('categories_with_additional_image', 'display_categories_with_additional_image');
 //конец вывод 2-й картинки для категорий на стр категорий
 
+//начало вывод подкатегорий и меток
+function display_kardany_subcategories_and_tags() {
+    ob_start(); // Начинаем буферизацию вывода
+
+    // Получаем отсортированные подкатегории и метки
+    $terms = get_sorted_product_tags_and_subcategories();
+
+    if (empty($terms)) {
+        return 'Подкатегории и метки не найдены.';
+    }
+
+    // Вывод всех меток (tags)
+    echo '<ul class="product-categories">';
+    foreach ($terms as $term) {
+        if ($term->taxonomy == 'product_tag') {
+            // Попытка получить изображение из ACF поля "img-big"
+            $image = get_field('img-big', $term);
+            if (!$image) {
+                // Если img-big отсутствует, пытаемся получить из "logo"
+                $image = get_field('logo', $term);
+            }
+
+            $tag_link = get_term_link($term);
+
+            echo '<li class="product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<h4 class="product-category__title">' . esc_html($term->name) . '</h4>';
+            echo '<a class="product-category__link" href="' . esc_url($tag_link) . '"></a>';
+            echo '</li>';
+        }
+    }
+
+    // Вывод всех подкатегорий (product_cat)
+    foreach ($terms as $term) {
+        // Проверяем, является ли элемент подкатегорией (product_cat)
+        if ($term->taxonomy == 'product_cat' && $term->parent != 0) {
+            // Попытка получить изображение из ACF поля "img-big"
+            $image = get_field('img-big', $term);
+            if (!$image) {
+                // Если img-big отсутствует, используем стандартное миниатюрное изображение
+                $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+                $image = wp_get_attachment_url($thumbnail_id);
+            }
+
+            $term_link = get_term_link($term);
+
+            echo '<li class="product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<h4 class="product-category__title">' . esc_html($term->name) . '</h4>';
+            echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+
+    return ob_get_clean(); // Возвращаем буферизированный вывод
+}
+add_shortcode('kardany_subcategories_and_tags', 'display_kardany_subcategories_and_tags');
+
+function display_kardany_all_subcategories_and_tags() {
+    ob_start(); // Начинаем буферизацию вывода
+
+    // Получаем отсортированные подкатегории и метки
+    $terms = get_sorted_product_tags_and_subcategories();
+
+    if (empty($terms)) {
+        return 'Подкатегории и метки не найдены.';
+    }
+
+    // Список для меток на русском языке
+    echo '<ul class="russian-tags">';
+    foreach ($terms as $term) {
+        if ($term->taxonomy == 'product_tag' && is_russian($term->name)) {
+
+            $image = get_field('logo', $term);
+            $tag_link = get_term_link($term);
+
+            echo '<li class="catalog-product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<p class="catalog-product-category__txt txt-normal">' . esc_html($term->name) . '</p>';
+            echo '<a class="catalog-product-category__link" href="' . esc_url($tag_link) . '"></a>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+
+    // Список для меток на английском языке
+    echo '<ul class="english-tags">';
+    foreach ($terms as $term) {
+        if ($term->taxonomy == 'product_tag' && !is_russian($term->name)) {
+
+            $image = get_field('logo', $term);
+            $tag_link = get_term_link($term);
+
+            echo '<li class="catalog-product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<p class="catalog-product-category__txt txt-normal">' . esc_html($term->name) . '</p>';
+            echo '<a class="catalog-product-category__link" href="' . esc_url($tag_link) . '"></a>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+
+    // Список подкатегорий и категорий ('crosspieces', 'accessories')
+    echo '<ul class="subcategories-and-specific-categories">';
+    foreach ($terms as $term) {
+        // Проверяем, является ли элемент подкатегорией (product_cat)
+        if ($term->taxonomy == 'product_cat' && $term->parent != 0) {
+
+            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $image = wp_get_attachment_url($thumbnail_id);
+            $term_link = get_term_link($term);
+
+            echo '<li class="catalog-product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<p class="catalog-product-category__txt">' . esc_html($term->name) . '</p>';
+            echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
+            echo '</li>';
+        }
+    }
+
+    // Получаем конкретные категории 'crosspieces' и 'accessories'
+    $specific_terms = ['crosspieces', 'accessories'];
+    foreach ($specific_terms as $slug) {
+        $term = get_term_by('slug', $slug, 'product_cat');
+        if ($term) {
+            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $image = wp_get_attachment_url($thumbnail_id);
+            $term_link = get_term_link($term);
+
+            echo '<li class="catalog-product-category">';
+            if ($image) {
+                echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($term->name) . '">';
+            }
+            echo '<p class="catalog-product-category__txt">' . esc_html($term->name) . '</p>';
+            echo '<a href="' . esc_url($term_link) . '" class="product-category__link"></a>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+
+    return ob_get_clean(); // Возвращаем буферизированный вывод
+}
+add_shortcode('kardany_all_subcategories_and_tags', 'display_kardany_all_subcategories_and_tags');
+
+function is_russian($text) {
+    return preg_match('/[\p{Cyrillic}]/u', $text);
+}
+//конец вывод подкатегорий и меток
+
+
 function search_block_custom() {
     ob_start(); // Начинаем буферизацию вывода чтобы не было ошибки Ошибка обновления. Ответ не является допустимым ответом JSON.
     ?>
@@ -789,36 +1046,79 @@ if ( ! function_exists( 'woocommerce_template_loop_product_title' ) ) {
 }
 
 //получаем картинку из категории
+// function get_image_from_category() {
+//     global $product;
+	
+//     if ( empty( $product ) ) {
+//         return;
+//     }
+
+//     // Получаем ID продукта
+// 	$product_id = $product->get_id();
+
+// 	// Получаем категории продукта
+// 	$product_categories = get_the_terms( $product_id, 'product_cat' );
+
+// 	if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
+// 		echo '<div class="product-category__img">';
+
+// 		foreach ( $product_categories as $category ) {
+// 			$thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
+// 			$image_url = wp_get_attachment_url( $thumbnail_id );
+
+// 			if ( $image_url ) {
+// 				echo '<div class="category-image">';
+// 				echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
+// 				echo '</div>';
+// 			}
+// 		}
+
+// 		echo '</div>';
+// 	}
+// }
+
 function get_image_from_category() {
     global $product;
-	
+
     if ( empty( $product ) ) {
         return;
     }
 
-    // Получаем ID продукта
-	$product_id = $product->get_id();
+    $product_id = $product->get_id();
 
-	// Получаем категории продукта
-	$product_categories = get_the_terms( $product_id, 'product_cat' );
+    $product_categories = get_the_terms( $product_id, 'product_cat' );
 
-	if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
-		echo '<div class="product-category__img">';
+    if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
+        echo '<div class="product-category__img">';
 
-		foreach ( $product_categories as $category ) {
-			$thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
-			$image_url = wp_get_attachment_url( $thumbnail_id );
+        foreach ( $product_categories as $category ) {
+            // Если категория = карданы для меток
+            if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
+                $current_tag = get_queried_object();
+                $logo_image = get_field('logo', 'product_cat_' . $current_tag->term_id);
 
-			if ( $image_url ) {
-				echo '<div class="category-image">';
-				echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
-				echo '</div>';
-			}
-		}
+                if ( $logo_image ) {
+                    echo '<div class="category-image 1111">';
+                    echo '<img src="' . esc_url( $logo_image ) . '"  />';
+                    echo '</div>';
+                }
+            } else {
+                // Для остальных категорий (включая подкатегории)
+                $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
+                $image_url = wp_get_attachment_url( $thumbnail_id );
 
-		echo '</div>';
-	}
+                if ( $image_url ) {
+                    echo '<div class="category-image 2222">';
+                    echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
+                    echo '</div>';
+                }
+            }
+        }
+
+        echo '</div>';
+    }
 }
+
 
 //удаляем исходную сортировку из видов сортировки
 function remove_orderby_options( $sortby ) {
@@ -1140,3 +1440,201 @@ function get_sorted_product_categories() {
     // Объединяем все категории в нужном порядке
     return array_merge( $russian, $english, $specific, $specific_2 );
 }
+
+function get_sorted_product_tags_and_subcategories() {
+    // Получаем все метки
+    $terms = get_terms( array(
+        'taxonomy'   => 'product_tag', // Таксономия меток
+        'hide_empty' => false,
+    ) );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        return array();
+    }
+
+    $russian = array();
+    $english = array();
+
+    foreach ( $terms as $term ) {
+        if ( preg_match( '/[а-яА-ЯЁё]/u', $term->name ) ) {
+            // Проверяем, содержит ли название метки кириллические символы
+            $russian[] = $term;
+        } else {
+            // Все остальные метки считаем английскими
+            $english[] = $term;
+        }
+    }
+
+    // Устанавливаем локаль для правильной сортировки русских меток
+    $current_locale = setlocale( LC_COLLATE, 0 ); // Сохраняем текущую локаль
+    setlocale( LC_COLLATE, 'ru_RU.UTF-8' );      // Устанавливаем русскую локаль
+
+    // Сортируем русские метки по алфавиту
+    usort( $russian, function( $a, $b ) {
+        return strcoll( $a->name, $b->name );
+    });
+
+    // Возвращаем локаль к исходному значению
+    setlocale( LC_COLLATE, $current_locale );
+
+    // Сортируем английские метки по алфавиту
+    usort( $english, function( $a, $b ) {
+        return strcasecmp( $a->name, $b->name );
+    });
+
+    // Получаем подкатегории для категории 'kardany'
+    $kardany_subcategories = array();
+    $kardany_term = get_term_by('slug', 'kardany', 'product_cat'); // Получаем термин категории 'kardany'
+
+    if ( $kardany_term ) {
+        $kardany_subcategories = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'parent'     => $kardany_term->term_id,
+            'hide_empty' => false,
+        ) );
+
+        // Сортируем подкатегории 'kardany' по алфавиту
+        usort( $kardany_subcategories, function( $a, $b ) {
+            return strcasecmp( $a->name, $b->name );
+        });
+    }
+
+    // Объединяем все метки и подкатегории в нужном порядке
+    return array_merge( $russian, $english, $kardany_subcategories );
+}
+
+
+function filter_products_by_parent_category_on_product_tag_page($query) {
+    if (!is_admin() && $query->is_main_query() && is_tax('product_tag')) {
+        $parent_category_id = 0;
+
+        // Получаем все родительские категории (только термины таксономии 'product_cat')
+        $parent_categories = get_terms(array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false, // Показывать все категории, даже если они пустые
+            'parent'     => 0, // Получить только родительские категории
+        ));
+        
+        // Ищем категорию с дочерними категориями
+        foreach ($parent_categories as $category) {
+            $subcategories = get_terms(array(
+                'taxonomy'   => 'product_cat',
+                'hide_empty' => false,
+                'parent'     => $category->term_id,
+            ));
+        
+            if (!empty($subcategories)) {
+                $parent_category_id = $category->term_id;
+                break; // Останавливаем цикл, как только нашли подходящую категорию
+            }
+        }
+
+        if ($parent_category_id === 0) {
+            return; // Если не найдена родительская категория, прекращаем выполнение
+        }
+
+        // Получаем ID всех дочерних категорий, включая родительскую
+        $child_categories = get_terms(array(
+            'taxonomy'   => 'product_cat',
+            'child_of'   => $parent_category_id,
+            'hide_empty' => false,
+            'fields'     => 'ids',
+        ));
+        
+        $child_categories[] = $parent_category_id;
+
+        // Получаем существующий tax_query или создаем новый массив
+        $tax_query = $query->get('tax_query');
+
+        if (!is_array($tax_query)) {
+            $tax_query = array();
+        }
+
+        // Добавляем новый запрос в tax_query
+        $tax_query[] = array(
+            'taxonomy' => 'product_cat',
+            'field'    => 'term_id',
+            'terms'    => $child_categories,
+            'operator' => 'IN',
+        );
+
+        // Устанавливаем обновленный tax_query для основного запроса
+        $query->set('tax_query', $tax_query);
+    }
+}
+add_action('pre_get_posts', 'filter_products_by_parent_category_on_product_tag_page');
+
+// function create_default_pages() {
+//     // Проверьте, не были ли страницы уже созданы
+//     $pick_up_page_title = 'Подобрать';
+//     $repair_page_title = 'Ремонт';
+
+//     $pick_up_page_check = get_page_by_title($pick_up_page_title);
+//     $repair_page_check = get_page_by_title($repair_page_title);
+
+
+//     // Если страницы с этими заголовками не существуют, создаем их
+//     if (!$pick_up_page_check) {
+//         wp_insert_post(array(
+//             'post_title'    => $pick_up_page_title,
+//             'post_content'  => 'Подобрать.',
+//             'post_status'   => 'publish',
+//             'post_type'     => 'page',
+//             'meta_input'     => [ '_wp_page_template'=>'pick_up.php' ],
+//         ));
+//     }
+
+//     if (!$repair_page_check) {
+//         wp_insert_post(array(
+//             'post_title'    => $repair_page_title,
+//             'post_content'  => 'Ремонт.',
+//             'post_status'   => 'publish',
+//             'post_type'     => 'page',
+//             'meta_input'     => [ '_wp_page_template'=>'repair.php' ],
+//         ));
+//     }
+// }
+// add_action('after_setup_theme', 'create_default_pages');
+
+function create_default_pages() {
+    // Проверьте, не были ли страницы уже созданы
+    $pick_up_page_title = 'Подобрать';
+    $repair_page_title = 'Ремонт';
+
+    $pick_up_page_check = get_page_by_path('pick-up');
+    $repair_page_check = get_page_by_path('repair');
+
+    // Если страницы с этими заголовками не существуют, создаем их
+    if (!$pick_up_page_check) {
+        $pick_up_page_id = wp_insert_post(array(
+            'post_title'    => $pick_up_page_title,
+            'post_content'  => 'Подобрать.',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_author'   => 1,
+            'post_name'     => 'pick-up',
+        ));
+
+        // Установить шаблон страницы, если страница была успешно создана
+        if ($pick_up_page_id && !is_wp_error($pick_up_page_id)) {
+            update_post_meta($pick_up_page_id, '_wp_page_template', 'pick_up.php');
+        }
+    }
+
+    if (!$repair_page_check) {
+        $repair_page_id = wp_insert_post(array(
+            'post_title'    => $repair_page_title,
+            'post_content'  => 'Ремонт.',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_author'   => 1,
+            'post_name'     => 'repair',
+        ));
+
+        // Установить шаблон страницы, если страница была успешно создана
+        if ($repair_page_id && !is_wp_error($repair_page_id)) {
+            update_post_meta($repair_page_id, '_wp_page_template', 'repair.php');
+        }
+    }
+}
+add_action('init', 'create_default_pages');
