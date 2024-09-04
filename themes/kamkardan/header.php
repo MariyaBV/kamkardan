@@ -171,12 +171,12 @@ $options = get_fields('option');
 
 		<div id="block-catalog" class="block-catalog">
 			<div class="wrap-header block-catalog__block">
-				<a id="close-catalog-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Vector-13"></span><h4>Назад</h4></a>
+				<?php /*<a id="close-catalog-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Vector-13"></span><h4>Назад</h4></a>*/?>
 				<div class="block-categories">
 					<?php echo do_shortcode('[kardany_all_subcategories_and_tags]'); ?>
 				</div>
 				<a href="" id="close-catalog-menu"><span class="icon-Close-1 close-catalog-menu"></span></a>
-			<div>
+			</div>
 		</div>
 	</header><!-- #masthead -->
 

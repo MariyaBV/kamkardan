@@ -4,6 +4,8 @@
     }
 
     .block-description-card {
+        margin-top: 24px;
+
         &__item {
             display: flex;
             align-items: center;
@@ -47,9 +49,14 @@
                 object-fit: scale-down;
                 margin: 0 auto;
             }
+
+            @media screen and (max-width: 768px) {
+                margin: 0 auto;
+            }
         }
 
         &__text {
+            margin-top: 8px;
             color: var(--dark-grey);
             font-size: var(--subtitle-s-font-size);
             font-weight: var(--subtitle-s-font-weight);
@@ -283,6 +290,10 @@
             span.extra_fields_name {
                 display: inline-table;
                 inline-size: 70%;
+
+                @media screen and (max-width: 500px) {
+                    inline-size: 60%;
+                }
             }
 
             span.extra_fields_value {

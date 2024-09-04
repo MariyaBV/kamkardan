@@ -26,9 +26,10 @@ $product_categories_plain = strip_tags($product_categories);
 ?>
 
     <div class="orderby__block-title-sort">
-        <div>
+        <div class="orderby__block-title">
             <?php if ( !is_shop() ): ?>
             <div class="orderby__title">
+            <div class="product-category__img-mobile"><?php if ( !is_shop() ){ echo get_image_from_category(); } ?></div>
                 <?php 
                 /*if ($product) {
                     if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
@@ -88,7 +89,7 @@ $product_categories_plain = strip_tags($product_categories);
             <?php endif; ?>
             <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>
             <div class="block-sort">
-                <form class="woocommerce-ordering orderby-block" method="get">
+                <?php /*<form class="woocommerce-ordering orderby-block" method="get">
                     <?php
                     // Проверяем наличие параметра 'orderby' в URL
                     $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
@@ -107,11 +108,38 @@ $product_categories_plain = strip_tags($product_categories);
                     </select>
                     <input type="hidden" name="paged" value="1" />
                     <?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'product-page' ) ); ?>
+                </form>*/?>
+
+
+                <form class="woocommerce-ordering custom-ordering" method="get">
+                    <input type="hidden" name="paged" value="1">
+                    <?php wc_query_string_form_fields(null, array('submit', 'product-page')); ?>
+
+                    <div class="custom-ordering__select" data-attribute="orderby">
+                        <div class="custom-ordering-select">
+                            <div class="custom-ordering-trigger" data-attribute-label="<?php esc_attr_e('Сортировать', 'woocommerce'); ?>">
+                                <?php echo $catalog_orderby_options[$orderby] ?? '<span class="icon-Frame-10"></span>Сортировать'; ?>
+                            </div>
+                            <ul class="custom-ordering-options">
+                                <?php foreach ($catalog_orderby_options as $id => $name) : ?>
+                                    <li class="custom-ordering-option <?php echo $orderby === $id ? 'selected' : ''; ?>" data-value="<?php echo esc_attr($id); ?>">
+                                        <input type="radio" name="orderby" value="<?php echo esc_attr($id); ?>" <?php checked($orderby, $id); ?>>
+                                        <?php echo wp_kses_post($name); ?>
+                                        <span class="icon-Onyes"><span class="path1"></span><span class="path2"></span></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
                 </form>
 
-                <?php if (strpos($product_categories_plain, 'Крестовины') === false){ echo print_length_filter();} ?>
+                <?php if (strpos($product_categories_plain, 'Крестовины') === false){ 
+                    echo print_length_filter();
+                } else {
+                    echo print_filters();
+                }?>
             </div>
             <?php endif; ?>
     </div> 
-    <?php if ( !is_shop() ){ echo get_image_from_category(); } ?>
+    <div class="product-category__img-desktop"><?php if ( !is_shop() ){ echo get_image_from_category(); } ?></div>
 </div>

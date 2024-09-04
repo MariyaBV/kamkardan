@@ -31,17 +31,6 @@ echo wc_get_stock_html( $product ); // WPCS: XSS ok.
 if ( $product->is_in_stock() ) : ?>
 
 	<?php do_action( 'woocommerce_before_add_to_cart_form' ); ?>
-
-	<div class="product-item">
-		<div class="block-quantity-button">
-			<button class="quantity-arrow-minus"> - </button>
-			<div class="quantity">
-				<input type="number" class="qty" name="quantity" value="1" min="1" />
-			</div>
-			<button class="quantity-arrow-plus"> + </button>
-			<a class="add-to-cart button add_to_cart_button ajax_add_to_cart" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"><span class="add-to-cart-text">Купить</span></a>
-		</div>
-	</div>
 	<div class="block-description-card txt-normal">
 		<div class="block-description-card__item">
 			<span class="icon-bi_check-all"></span>
@@ -52,6 +41,19 @@ if ( $product->is_in_stock() ) : ?>
 			<p>Гарантия <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)): ?> на новые карданы <?php endif; ?> - 1 год</p>
 		</div>
 	</div>
+	<div class="product-item">
+		<div class="block-quantity-button">
+			<button class="quantity-arrow-minus"> - </button>
+			<div class="quantity">
+				<input type="number" class="qty" name="quantity" value="1" min="1" />
+			</div>
+			<button class="quantity-arrow-plus"> + </button>
+			<a class="add-to-cart button add_to_cart_button ajax_add_to_cart" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"><span class="add-to-cart-text">Купить</span></a>
+		</div>
+	</div>
+	<hr class="hr-line">
+	<p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
+    
 	<?php /*do_action( 'woocommerce_after_add_to_cart_form' );*/ ?>
 
 <?php endif; ?>

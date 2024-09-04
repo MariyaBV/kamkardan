@@ -601,10 +601,14 @@ function add_kardany_tags_and_subcategories_sidebar() {
                 <?php if (!empty($tags)) : ?>
                     <ul class="category-list">
                         <?php foreach ($tags as $tag) : 
-                            // Получаем изображение из ACF поля "logo"
-                            $image_url = get_field('logo', $tag);
+                            // Получаем значение поля "logo"
+                            $logo_field = get_field('logo', $tag);
+                            if (is_numeric($logo_field)) {
+                                $image_url = wp_get_attachment_url($logo_field);
+                            } else {
+                                $image_url = $logo_field; // Предполагаем, что это уже URL
+                            }
                             $link = get_term_link($tag);
-                            // Проверяем, является ли эта метка текущей
                             $selected_class = in_array($tag->term_id, $current_term_ids) ? ' selected' : '';
                         ?>
                             <li id="tag-item-<?php echo esc_attr($tag->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($tag->term_id); ?><?php echo esc_attr($selected_class); ?>">
@@ -626,7 +630,6 @@ function add_kardany_tags_and_subcategories_sidebar() {
                             $thumbnail_id = get_term_meta($subcategory->term_id, 'thumbnail_id', true);
                             $image_url = wp_get_attachment_url($thumbnail_id);
                             $link = get_term_link($subcategory);
-                            // Проверяем, является ли эта подкатегория текущей
                             $selected_class = in_array($subcategory->term_id, $current_term_ids) ? ' selected' : '';
                         ?>
                             <li id="cat-item-<?php echo esc_attr($subcategory->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($subcategory->term_id); ?><?php echo esc_attr($selected_class); ?>">
@@ -646,6 +649,7 @@ function add_kardany_tags_and_subcategories_sidebar() {
     }
 }
 add_shortcode('kardany_tags_and_subcategories', 'add_kardany_tags_and_subcategories_sidebar');
+
 
 
 
@@ -701,21 +705,19 @@ function display_product_attribute($product, $attribute_key) {
 }
 
 function custom_woocommerce_attr_len_cardan() {
-    if ( is_shop() || is_product_category() || is_front_page()) {
-        $product = wc_get_product(get_the_ID());
+    $product = wc_get_product(get_the_ID());
 
-        // Массив с ключами нужных атрибутов
-        $attribute_keys = array(
-            'pa_application',
-            'pa_length-compressed-position',
-            'pa_bearing-outerd-mm',
-            'pa_dimensions-at-ends-h-mm'
-        );
+    // Массив с ключами нужных атрибутов
+    $attribute_keys = array(
+        'pa_application',
+        'pa_length-compressed-position',
+        'pa_bearing-outerd-mm',
+        'pa_dimensions-at-ends-h-mm'
+    );
 
-        // Перебор атрибутов и вывод
-        foreach ( $attribute_keys as $attribute_key ) {
-            display_product_attribute( $product, $attribute_key );
-        }
+    // Перебор атрибутов и вывод
+    foreach ( $attribute_keys as $attribute_key ) {
+        display_product_attribute( $product, $attribute_key );
     }
 }
 add_action('woocommerce_after_shop_loop_item_title', 'custom_woocommerce_attr_len_cardan', 15);
@@ -1078,30 +1080,45 @@ function get_image_from_category() {
     }
 
     $product_id = $product->get_id();
-
     $product_categories = get_the_terms( $product_id, 'product_cat' );
 
     if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
         echo '<div class="product-category__img">';
 
         foreach ( $product_categories as $category ) {
-            // Если категория = карданы для меток
+            // Проверка, если текущая категория является карданы
             if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
                 $current_tag = get_queried_object();
-                $logo_image = get_field('logo', 'product_cat_' . $current_tag->term_id);
+                
+                // Получаем URL изображения для текущей метки
+                $logo_field = get_field('logo', 'product_cat_' . $current_tag->term_id);
+                
+                // Обрабатываем различные типы значений
+                if ( is_string($logo_field) && filter_var($logo_field, FILTER_VALIDATE_URL) ) {
+                    // Если это строка и является URL
+                    $logo_image = esc_url($logo_field);
+                }  elseif ( is_array($logo_field) && isset($logo_field['url']) ) {
+                    // Если это массив, получаем URL из ключа 'url'
+                    $logo_image = esc_url($logo_field['url']);
+                } elseif ( is_numeric($logo_field) ) {
+                    // Если это числовой ID, преобразуем в URL
+                    $logo_image = wp_get_attachment_url($logo_field);
+                } else {
+                    $logo_image = esc_url($logo_field); // Неверный формат
+                }
 
                 if ( $logo_image ) {
-                    echo '<div class="category-image 1111">';
-                    echo '<img src="' . esc_url( $logo_image ) . '"  />';
+                    echo '<div class="category-image">';
+                    echo '<img src="' . esc_url( $logo_image ) . '" alt="' . esc_attr( $category->name ) . '" />';
                     echo '</div>';
                 }
             } else {
-                // Для остальных категорий (включая подкатегории)
+                // Обрабатываем остальные категории и подкатегории
                 $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
                 $image_url = wp_get_attachment_url( $thumbnail_id );
 
                 if ( $image_url ) {
-                    echo '<div class="category-image 2222">';
+                    echo '<div class="category-image">';
                     echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
                     echo '</div>';
                 }
@@ -1111,6 +1128,8 @@ function get_image_from_category() {
         echo '</div>';
     }
 }
+
+
 
 
 //удаляем исходную сортировку из видов сортировки
@@ -1132,9 +1151,9 @@ function print_length_filter() {
 
     echo '<form class="length-filter subtitle" method="get">';
     echo '<span>Длина в сжатом положении:</span>';
-    echo '<input class="subtitle" placeholder="от" type="number" id="min_length" name="min_length" value="' . esc_attr($min_length) . '" />';
-    echo '<input class="subtitle" placeholder="до" type="number" id="max_length" name="max_length" value="' . esc_attr($max_length) . '" />';
-    echo '<input class="subtitle" type="submit" value="Фильтровать" />';
+    echo '<div class="length-filter__block"><input class="subtitle" placeholder="от" type="number" id="min_length" name="min_length" value="' . esc_attr($min_length) . '" />';
+    echo '<input class="subtitle" placeholder="до" type="number" id="max_length" name="max_length" value="' . esc_attr($max_length) . '" /></div>';
+    echo '<input class="subtitle" type="submit" value="Применить" />';
     echo '</form>';
 
     // Создаем URL для очистки фильтров
@@ -1151,7 +1170,7 @@ function print_length_filter() {
 
 // Фильтрация продуктов по длине
 function filter_products_by_length( $query ) {
-    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
         global $wpdb;
         $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
         $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
@@ -1184,9 +1203,10 @@ function filter_products_by_length( $query ) {
 }
 add_action('pre_get_posts', 'filter_products_by_length');
 
+
 // Проверка наличия товаров перед запросом
 function check_products_exist_for_length_filter() {
-    if (is_shop() || is_tax('product_cat')) {
+    if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
         global $wpdb;
 
         $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
@@ -1214,7 +1234,7 @@ function check_products_exist_for_length_filter() {
             if (empty($results)) {
                 // Отменяем стандартный запрос
                 add_filter('pre_get_posts', function($query) {
-                    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+                    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
                         $query->set('post__in', array(0)); // Возвращаем пустые результаты
                     }
                 });
@@ -1224,29 +1244,25 @@ function check_products_exist_for_length_filter() {
 }
 add_action('wp', 'check_products_exist_for_length_filter');
 
-
 // Сортировка по длине
 function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
-    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
-        $orderby = isset($_GET['orderby']) ? $_GET['orderby'] : '';
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
+        $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
 
+
+       
         if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+            
             add_filter('posts_clauses', function($clauses, $wp_query) use ($orderby) {
                 global $wpdb;
 
-                // Проверяем, что запрос связан с продуктами WooCommerce
-                if ( isset($wp_query->query_vars['post_type']) && $wp_query->query_vars['post_type'] === 'product' ) {
-                    
-                    //  JOINим 3 связанные таблицы чтобы найти данные по таксономии
-                    $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
-                                          LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-                                          LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
-                    
-                    $clauses['where'] .= " AND tt.taxonomy = 'pa_length-compressed-position'";
-
-                    // Устанавливаем порядок сортировки по убыванию length_desc или возрастанию length_asc
-                    $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
-                }
+                $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
+                                        LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                                        LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
+                
+                $clauses['where'] .= $wpdb->prepare(" AND tt.taxonomy = %s", 'pa_length-compressed-position');
+                
+                $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
 
                 return $clauses;
             }, 10, 2);
@@ -1255,8 +1271,30 @@ function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
 }
 add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args');
 
+
+
 // Добавление пользовательских параметров сортировки
 function custom_orderby_option( $sortby ) {
+    global $wp_query;
+
+    $sortby['default'] = '<span class="icon-Frame-10"></span>Сортировать'; 
+    
+    $default_sort = array('default' => '<span class="icon-Frame-10"></span>Сортировать');
+    $sortby = array_merge($default_sort, $sortby);
+
+
+    if ( is_product_category() ) {
+        $current_category_id = get_queried_object_id();
+        $excluded_category_slug = 'crosspieces'; 
+        $excluded_category = get_term_by( 'id', $current_category_id, 'product_cat' );
+
+        //если крестовины то не выводим
+        if ( $excluded_category && $excluded_category->slug === $excluded_category_slug ) {
+            return $sortby;
+        }
+    }
+
+    // Добавляем новые параметры сортировки, если текущая страница не является категорией "crosspieces"
     $sortby['length_asc'] = 'Длина, мм ⬆'; 
     $sortby['length_desc'] = 'Длина, мм ⬇';
     return $sortby;
@@ -1265,6 +1303,151 @@ add_filter( 'woocommerce_default_catalog_orderby_options', 'custom_orderby_optio
 add_filter( 'woocommerce_catalog_orderby', 'custom_orderby_option' );
 //конец добавляем сортировку длина мм
 
+//фильтры по аттриьбутам
+function get_category_product_attributes($category_id) {
+    global $wpdb;
+
+    // Получаем ID всех продуктов в данной категории
+    $product_ids = $wpdb->get_col($wpdb->prepare("
+        SELECT object_id
+        FROM {$wpdb->term_relationships}
+        WHERE term_taxonomy_id = %d
+    ", $category_id));
+
+    if (empty($product_ids)) {
+        return false;
+    }
+
+    $all_attributes = wc_get_attribute_taxonomies();
+
+    // Отфильтровываем только те атрибуты, которые используются в данных продуктах
+    $attributes = array();
+    foreach ($all_attributes as $attribute) {
+        $attribute_name = $attribute->attribute_name;
+
+        // Исключаем атрибут 'product-unit'
+        if ($attribute_name === 'product-unit') {
+            continue;
+        }
+
+        $taxonomy = 'pa_' . $attribute->attribute_name;
+        $term_count = $wpdb->get_var($wpdb->prepare("
+            SELECT COUNT(DISTINCT tr.term_taxonomy_id)
+            FROM {$wpdb->term_relationships} AS tr
+            INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            WHERE tt.taxonomy = %s
+            AND tr.object_id IN (" . implode(',', array_map('intval', $product_ids)) . ")
+        ", $taxonomy));
+
+        if ($term_count > 0) {
+            $attributes[] = $attribute;
+        }
+    }
+
+    return $attributes;
+}
+function print_filters() {
+    // Получаем текущий URL
+    $current_url = $_SERVER['REQUEST_URI'];
+
+    $category = get_queried_object();
+
+    if (!$category) {
+        return;
+    }
+
+    $category_id = $category->term_id;
+
+    // Получаем атрибуты категории
+    if (function_exists('get_category_product_attributes')) {
+        $attributes = get_category_product_attributes($category_id);
+
+        // Если атрибуты отсутствуют или это не массив, прекращаем выполнение
+        if (!$attributes || !is_array($attributes)) {
+            return;
+        }
+
+        // Убираем атрибут с названием 'application'
+        $attributes = array_filter($attributes, function($attribute) {
+            return $attribute->attribute_name !== 'application';
+        });
+
+        if (empty($attributes)) {
+            return; // Если после фильтрации не осталось атрибутов, выходим из функции
+        }
+    } else {
+        error_log('Функция get_category_product_attributes не определена.');
+        return;
+    }
+
+    $current_params = $_GET;
+
+    $attribute_params = array_filter($current_params, function($key) {
+        return strpos($key, 'attribute_') === 0;
+    }, ARRAY_FILTER_USE_KEY);
+
+    $non_attribute_params = array_filter($current_params, function($key) {
+        return strpos($key, 'attribute_') !== 0;
+    }, ARRAY_FILTER_USE_KEY);
+
+    $has_non_empty_attribute = false;
+    foreach ($attribute_params as $value) {
+        if (!empty($value)) {
+            $has_non_empty_attribute = true;
+            break;
+        }
+    }
+
+    $clear_filters_url = add_query_arg($non_attribute_params, get_term_link($category));
+    echo '<div class="attribute-filters"><form method="get" action="#">';
+
+    foreach ($current_params as $key => $value) {
+        if (strpos($key, 'attribute_') !== 0) {
+            echo '<input type="hidden" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '">';
+        }
+    }
+
+    foreach ($attributes as $attribute) {
+        $attribute_name = $attribute->attribute_name;
+        $attribute_label = $attribute->attribute_label;
+        $selected_value = isset($current_params['attribute_' . esc_attr($attribute_name)]) ? $current_params['attribute_' . esc_attr($attribute_name)] : '';
+
+        $terms = get_terms(array(
+            'taxonomy' => 'pa_' . $attribute_name,
+            'hide_empty' => true,
+        ));
+
+        if (!empty($terms) && !is_wp_error($terms)) {
+            echo '<div class="attribute-filters__select" data-attribute="' . esc_attr($attribute_name) . '">';
+            echo '<div class="custom-select">';
+            $selected_label = $selected_value ? get_term_by('slug', $selected_value, 'pa_' . esc_attr($attribute_name))->name : esc_html($attribute_label);
+            echo '<div class="custom-select-trigger" data-attribute-label="' . esc_html($attribute_label) . '">' . esc_html($selected_label) . '</div>';
+            echo '<span class="icon-Down-3"></span>';
+            echo '<ul class="custom-options">';
+
+            foreach ($terms as $term) {
+                $selected = $selected_value === $term->slug ? ' selected' : '';
+                echo '<li class="custom-option' . ($selected ? ' selected' : '') . '" data-value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</li>';
+            }
+
+            echo '</ul>';
+            echo '</div>';
+            echo '<span class="vertical-line"></span>';
+            echo '<span class="reset-button">×</span>';
+            echo '<input type="hidden" name="attribute_' . esc_attr($attribute_name) . '" value="' . esc_attr($selected_value) . '">';
+            echo '</div>';
+        }
+    }
+
+    echo '<input class="submit-button" type="submit" value="Применить">';
+    echo '</form>';
+
+    if ($has_non_empty_attribute) {
+        echo '<a href="' . esc_url($clear_filters_url) . '" class="clear-filters">Очистить фильтры</a>';
+    }
+
+    echo '</div>';
+}
 
 
 function custom_woocommerce_ajax_add_to_cart() {
@@ -1631,3 +1814,18 @@ function create_default_pages() {
     }
 }
 add_action('init', 'create_default_pages');
+
+function style_mobile() {
+    if (is_front_page() || is_cart() || is_checkout() || is_account_page() || is_singular('product')) {
+        ?> 
+            <style>
+                @media screen and (max-width: 960px) {
+                    #primary {
+                        margin-top: 136px;
+                    }
+                }
+            </style>
+        <?php
+    }
+}
+add_action('wp_head', 'style_mobile');
