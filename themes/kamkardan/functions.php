@@ -720,39 +720,6 @@ function custom_woocommerce_attr_len_cardan() {
 }
 add_action('woocommerce_after_shop_loop_item_title', 'custom_woocommerce_attr_len_cardan', 15);
 
-
-
-//начало добавляем к поиску поиск по атрибутам
-function custom_search_query($query) {
-    if ( !is_admin() && $query->is_search() && $query->is_main_query() ) {
-        add_filter('posts_search', 'custom_search_query_post', 10, 2);
-    }
-}
-add_action('pre_get_posts', 'custom_search_query');
-
-function custom_search_query_post($search, $query) {
-    global $wpdb;
-
-    if ( empty($search) ) {
-        return $search;
-    }
-
-    $search_term = $query->get('s');
-
-	$search .= " OR EXISTS (
-		SELECT 1 
-		FROM {$wpdb->prefix}terms AS t
-		INNER JOIN {$wpdb->prefix}term_taxonomy AS tt ON t.term_id = tt.term_id
-		INNER JOIN {$wpdb->prefix}term_relationships AS tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-		WHERE t.name LIKE '%" . esc_sql($wpdb->esc_like($search_term)) . "%'
-		AND tr.object_id = {$wpdb->posts}.ID
-	)";
-
-
-    return $search;
-}
-//конец добавляем к поиску поиск по атрибутам
-
 // Удаляем стандартную функцию вывода описания
 remove_action( 'woocommerce_product_tabs', 'woocommerce_product_description_tab', 10 );
 // Добавляем нашу функцию для вывода описания без заголовка <h2>
@@ -775,25 +742,50 @@ function custom_woocommerce_product_description_tab_content() {
     }
 }
 
+//начало хлебные крошки
 //удаляем хлебные крошки woocomerce
 remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
+// Добавляем хлебные крошки только на страницах товаров
+function add_woocommerce_breadcrumbs_to_product_page() {
+    if (is_singular('product')) {
+        woocommerce_breadcrumb();
+    }
+}
+add_action('woocommerce_before_main_content', 'add_woocommerce_breadcrumbs_to_product_page', 20);
+function custom_woocommerce_breadcrumb_separator($defaults) {
+    // Удаляем символ '/'
+    $defaults['delimiter'] = '';
+    return $defaults;
+}
+add_filter('woocommerce_breadcrumb_defaults', 'custom_woocommerce_breadcrumb_separator');
+//добавляем спан чтобы стили можно было правильно импользовать
+function wrap_woocommerce_breadcrumbs_link_text($crumbs) {
+    foreach ($crumbs as &$crumb) {
+        if (!empty($crumb[1])) {
+            $crumb[0] = `<span>` . $crumb[0] . `</span>`;
+        }
+    }
+    return $crumbs;
+}
+add_filter('woocommerce_get_breadcrumb', 'wrap_woocommerce_breadcrumbs_link_text');
 
 //хлебные крошки yoast seo
 function custom_breadcrumb_home_text($link_output) {
+    if (is_singular('product')) {
+        return ''; 
+    }
     if (!is_front_page()) {
         return str_replace('Главная страница', 'Главная', $link_output);
     }
     return $link_output;
 }
 add_filter('wpseo_breadcrumb_single_link', 'custom_breadcrumb_home_text');
-
 //удаляем разделить в хлебных крошках yoast seo
 function custom_breadcrumb_separator($output) {
     $output = str_replace('»', '', $output);
     return $output;
 }
 add_filter('wpseo_breadcrumb_separator', 'custom_breadcrumb_separator');
-
 //добавляем доп спан чтобы правильно применялись стили для текста
 function wrap_breadcrumbs_link_text($link_output) {
     if (preg_match('/<a[^>]*>(.*?)<\/a>/', $link_output, $matches)) {
@@ -803,6 +795,7 @@ function wrap_breadcrumbs_link_text($link_output) {
     return $link_output;
 }
 add_filter('wpseo_breadcrumb_single_link', 'wrap_breadcrumbs_link_text');
+//конец хлебные крошки
 
 
 //начало вывод 2-й картинки для категорий на стр категорий

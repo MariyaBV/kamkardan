@@ -180,7 +180,7 @@ $options = get_fields('option');
 		</div>
 	</header><!-- #masthead -->
 
-	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page()) : ?>
+	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page() && !is_singular('product')) : ?>
 		<div class="wrap-breadcrumbs">
 			<?php if (function_exists('yoast_breadcrumb')) {
 				yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
