@@ -3,5 +3,6 @@
 /themes/twentytwentytwo/
 /themes/twentytwentythree/
 /themes/twentytwentyfour/
-/plugins/akismet/
+/plugins/*
+!/plugins/delivery-mne/
 /plugins/hello.php
