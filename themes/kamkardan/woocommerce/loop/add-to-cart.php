@@ -23,10 +23,20 @@ global $product;
 
 
 ?>
+<<<<<<< HEAD
 <span id="woocommerce_loop_add_to_cart_link_describedby_<?php echo esc_attr( $product->get_id() ); ?>" class="screen-reader-text">
 	<?php echo esc_html( $args['aria-describedby_text'] ); ?>
 </span>
 <a></a>
+=======
+
+<?php if($args['aria-describedby_text']): ?>
+<span id="woocommerce_loop_add_to_cart_link_describedby_<?php echo esc_attr( $product->get_id() ); ?>" class="screen-reader-text">
+	<?php echo esc_html( $args['aria-describedby_text'] ); ?>
+</span>
+<?php endif; ?>
+
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 <div class="product-item duplicated">
 	<div class="block-quantity-button">
 		<button class="quantity-arrow-minus"> - </button>

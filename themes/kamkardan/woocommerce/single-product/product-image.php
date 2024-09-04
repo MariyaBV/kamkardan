@@ -48,5 +48,30 @@ $wrapper_classes   = apply_filters(
             echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . wp_get_attachment_image($post_thumbnail_id, 'large') . '</a>'; //. genius_display_discount_badge_return() .
 		?>
     </div>
+<<<<<<< HEAD
     <p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
+=======
+    <div class="__slider slider-mobile">
+        <div class="swiper mobile">
+            <div class="swiper-container-mobile  product-gallery-swiper-mobile">
+                <div class="swiper-wrapper swiper-wrapper-mobile">
+                    <?php
+                    if ($attachment_ids) {
+                        foreach ($attachment_ids as $attachment_id) {
+                            $full_size_image = wp_get_attachment_image_src($attachment_id, 'full');
+                            $thumbnail_image = wp_get_attachment_image($attachment_id, 'thumbnail');
+                            echo '<div class="swiper-slide">';
+                            echo '<a href="' . esc_url($full_size_image[0]) . '" data-fancybox="gallery">' . $thumbnail_image . '</a>';
+                            echo '</div>';
+                        }
+                    }
+                    ?>
+                </div>
+                <div class="swiper-button-prev product-gallery__swiper-button-prev-mobile icon-Vector-13"></div>
+                <div class="swiper-button-next product-gallery__swiper-button-next-mobile icon-Vector-14"></div>
+            </div>
+        </div>
+    </div>
+
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 </div>

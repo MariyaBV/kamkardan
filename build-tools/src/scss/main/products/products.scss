@@ -11,7 +11,11 @@
 
     }
 
+<<<<<<< HEAD
     @media screen and (max-width: 768px) {
+=======
+    @media screen and (max-width: 990px) {
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         gap: unset;
 
         .col-sm-0 {
@@ -24,13 +28,21 @@
     }
 }
 
+<<<<<<< HEAD
 .container ul.products.custom-list-products,
+=======
+#primary .container ul.products.custom-list-products,
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 .fourProducts ul.products.custom-list-products {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
     padding: 0;
+<<<<<<< HEAD
     justify-content: space-between;
+=======
+    //justify-content: space-between;
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     flex-direction: row;
 
     &::after,
@@ -47,7 +59,11 @@
     }
 
     @media screen and (max-width: 530px) {
+<<<<<<< HEAD
         gap: unset;
+=======
+        gap: 5px;
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     }
 
     li {
@@ -63,6 +79,11 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+<<<<<<< HEAD
+=======
+        max-width: 260px;
+        height: 100%;
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
         &:hover {
             box-shadow: 0px 8px 16px -8px #B69B9966;
@@ -229,9 +250,16 @@
         @media screen and (max-width: 1240px) {
             width: calc((100% / 2) - 30px);
 
+<<<<<<< HEAD
             &:last-child {
                 display: none;
             }
+=======
+
+            // &:last-child {
+            //     display: none;
+            // }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         }
 
         @media screen and (max-width: 768px) {
@@ -250,16 +278,47 @@
         @media screen and (max-width: 1240px) {
             width: calc((100% / 3) - 30px);
 
+<<<<<<< HEAD
             &:last-child {
                 display: none;
             }
+=======
+            // &:last-child {
+            //     display: none;
+            // }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         }
 
         @media screen and (max-width: 768px) {
             width: calc((100% / 2) - 10px);
 
+<<<<<<< HEAD
             &:last-child {
                 display: flex;
+=======
+            // &:last-child {
+            //     display: flex;
+            // }
+        }
+    }
+}
+
+.related.products {
+    ul.custom-list-products {
+        @media screen and (max-width: 1240px) {
+            justify-content: flex-start;
+        }
+
+        @media screen and (max-width: 550px) {
+            justify-content: space-between;
+        }
+        
+        li {
+            @media screen and (max-width: 1240px) {
+                 &:last-child {
+                     display: none!important;
+                }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             }
         }
     }

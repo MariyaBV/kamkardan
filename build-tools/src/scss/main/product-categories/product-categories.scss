@@ -66,12 +66,55 @@
         width: 100%;
     }
 
+<<<<<<< HEAD
     .orderby__title {
         margin-bottom: 32px;
 
         a {
             text-decoration: none;
         }
+=======
+    .product-category__img-desktop {
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
+    }
+
+    .product-category__img-mobile {
+        display: none;
+
+        @media screen and (max-width: 768px) {
+            display: block;
+            max-width: 40px;
+        }
+    }
+
+    .orderby__block-title {
+        flex: 80%;
+    }
+
+    .orderby__title {
+        margin-bottom: 32px;
+
+        .posted_in {
+            @media screen and (max-width: 768px) {
+                font-family: Inter;
+                font-size: 20px;
+                font-weight: 600;
+                line-height: 26px;
+                letter-spacing: 0.01em;
+
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            display: flex;
+        }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     }
 }
 
@@ -79,12 +122,25 @@
     .block-sort {
         display: flex;
         gap: 15px;
+<<<<<<< HEAD
         align-items: center;
+=======
+        align-items: flex-start;
+        flex-wrap: wrap;
+        flex-direction: row;
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
         .clear-filters {
             color: var(--light-red);
             text-decoration: none;
             border-bottom: 1px solid var(--light-red);
+<<<<<<< HEAD
+=======
+            text-wrap: nowrap;
+            font-size: var(--subtitle-font-size);
+            font-weight: var(--subtitle-font-weight);
+            line-height: var(--subtitle-line-height);
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
             &:hover {
                 cursor: pointer;
@@ -95,7 +151,21 @@
             display: flex;
             align-items: center;
             gap: 8px;
+<<<<<<< HEAD
     
+=======
+
+            &__block {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            @media screen and (max-width: 635px) {
+                flex-wrap: wrap;
+            }
+
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             input[type=number] {
                 border: 1px solid var(--grey);
                 border-radius: var(--border-radius);
@@ -103,6 +173,7 @@
                 padding: 8px;
                 font-size: var(--subtitle-font-size);
             }
+<<<<<<< HEAD
     
             input[type=submit] {
                 font-size: var(--button-m-font-size);
@@ -111,20 +182,45 @@
                 letter-spacing: var(--button-m-letter-spacing);
                 color: var(--white);
                 padding: 7px 0;
+=======
+
+            input[type=submit] {
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 20.8px;
+                letter-spacing: 0.01em;
+                color: var(--white);
+                padding: 6.5px 0;
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                 max-width: 150px;
                 width: 100%;
                 background-color: var(--main-color);
                 text-align: center;
+<<<<<<< HEAD
                 border-radius: var(--border-radius);
                 margin: 0;
                 border: none;
+=======
+                border-radius: var(--button-border-radius);
+                margin: 0;
+                border: none;
+
+                @media screen and (max-width: 635px) {
+                    max-width: 264px;
+                    padding: 14px 0;
+                }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             }
         }
 
         .orderby-block {
             float: none;
             margin: 0;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
             select {
                 border: 1px solid var(--grey);
                 padding: 8px;
@@ -132,11 +228,19 @@
                 -webkit-appearance: none;
                 -moz-appearance: none;
             }
+<<<<<<< HEAD
     
             select::-ms-expand {
                 display: none;
             }
     
+=======
+
+            select::-ms-expand {
+                display: none;
+            }
+
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         }
     }
 }
