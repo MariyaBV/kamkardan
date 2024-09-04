@@ -26,16 +26,10 @@ $product_categories_plain = strip_tags($product_categories);
 ?>
 
     <div class="orderby__block-title-sort">
-<<<<<<< HEAD
-        <div>
-            <?php if ( !is_shop() ): ?>
-            <div class="orderby__title">
-=======
         <div class="orderby__block-title">
             <?php if ( !is_shop() ): ?>
             <div class="orderby__title">
             <div class="product-category__img-mobile"><?php if ( !is_shop() ){ echo get_image_from_category(); } ?></div>
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                 <?php 
                 /*if ($product) {
                     if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
@@ -95,11 +89,7 @@ $product_categories_plain = strip_tags($product_categories);
             <?php endif; ?>
             <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>
             <div class="block-sort">
-<<<<<<< HEAD
-                <form class="woocommerce-ordering orderby-block" method="get">
-=======
                 <?php /*<form class="woocommerce-ordering orderby-block" method="get">
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                     <?php
                     // Проверяем наличие параметра 'orderby' в URL
                     $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
@@ -118,15 +108,6 @@ $product_categories_plain = strip_tags($product_categories);
                     </select>
                     <input type="hidden" name="paged" value="1" />
                     <?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'product-page' ) ); ?>
-<<<<<<< HEAD
-                </form>
-
-                <?php if (strpos($product_categories_plain, 'Крестовины') === false){ echo print_length_filter();} ?>
-            </div>
-            <?php endif; ?>
-    </div> 
-    <?php if ( !is_shop() ){ echo get_image_from_category(); } ?>
-=======
                 </form>*/?>
 
 
@@ -161,5 +142,4 @@ $product_categories_plain = strip_tags($product_categories);
             <?php endif; ?>
     </div> 
     <div class="product-category__img-desktop"><?php if ( !is_shop() ){ echo get_image_from_category(); } ?></div>
->>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 </div>
