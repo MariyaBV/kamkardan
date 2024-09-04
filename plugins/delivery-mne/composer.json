@@ -1,0 +1,15 @@
+{
+    "name": "delivery/mne",
+    "autoload": {
+        "psr-4": {
+            "Delivery\\Mne\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yun Andrey",
+            "email": "mrsashok86@gmail.com"
+        }
+    ],
+    "require": {}
+}

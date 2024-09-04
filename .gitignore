@@ -3,4 +3,5 @@
 /themes/twentytwentytwo/
 /themes/twentytwentythree/
 /themes/twentytwentyfour/
-/plugins/
+/plugins/akismet/
+/plugins/hello.php
