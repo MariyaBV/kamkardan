@@ -601,6 +601,12 @@ function add_kardany_tags_and_subcategories_sidebar() {
                 <?php if (!empty($tags)) : ?>
                     <ul class="category-list">
                         <?php foreach ($tags as $tag) : 
+<<<<<<< HEAD
+                            // Получаем изображение из ACF поля "logo"
+                            $image_url = get_field('logo', $tag);
+                            $link = get_term_link($tag);
+                            // Проверяем, является ли эта метка текущей
+=======
                             // Получаем значение поля "logo"
                             $logo_field = get_field('logo', $tag);
                             if (is_numeric($logo_field)) {
@@ -609,6 +615,7 @@ function add_kardany_tags_and_subcategories_sidebar() {
                                 $image_url = $logo_field; // Предполагаем, что это уже URL
                             }
                             $link = get_term_link($tag);
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                             $selected_class = in_array($tag->term_id, $current_term_ids) ? ' selected' : '';
                         ?>
                             <li id="tag-item-<?php echo esc_attr($tag->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($tag->term_id); ?><?php echo esc_attr($selected_class); ?>">
@@ -630,6 +637,10 @@ function add_kardany_tags_and_subcategories_sidebar() {
                             $thumbnail_id = get_term_meta($subcategory->term_id, 'thumbnail_id', true);
                             $image_url = wp_get_attachment_url($thumbnail_id);
                             $link = get_term_link($subcategory);
+<<<<<<< HEAD
+                            // Проверяем, является ли эта подкатегория текущей
+=======
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                             $selected_class = in_array($subcategory->term_id, $current_term_ids) ? ' selected' : '';
                         ?>
                             <li id="cat-item-<?php echo esc_attr($subcategory->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($subcategory->term_id); ?><?php echo esc_attr($selected_class); ?>">
@@ -652,7 +663,10 @@ add_shortcode('kardany_tags_and_subcategories', 'add_kardany_tags_and_subcategor
 
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 //вывод номера кардана из атрибутов на странице товара и карточке
 function custom_woocommerce_attr_num_cardan() {
     if ( is_product() || is_shop() || is_product_category() || is_front_page()) {
@@ -705,6 +719,23 @@ function display_product_attribute($product, $attribute_key) {
 }
 
 function custom_woocommerce_attr_len_cardan() {
+<<<<<<< HEAD
+    if ( is_shop() || is_product_category() || is_front_page()) {
+        $product = wc_get_product(get_the_ID());
+
+        // Массив с ключами нужных атрибутов
+        $attribute_keys = array(
+            'pa_application',
+            'pa_length-compressed-position',
+            'pa_bearing-outerd-mm',
+            'pa_dimensions-at-ends-h-mm'
+        );
+
+        // Перебор атрибутов и вывод
+        foreach ( $attribute_keys as $attribute_key ) {
+            display_product_attribute( $product, $attribute_key );
+        }
+=======
     $product = wc_get_product(get_the_ID());
 
     // Массив с ключами нужных атрибутов
@@ -718,10 +749,47 @@ function custom_woocommerce_attr_len_cardan() {
     // Перебор атрибутов и вывод
     foreach ( $attribute_keys as $attribute_key ) {
         display_product_attribute( $product, $attribute_key );
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     }
 }
 add_action('woocommerce_after_shop_loop_item_title', 'custom_woocommerce_attr_len_cardan', 15);
 
+<<<<<<< HEAD
+
+
+//начало добавляем к поиску поиск по атрибутам
+function custom_search_query($query) {
+    if ( !is_admin() && $query->is_search() && $query->is_main_query() ) {
+        add_filter('posts_search', 'custom_search_query_post', 10, 2);
+    }
+}
+add_action('pre_get_posts', 'custom_search_query');
+
+function custom_search_query_post($search, $query) {
+    global $wpdb;
+
+    if ( empty($search) ) {
+        return $search;
+    }
+
+    $search_term = $query->get('s');
+
+	$search .= " OR EXISTS (
+		SELECT 1 
+		FROM {$wpdb->prefix}terms AS t
+		INNER JOIN {$wpdb->prefix}term_taxonomy AS tt ON t.term_id = tt.term_id
+		INNER JOIN {$wpdb->prefix}term_relationships AS tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+		WHERE t.name LIKE '%" . esc_sql($wpdb->esc_like($search_term)) . "%'
+		AND tr.object_id = {$wpdb->posts}.ID
+	)";
+
+
+    return $search;
+}
+//конец добавляем к поиску поиск по атрибутам
+
+=======
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 // Удаляем стандартную функцию вывода описания
 remove_action( 'woocommerce_product_tabs', 'woocommerce_product_description_tab', 10 );
 // Добавляем нашу функцию для вывода описания без заголовка <h2>
@@ -744,6 +812,13 @@ function custom_woocommerce_product_description_tab_content() {
     }
 }
 
+<<<<<<< HEAD
+//удаляем хлебные крошки woocomerce
+remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
+
+//хлебные крошки yoast seo
+function custom_breadcrumb_home_text($link_output) {
+=======
 //начало хлебные крошки
 //удаляем хлебные крошки woocomerce
 remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
@@ -776,18 +851,27 @@ function custom_breadcrumb_home_text($link_output) {
     if (is_singular('product')) {
         return ''; 
     }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     if (!is_front_page()) {
         return str_replace('Главная страница', 'Главная', $link_output);
     }
     return $link_output;
 }
 add_filter('wpseo_breadcrumb_single_link', 'custom_breadcrumb_home_text');
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 //удаляем разделить в хлебных крошках yoast seo
 function custom_breadcrumb_separator($output) {
     $output = str_replace('»', '', $output);
     return $output;
 }
 add_filter('wpseo_breadcrumb_separator', 'custom_breadcrumb_separator');
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 //добавляем доп спан чтобы правильно применялись стили для текста
 function wrap_breadcrumbs_link_text($link_output) {
     if (preg_match('/<a[^>]*>(.*?)<\/a>/', $link_output, $matches)) {
@@ -797,7 +881,10 @@ function wrap_breadcrumbs_link_text($link_output) {
     return $link_output;
 }
 add_filter('wpseo_breadcrumb_single_link', 'wrap_breadcrumbs_link_text');
+<<<<<<< HEAD
+=======
 //конец хлебные крошки
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
 
 //начало вывод 2-й картинки для категорий на стр категорий
@@ -1080,12 +1167,30 @@ function get_image_from_category() {
     }
 
     $product_id = $product->get_id();
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     $product_categories = get_the_terms( $product_id, 'product_cat' );
 
     if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
         echo '<div class="product-category__img">';
 
         foreach ( $product_categories as $category ) {
+<<<<<<< HEAD
+            // Если категория = карданы для меток
+            if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
+                $current_tag = get_queried_object();
+                $logo_image = get_field('logo', 'product_cat_' . $current_tag->term_id);
+
+                if ( $logo_image ) {
+                    echo '<div class="category-image 1111">';
+                    echo '<img src="' . esc_url( $logo_image ) . '"  />';
+                    echo '</div>';
+                }
+            } else {
+                // Для остальных категорий (включая подкатегории)
+=======
             // Проверка, если текущая категория является карданы
             if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
                 $current_tag = get_queried_object();
@@ -1114,11 +1219,16 @@ function get_image_from_category() {
                 }
             } else {
                 // Обрабатываем остальные категории и подкатегории
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                 $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
                 $image_url = wp_get_attachment_url( $thumbnail_id );
 
                 if ( $image_url ) {
+<<<<<<< HEAD
+                    echo '<div class="category-image 2222">';
+=======
                     echo '<div class="category-image">';
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                     echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
                     echo '</div>';
                 }
@@ -1130,8 +1240,11 @@ function get_image_from_category() {
 }
 
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 //удаляем исходную сортировку из видов сортировки
 function remove_orderby_options( $sortby ) {
 	unset( $sortby[ 'menu_order' ] ); // исходная сортировка
@@ -1151,9 +1264,15 @@ function print_length_filter() {
 
     echo '<form class="length-filter subtitle" method="get">';
     echo '<span>Длина в сжатом положении:</span>';
+<<<<<<< HEAD
+    echo '<input class="subtitle" placeholder="от" type="number" id="min_length" name="min_length" value="' . esc_attr($min_length) . '" />';
+    echo '<input class="subtitle" placeholder="до" type="number" id="max_length" name="max_length" value="' . esc_attr($max_length) . '" />';
+    echo '<input class="subtitle" type="submit" value="Фильтровать" />';
+=======
     echo '<div class="length-filter__block"><input class="subtitle" placeholder="от" type="number" id="min_length" name="min_length" value="' . esc_attr($min_length) . '" />';
     echo '<input class="subtitle" placeholder="до" type="number" id="max_length" name="max_length" value="' . esc_attr($max_length) . '" /></div>';
     echo '<input class="subtitle" type="submit" value="Применить" />';
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     echo '</form>';
 
     // Создаем URL для очистки фильтров
@@ -1170,7 +1289,11 @@ function print_length_filter() {
 
 // Фильтрация продуктов по длине
 function filter_products_by_length( $query ) {
+<<<<<<< HEAD
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+=======
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         global $wpdb;
         $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
         $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
@@ -1203,10 +1326,16 @@ function filter_products_by_length( $query ) {
 }
 add_action('pre_get_posts', 'filter_products_by_length');
 
+<<<<<<< HEAD
+// Проверка наличия товаров перед запросом
+function check_products_exist_for_length_filter() {
+    if (is_shop() || is_tax('product_cat')) {
+=======
 
 // Проверка наличия товаров перед запросом
 function check_products_exist_for_length_filter() {
     if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
         global $wpdb;
 
         $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
@@ -1234,7 +1363,11 @@ function check_products_exist_for_length_filter() {
             if (empty($results)) {
                 // Отменяем стандартный запрос
                 add_filter('pre_get_posts', function($query) {
+<<<<<<< HEAD
+                    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+=======
                     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
                         $query->set('post__in', array(0)); // Возвращаем пустые результаты
                     }
                 });
@@ -1244,6 +1377,31 @@ function check_products_exist_for_length_filter() {
 }
 add_action('wp', 'check_products_exist_for_length_filter');
 
+<<<<<<< HEAD
+
+// Сортировка по длине
+function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+        $orderby = isset($_GET['orderby']) ? $_GET['orderby'] : '';
+
+        if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+            add_filter('posts_clauses', function($clauses, $wp_query) use ($orderby) {
+                global $wpdb;
+
+                // Проверяем, что запрос связан с продуктами WooCommerce
+                if ( isset($wp_query->query_vars['post_type']) && $wp_query->query_vars['post_type'] === 'product' ) {
+                    
+                    //  JOINим 3 связанные таблицы чтобы найти данные по таксономии
+                    $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
+                                          LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                                          LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
+                    
+                    $clauses['where'] .= " AND tt.taxonomy = 'pa_length-compressed-position'";
+
+                    // Устанавливаем порядок сортировки по убыванию length_desc или возрастанию length_asc
+                    $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
+                }
+=======
 // Сортировка по длине
 function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
@@ -1263,6 +1421,7 @@ function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
                 $clauses['where'] .= $wpdb->prepare(" AND tt.taxonomy = %s", 'pa_length-compressed-position');
                 
                 $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
                 return $clauses;
             }, 10, 2);
@@ -1271,6 +1430,10 @@ function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
 }
 add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args');
 
+<<<<<<< HEAD
+// Добавление пользовательских параметров сортировки
+function custom_orderby_option( $sortby ) {
+=======
 
 
 // Добавление пользовательских параметров сортировки
@@ -1295,6 +1458,7 @@ function custom_orderby_option( $sortby ) {
     }
 
     // Добавляем новые параметры сортировки, если текущая страница не является категорией "crosspieces"
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
     $sortby['length_asc'] = 'Длина, мм ⬆'; 
     $sortby['length_desc'] = 'Длина, мм ⬇';
     return $sortby;
@@ -1303,6 +1467,8 @@ add_filter( 'woocommerce_default_catalog_orderby_options', 'custom_orderby_optio
 add_filter( 'woocommerce_catalog_orderby', 'custom_orderby_option' );
 //конец добавляем сортировку длина мм
 
+<<<<<<< HEAD
+=======
 //фильтры по аттриьбутам
 function get_category_product_attributes($category_id) {
     global $wpdb;
@@ -1448,6 +1614,7 @@ function print_filters() {
 
     echo '</div>';
 }
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
 
 
 function custom_woocommerce_ajax_add_to_cart() {
@@ -1813,6 +1980,9 @@ function create_default_pages() {
         }
     }
 }
+<<<<<<< HEAD
+add_action('init', 'create_default_pages');
+=======
 add_action('init', 'create_default_pages');
 
 function style_mobile() {
@@ -1829,3 +1999,4 @@ function style_mobile() {
     }
 }
 add_action('wp_head', 'style_mobile');
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f

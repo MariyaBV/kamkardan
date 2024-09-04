@@ -3,4 +3,10 @@
 /themes/twentytwentytwo/
 /themes/twentytwentythree/
 /themes/twentytwentyfour/
+<<<<<<< HEAD
+/plugins/*
+!/plugins/delivery-mne/
+/plugins/hello.php
+=======
 /plugins/
+>>>>>>> 6792cb3554322df4017191e382c2ca5918daba8f
