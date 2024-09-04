@@ -1,0 +1,168 @@
+.footer-content {
+    background-color: #292929;
+    width: 100%;
+    font-size: var(--txt-normal-font-size);
+    font-weight: var(--txt-normal-font-weight);
+    line-height: var(--txt-normal-line-height);
+    color: var(--white);
+
+    .custom {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 40px;
+        padding-bottom: 64px;
+        margin: 0 auto;
+        gap: 20px;
+
+        @media screen and (max-width: 900px) {
+            flex-direction: column;
+        }
+
+        .footer-left {
+            flex: 25%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: space-between;
+
+            @media screen and (max-width: 900px) {
+                flex-direction: column;
+            }
+
+            .txt-company-name {
+                font-family: "Wix Madefor Display", sans-serif;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 15.6px;
+                letter-spacing: 0.01em;
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 24px;
+                text-decoration: none;
+
+                a {
+                    text-decoration: none;
+                }
+
+                .footer-logo {
+                    width: 100%;
+                    margin-right: 10px;
+                    max-width: 160px;
+
+                    @media screen and (max-width: 600px) {
+                        max-width: 145px;
+                        margin-right: 5px;
+                    }
+                }
+
+                @media screen and (max-width: 600px) {
+                    flex-wrap: wrap;
+                }
+            }
+
+            @media screen and (max-width: 600px) {
+                flex: 65%;
+            }
+        }
+
+        .footer-center {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 30px;
+            flex: 50%;
+
+            @media screen and (max-width: 900px) {
+                order: 3;
+            }
+
+
+            ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                gap: 10px;
+
+                li {
+                    flex: calc(50% - 10px);
+
+                    a {
+                        color: var(--white);
+                        text-decoration: none;
+                        padding: 8px 0;
+                        display: block;
+                    }
+
+                    @media screen and (max-width: 655px) {
+                        flex: 100%;
+                    }
+                }
+
+                @media screen and (max-width: 655px) {
+                    gap: unset;
+                }
+            }
+
+            @media screen and (max-width: 600px) {
+                flex: 35%;
+            }
+        }
+
+        .footer-right {
+            flex: 25%;
+        }
+
+        .icon-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-bottom: 16px;
+            color: var(--white);
+            text-decoration: none;
+
+            .icon-Frame-43,
+            .icon-phone-3,
+            .icon-Frame-44 {
+                font-size: xx-large;
+            }
+
+            p {
+                font-family: "Inter", sans-serif;
+                font-size: var(--txt-normal-font-size);
+                font-weight: var(--txt-normal-font-weight);
+                line-height: var(--txt-normal-line-height);
+
+                &.subtitle-xs {
+                    color: var(--pale-green);
+                    font-size: var(--subtitle-xs-font-size);
+                    font-weight: var(--subtitle-xs-font-weight);
+                    line-height: var(--subtitle-xs-line-height);
+                }
+            }
+        }
+
+        .icon-container svg {
+            margin-right: 8px;
+        }
+
+        .icon-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 80%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 600px) {
+            padding: 20px;
+            gap: 10px;
+        }
+    }
+}
