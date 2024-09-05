@@ -32,11 +32,11 @@ global $product;
 
 <div class="product-item duplicated">
 	<div class="block-quantity-button">
-		<button class="quantity-arrow-minus"> - </button>
+		<button class="quantity-arrow-minus"> <span class="icon-1"></span> </button>
 		<div class="quantity">
 			<input type="number" class="qty" name="quantity" value="1" min="1" />
 		</div>
-		<button class="quantity-arrow-plus"> + </button>
+		<button class="quantity-arrow-plus"><span class="icon-uniE936"></span></button>
 		<a class="add-to-cart button add_to_cart_button ajax_add_to_cart" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"><span class="add-to-cart-text">Купить</span></a>
 	</div>
 </div>

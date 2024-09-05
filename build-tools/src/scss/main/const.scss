@@ -401,6 +401,7 @@ input[type="week"] {
 
   &:hover {
     cursor: pointer;
+    background-color: var(--light-red);
   }
 }
 
@@ -519,6 +520,16 @@ button {
       vertical-align: middle;
       margin-left: 8px;
     }
+
+    &:hover {
+      cursor: pointer;
+      border-color: var(--light-red);
+      color: var(--light-red);
+
+      span:before {
+        color: var(--light-red);
+      }
+    }
   }
 }
 
@@ -577,5 +588,41 @@ table.tablepress {
 }
 
 .hr-line {
-  border-top: 1px solid #DADADA;
+  border-top: 1px solid var(--grey);
+}
+
+#page #primary button.quantity-arrow-minus,
+#page #primary button.quantity-arrow-plus {
+    &:hover {
+        cursor: pointer;
+        background-color: var(--grey);
+    }
+
+    &:active,
+    &:focus {
+      background-color: var(--main-color);
+      color: var(--white);
+    }
+
+    span.icon-1 {
+      font-size: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    span.icon-uniE936 {
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+ }
+
+#page input[type="submit"],
+#page #primary .add-to-cart.button {
+  &:hover {
+    cursor: pointer;
+    background-color: #737373;
+  }
 }

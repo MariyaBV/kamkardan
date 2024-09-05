@@ -43,9 +43,17 @@ header#main-header {
             }
 
             &__block-phone {
-                min-width: 156px;
-                padding-top: 8px;
-                flex: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                position: relative;
+                width: 153px;
+                flex: none;
+
+                span[class^=icon-] {
+                    position: absolute;
+                    left: 0;
+                }
             }
 
             &__phone {
@@ -232,10 +240,8 @@ header#main-header {
 
     }
 
-    .header-cart,
-    .header-wishlist {
+    .header-cart {
         display: inline-block;
-        margin-right: 31px;
 
         .icon-typeDefault-1 {
             font-size: xx-large;
@@ -247,16 +253,16 @@ header#main-header {
             color: var(--black);
         }
 
-        .cart-count,
-        .wishlist-count {
+        .cart-count {
             position: absolute;
-            top: -15px;
+            top: -25px;
             right: 0;
             background-color: var(--red);
             color: var(--white);
             border-radius: 50%;
-            padding: 0px 5.9px;
-            font-size: 10px;
+            padding: 0px 7px;
+            font-size: 12px;
+            display: block;
         }
     }
 
@@ -756,7 +762,15 @@ header#main-header {
         display: none;
 
         @media screen and (max-width: 990px) {
-            display: block;
+            display: flex;
+            padding: 13.5px 0 0 20px;
+            align-items: center;
+
+            p {
+                margin-left: 10px;
+                text-transform: none;
+            }
+            
         }
     }
 

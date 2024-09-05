@@ -48,17 +48,27 @@ $product_categories_plain = strip_tags($product_categories);
                     // Проходим по категориям, чтобы проверить, есть ли категория "Карданы" или её подкатегории
                     if ($categories && !is_wp_error($categories)) {
                         foreach ($categories as $category) {
-                            // Проверяем, является ли категория или её родительская категория "Карданы"
+                            // Получаем родительскую категорию
                             $parent_category = get_term($category->parent, 'product_cat');
-                            if ($category->name === 'Карданы' || ($parent_category && $parent_category->name === 'Карданы')) {
-                                $is_in_kardany = true;
-                                if ($parent_category && $parent_category->name === 'Карданы') {
-                                    $subcategory_name = $category->name;
+                    
+                            // Проверка на наличие ошибки перед использованием свойства 'name'
+                            if (!is_wp_error($parent_category)) {
+                                // Проверяем, является ли категория или её родительская категория "Карданы"
+                                if ($category->name === 'Карданы' || $parent_category->name === 'Карданы') {
+                                    $is_in_kardany = true;
+                    
+                                    // Если текущая категория — подкатегория "Карданы", сохраняем её название
+                                    if ($parent_category->name === 'Карданы') {
+                                        $subcategory_name = $category->name;
+                                    }
+                    
+                                    // Прекращаем дальнейший поиск, если нашли нужную категорию
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
+                    
 
                     // Если продукт в категории "Карданы" или её подкатегории
                     if ($is_in_kardany) {

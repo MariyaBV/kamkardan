@@ -1829,3 +1829,17 @@ function style_mobile() {
     }
 }
 add_action('wp_head', 'style_mobile');
+
+//добавление кнопки очистить корзину начало
+add_action( 'woocommerce_before_cart', 'true_empty_cart_btn' );
+function true_empty_cart_btn(){
+	echo '<a class="clear-filters clear-filters-cart" href="' . WC()->cart->get_cart_url() . '?empty-cart">Очистить корзину</a>';
+}
+ 
+add_action( 'init', 'true_empty_cart' );
+function true_empty_cart() {
+	if ( isset( $_GET[ 'empty-cart' ] ) ) {
+		WC()->cart->empty_cart();
+	}
+}
+//добавление кнопки очистить корзину конец
