@@ -13,6 +13,11 @@ h1 {
   letter-spacing: -0.03em;
   font-family: var(--h1-font-family);
   margin: 24px 0;
+
+  @media screen and (max-width: 768px) {
+    font-size: 26px;
+    line-height: 30px;
+  }
 }
 
 .h1-banner {
@@ -187,9 +192,13 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  span.add-to-cart-text {
+    font-family: 'Inter', sans-serif;
+  }
+
   &::before {
-    content: "\e902";
-    color: #bdff00;
+    content: "\e91c";
+    color: var(--dark-red);
     margin-right: 5px;
     display: inline-block;
     vertical-align: text-top;
@@ -625,4 +634,52 @@ table.tablepress {
     cursor: pointer;
     background-color: #737373;
   }
+}
+
+.block-sort-mobile {
+  display: none;
+  border: 1px solid var(--grey);
+  border-radius: 8px;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+
+  a {
+    span {
+      font-size: 40px;
+    }
+  }
+}
+
+.subtitle-mobile {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: .01em;
+  text-align: center;
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+}
+
+#close-ordering-menu {
+  position: absolute;
+  z-index: 1002;
+  top: 0;
+  text-decoration: none;
+  font-size: 24px;
 }

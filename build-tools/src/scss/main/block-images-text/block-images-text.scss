@@ -4,6 +4,14 @@
     gap: 40px;
     margin-bottom: 40px;
 
+    @media screen and (max-width: 768px) {
+        gap: 20px;
+    }
+
+    @media screen and (max-width: 500px) {
+        gap: 10px;
+    }
+
     &.bottom {
         .step-subtitle {
             text-align: center;
@@ -66,12 +74,8 @@
         }
 
         @media screen and (max-width: 768px) {
-            width: calc(100% / 2 - 40px);
+            width: calc(100% / 2 - 20px);
             text-align: center;
-        }
-
-        @media screen and (max-width: 400px) {
-            width: 100%;
         }
     }
 }

@@ -208,3 +208,14 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#block-sort-mobile-button').click(function () {
+        $('#block-sort').addClass('visible');
+        $('#overlay').addClass('visible');
+
+        $('#close-ordering-menu').click(function () {
+            $('#block-sort').removeClass('visible');
+            $('#overlay').removeClass('visible');
+        })
+    });
+});

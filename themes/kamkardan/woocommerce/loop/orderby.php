@@ -38,67 +38,67 @@ $product_categories_plain = strip_tags($product_categories);
                         echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( '', '', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' ); 
                     }
                 } */?>
-                <?php 
-                if ($product) {
-                    $categories = get_the_terms($product->get_id(), 'product_cat');
-                    
-                    $is_in_kardany = false;
-                    $subcategory_name = '';
 
-                    // Проходим по категориям, чтобы проверить, есть ли категория "Карданы" или её подкатегории
-                    if ($categories && !is_wp_error($categories)) {
-                        foreach ($categories as $category) {
-                            // Получаем родительскую категорию
-                            $parent_category = get_term($category->parent, 'product_cat');
+                <?php
+                if ($product) {
+                    // Получаем URL страницы
+                    $current_url = home_url(add_query_arg(array(), $_SERVER['REQUEST_URI']));
                     
-                            // Проверка на наличие ошибки перед использованием свойства 'name'
-                            if (!is_wp_error($parent_category)) {
-                                // Проверяем, является ли категория или её родительская категория "Карданы"
-                                if ($category->name === 'Карданы' || $parent_category->name === 'Карданы') {
-                                    $is_in_kardany = true;
+                    // Разбиваем URL на части
+                    $url_parts = explode('/', trim(parse_url($current_url, PHP_URL_PATH), '/'));
                     
-                                    // Если текущая категория — подкатегория "Карданы", сохраняем её название
-                                    if ($parent_category->name === 'Карданы') {
-                                        $subcategory_name = $category->name;
-                                    }
+                    // Получаем последнее слово из URL (если оно есть)
+                    $last_url_segment = end($url_parts);
+
+                    // Определяем, является ли последний сегмент меткой или категорией
+                    $is_tag_page = strpos($current_url, 'product-tag/') !== false;
+                    $is_category_page = strpos($current_url, 'product-category/') !== false;
                     
-                                    // Прекращаем дальнейший поиск, если нашли нужную категорию
+                    // Инициализируем переменные для заголовка
+                    $header_title = '';
+                    
+                    
+                    if ($is_tag_page) {
+                        // Попробуем получить метку по последнему сегменту
+                        $tag = get_term_by('slug', $last_url_segment, 'product_tag');
+                        if ($tag && !is_wp_error($tag)) {
+                            $header_title = 'Карданы для ' . esc_html($tag->name);
+                        }
+                    } elseif ($is_category_page) {
+                        // Попробуем получить категорию по последнему сегменту
+                        $category = get_term_by('slug', $last_url_segment, 'product_cat');
+                        if ($category && !is_wp_error($category)) {
+                            // Проверяем, является ли категория дочерней категорию "Карданы"
+                            $parent_is_kardans = false;
+                            $ancestors = get_ancestors($category->term_id, 'product_cat');
+                            foreach ($ancestors as $ancestor_id) {
+                                $ancestor = get_term($ancestor_id, 'product_cat');
+                                if ($ancestor && !is_wp_error($ancestor) && $ancestor->slug === 'kardany') {
+                                    $parent_is_kardans = true;
                                     break;
                                 }
                             }
-                        }
-                    }
-                    
-
-                    // Если продукт в категории "Карданы" или её подкатегории
-                    if ($is_in_kardany) {
-                        if ($subcategory_name) {
-                            // Выводим название подкатегории
-                            echo '<h2 class="posted_in">Карданы для ' . esc_html($subcategory_name) . '</h2>';
-                        } else {
-                            // Получаем текущий объект метки (тега)
-                            $current_tag = get_queried_object();
-                            
-                            // Проверяем, что это метка (тег)
-                            if ($current_tag && !is_wp_error($current_tag) && $current_tag->taxonomy === 'product_tag') {
-                                // Выводим название метки
-                                echo '<h2 class="posted_in">Карданы для ' . esc_html($current_tag->name) . '</h2>';
+                            if ($category->slug === 'kardany' || $parent_is_kardans) {
+                                $header_title = 'Карданы для ' . esc_html($category->name);
+                            } else {
+                                $header_title = esc_html($category->name);
                             }
                         }
-                    } else if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)) {
-                        // Выводим название категории, если продукт не в "Карданы", "Крестовины" или "Комплектующие"
-                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( 'Карданы для ', 'Categories:', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' );
-                    } else {
-                        // Если продукт в категории "Крестовины" или "Комплектующие", ничего не выводим
-                        echo wc_get_product_category_list( $product->get_id(), ', ', '<h2 class="posted_in">' . _n( '', '', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</h2>' );
                     }
+
+                    echo '<h2 class="posted_in">' . $header_title . '</h2>';
                 }
                 ?>
 
+
+
+                
+            <div class="block-sort-mobile"><a id="block-sort-mobile-button"><span class="icon-rivet-icons_filter-1"></span></a></div>
             </div>
             <?php endif; ?>
             <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>
-            <div class="block-sort">
+
+            <div id="block-sort" class="block-sort">
                 <?php /*<form class="woocommerce-ordering orderby-block" method="get">
                     <?php
                     // Проверяем наличие параметра 'orderby' в URL
@@ -119,7 +119,6 @@ $product_categories_plain = strip_tags($product_categories);
                     <input type="hidden" name="paged" value="1" />
                     <?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'product-page' ) ); ?>
                 </form>*/?>
-
 
                 <form class="woocommerce-ordering custom-ordering" method="get">
                     <input type="hidden" name="paged" value="1">
@@ -143,6 +142,27 @@ $product_categories_plain = strip_tags($product_categories);
                     </div>
                 </form>
 
+                <form class="woocommerce-ordering custom-ordering mobile" method="get">
+                    <p class="subtitle-mobile margin-bottom-24">Фильтры</p>
+                    <a href="" id="close-ordering-menu"><span class="icon-Close-1 close-catalog-menu"></span></a>
+                    <input type="hidden" name="paged" value="1">
+                    <?php wc_query_string_form_fields(null, array('submit', 'product-page')); ?>
+
+                    <div class="custom-ordering__select" data-attribute="orderby">
+                        <div class="custom-ordering-select">
+                            <ul class="custom-ordering-options">
+                                <?php foreach ($catalog_orderby_options as $id => $name) : ?>
+                                    <li class="custom-ordering-option <?php echo $orderby === $id ? 'selected' : ''; ?>" data-value="<?php echo esc_attr($id); ?>">
+                                        <input type="radio" name="orderby" value="<?php echo esc_attr($id); ?>" <?php checked($orderby, $id); ?>>
+                                        <?php echo wp_kses_post($name); ?>
+                                        <span class="icon-Onyes"><span class="path1"></span><span class="path2"></span></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+
                 <?php if (strpos($product_categories_plain, 'Крестовины') === false){ 
                     echo print_length_filter();
                 } else {
@@ -151,5 +171,9 @@ $product_categories_plain = strip_tags($product_categories);
             </div>
             <?php endif; ?>
     </div> 
-    <div class="product-category__img-desktop"><?php if ( !is_shop() ){ echo get_image_from_category(); } ?></div>
+    <div class="product-category__img-desktop">
+        <div class="product-category__img">
+            <?php if ( !is_shop() ){ echo get_image_from_category(); } ?>
+        </div>
+    </div>
 </div>

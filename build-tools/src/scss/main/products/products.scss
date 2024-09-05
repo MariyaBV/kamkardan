@@ -73,6 +73,9 @@
         a.woocommerce-loop-product__link {
             position: relative;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
         .product-item.duplicated {
@@ -233,7 +236,6 @@
 
         @media screen and (max-width: 768px) {
             width: calc((100% / 2) - 15px);
-            height: 100%;
         }
     }
 }
@@ -272,11 +274,11 @@
         @media screen and (max-width: 550px) {
             justify-content: space-between;
         }
-        
+
         li {
             @media screen and (max-width: 1240px) {
-                 &:last-child {
-                     display: none!important;
+                &:last-child {
+                    display: none !important;
                 }
             }
         }

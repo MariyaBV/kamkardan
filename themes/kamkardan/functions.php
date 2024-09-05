@@ -1072,64 +1072,101 @@ if ( ! function_exists( 'woocommerce_template_loop_product_title' ) ) {
 // 	}
 // }
 
+// function get_image_from_category() {
+//     global $product;
+
+//     if ( empty( $product ) ) {
+//         return;
+//     }
+
+//     $product_id = $product->get_id();
+//     $product_categories = get_the_terms( $product_id, 'product_cat' );
+
+//     if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
+//         echo '<div class="product-category__img">';
+
+//         foreach ( $product_categories as $category ) {
+
+//             // Проверка, если текущая категория является карданы
+//             if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
+//                 $current_tag = get_queried_object();
+                
+//                 // Получаем URL изображения для текущей метки
+//                 $logo_field = get_field('logo', 'product_cat_' . $current_tag->term_id);
+                
+//                 // Обрабатываем различные типы значений
+//                 if ( is_string($logo_field) && filter_var($logo_field, FILTER_VALIDATE_URL) ) {
+//                     // Если это строка и является URL
+//                     $logo_image = esc_url($logo_field);
+//                 }  elseif ( is_array($logo_field) && isset($logo_field['url']) ) {
+//                     // Если это массив, получаем URL из ключа 'url'
+//                     $logo_image = esc_url($logo_field['url']);
+//                 } elseif ( is_numeric($logo_field) ) {
+//                     // Если это числовой ID, преобразуем в URL
+//                     $logo_image = wp_get_attachment_url($logo_field);
+//                 } else {
+//                     $logo_image = esc_url($logo_field); // Неверный формат
+//                 }
+
+//                 if ( $logo_image ) {
+//                     echo '<div class="category-image">';
+//                     echo '<img src="' . esc_url( $logo_image ) . '" alt="' . esc_attr( $category->name ) . '" />';
+//                     echo '</div>';
+//                 }
+//             } else {
+//                 // Обрабатываем остальные категории и подкатегории
+//                 $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
+//                 $image_url = wp_get_attachment_url( $thumbnail_id );
+
+//                 if ( $image_url ) {
+//                     echo '<div class="category-image">';
+//                     echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
+//                     echo '</div>';
+//                 }
+//             }
+//         }
+
+//         echo '</div>';
+//     }
+// }
+
 function get_image_from_category() {
-    global $product;
+    // Получаем текущий объект (метку, категорию или подкатегорию)
+    $current_object = get_queried_object();
 
-    if ( empty( $product ) ) {
-        return;
-    }
+    
 
-    $product_id = $product->get_id();
-    $product_categories = get_the_terms( $product_id, 'product_cat' );
+    if ( ! empty( $current_object ) && ! is_wp_error( $current_object ) ) {
+        $image_url = '';
 
-    if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
-        echo '<div class="product-category__img">';
+        
+        // Проверяем, что текущий объект — это категория или метка
+        if ( ! empty( $current_object ) && ! is_wp_error( $current_object ) ) {
+            $image_url = '';
+            
+            // Проверяем, что текущий объект — это категория или подкатегория
 
-        foreach ( $product_categories as $category ) {
-            // Проверка, если текущая категория является карданы
-            if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
-                $current_tag = get_queried_object();
-                
-                // Получаем URL изображения для текущей метки
-                $logo_field = get_field('logo', 'product_cat_' . $current_tag->term_id);
-                
-                // Обрабатываем различные типы значений
-                if ( is_string($logo_field) && filter_var($logo_field, FILTER_VALIDATE_URL) ) {
-                    // Если это строка и является URL
-                    $logo_image = esc_url($logo_field);
-                }  elseif ( is_array($logo_field) && isset($logo_field['url']) ) {
-                    // Если это массив, получаем URL из ключа 'url'
-                    $logo_image = esc_url($logo_field['url']);
-                } elseif ( is_numeric($logo_field) ) {
-                    // Если это числовой ID, преобразуем в URL
-                    $logo_image = wp_get_attachment_url($logo_field);
-                } else {
-                    $logo_image = esc_url($logo_field); // Неверный формат
+            if ( isset($current_object->taxonomy) && ($current_object->taxonomy === 'product_tag') ) {
+                // Это метка
+                $logo_field = get_field('logo', 'product_tag_' . $current_object->term_id);
+                if ( $logo_field ) {
+                    $image_url = esc_url($logo_field);
                 }
-
-                if ( $logo_image ) {
-                    echo '<div class="category-image">';
-                    echo '<img src="' . esc_url( $logo_image ) . '" alt="' . esc_attr( $category->name ) . '" />';
-                    echo '</div>';
-                }
-            } else {
-                // Обрабатываем остальные категории и подкатегории
-                $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
+            } else  {
+                // Это категория или подкатегория
+                $thumbnail_id = get_term_meta( $current_object->term_id, 'thumbnail_id', true );
                 $image_url = wp_get_attachment_url( $thumbnail_id );
-
-                if ( $image_url ) {
-                    echo '<div class="category-image">';
-                    echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
-                    echo '</div>';
-                }
+            }
+        
+        // Если есть URL изображения, выводим его
+            if ( $image_url ) {
+                echo '<div class="category-image">';
+                echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($current_object->name) . '" />';
+                echo '</div>';
             }
         }
-
-        echo '</div>';
     }
 }
-
-
 
 
 //удаляем исходную сортировку из видов сортировки
@@ -1145,6 +1182,7 @@ add_filter( 'woocommerce_catalog_orderby', 'remove_orderby_options' );
 
 //начало добавляем сортировку длина мм
 // Вывод формы фильтрации
+// Функция для отображения фильтра длины
 function print_length_filter() {
     $min_length = isset($_GET['min_length']) && $_GET['min_length'] !== '' ? intval($_GET['min_length']) : 0;
     $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
@@ -1159,9 +1197,7 @@ function print_length_filter() {
     // Создаем URL для очистки фильтров
     if ($min_length || $max_length) {
         $query_params = $_GET;
-        // Удаляем параметры min_length и max_length
         unset($query_params['min_length'], $query_params['max_length']);
-        // Генерируем новый URL без этих параметров
         $clear_filters_url = '?' . http_build_query($query_params);
 
         echo '<a href="' . esc_url($clear_filters_url) . '" class="clear-filters subtitle">Очистить фильтры</a>';
@@ -1176,32 +1212,50 @@ function filter_products_by_length( $query ) {
         $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
 
         if ($min_length || $max_length) {
-            add_filter('posts_join', function($join) {
-                global $wpdb;
-                $join .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id";
-                $join .= " LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
-                $join .= " LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
-                return $join;
-            });
+            // Добавляем фильтры
+            add_filter('posts_join', 'custom_posts_join');
+            add_filter('posts_where', 'custom_posts_where', 10, 2);
+            add_filter('posts_distinct', 'custom_posts_distinct');
 
-            add_filter('posts_where', function($where) use ($min_length, $max_length, $wpdb) {
-                $where .= " AND tt.taxonomy = 'pa_length-compressed-position'";
-                if ($min_length) {
-                    $where .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) >= %d", $min_length);
-                }
-                if ($max_length) {
-                    $where .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) <= %d", $max_length);
-                }
-                return $where;
-            });
-
-            add_filter('posts_distinct', function($distinct) {
-                return 'DISTINCT';
-            });
+            // Удаляем фильтры после запроса
+            add_action('wp', 'remove_custom_filters');
         }
     }
 }
-add_action('pre_get_posts', 'filter_products_by_length');
+
+function custom_posts_join($join) {
+    global $wpdb;
+    $join .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id";
+    $join .= " LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
+    $join .= " LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
+    return $join;
+}
+
+function custom_posts_where($where, $query) {
+    global $wpdb;
+    $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
+    $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
+
+    $where .= " AND tt.taxonomy = 'pa_length-compressed-position'";
+    if ($min_length) {
+        $where .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) >= %d", $min_length);
+    }
+    if ($max_length) {
+        $where .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) <= %d", $max_length);
+    }
+    return $where;
+}
+
+function custom_posts_distinct($distinct) {
+    return 'DISTINCT';
+}
+
+function remove_custom_filters() {
+    remove_filter('posts_join', 'custom_posts_join');
+    remove_filter('posts_where', 'custom_posts_where');
+    remove_filter('posts_distinct', 'custom_posts_distinct');
+}
+add_action('pre_get_posts', 'filter_products_by_length', 20);
 
 
 // Проверка наличия товаров перед запросом
@@ -1249,27 +1303,39 @@ function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
         $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
 
-
-       
         if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+            add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
             
-            add_filter('posts_clauses', function($clauses, $wp_query) use ($orderby) {
-                global $wpdb;
-
-                $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
-                                        LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-                                        LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
-                
-                $clauses['where'] .= $wpdb->prepare(" AND tt.taxonomy = %s", 'pa_length-compressed-position');
-                
-                $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
-
-                return $clauses;
-            }, 10, 2);
+            // Удаляем фильтр после запроса
+            add_action('wp', 'remove_custom_posts_clauses_for_ordering');
         }
     }
 }
-add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args');
+
+function custom_posts_clauses_for_ordering($clauses, $wp_query) {
+    global $wpdb;
+
+    // Убедитесь, что фильтр применяется только к основному запросу WooCommerce
+    if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
+        $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
+                                LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                                LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
+
+        $clauses['where'] .= $wpdb->prepare(" AND tt.taxonomy = %s", 'pa_length-compressed-position');
+
+        // Сортировка по длине (числовое значение из term.name)
+        $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'length_asc';
+        $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
+    }
+
+    return $clauses;
+}
+
+function remove_custom_posts_clauses_for_ordering() {
+    remove_filter('posts_clauses', 'custom_posts_clauses_for_ordering');
+}
+
+add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
 
 
 
@@ -1325,11 +1391,14 @@ function get_category_product_attributes($category_id) {
     foreach ($all_attributes as $attribute) {
         $attribute_name = $attribute->attribute_name;
 
+
+
         // Исключаем атрибут 'product-unit'
         if ($attribute_name === 'product-unit') {
             continue;
         }
 
+        
         $taxonomy = 'pa_' . $attribute->attribute_name;
         $term_count = $wpdb->get_var($wpdb->prepare("
             SELECT COUNT(DISTINCT tr.term_taxonomy_id)
@@ -1338,6 +1407,7 @@ function get_category_product_attributes($category_id) {
             WHERE tt.taxonomy = %s
             AND tr.object_id IN (" . implode(',', array_map('intval', $product_ids)) . ")
         ", $taxonomy));
+
 
         if ($term_count > 0) {
             $attributes[] = $attribute;
@@ -1448,6 +1518,45 @@ function print_filters() {
 
     echo '</div>';
 }
+function custom_woocommerce_get_catalog_ordering_attr_args_not_cardany( $query ) {
+    // Проверяем, что это основной запрос и не в админке
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {
+        // Получаем текущую категорию
+        if ( is_tax('product_cat') && ! is_tax('product_cat', 'crosspieces') ) {
+            // Если это не нужная категория, выходим из функции
+            return;
+        }
+        
+        // Получаем текущие параметры запроса
+        $query_vars = $query->query_vars;
+
+        // Инициализация массива tax_query, если он не существует
+        if ( ! isset( $query_vars['tax_query'] ) ) {
+            $query_vars['tax_query'] = array();
+        }
+
+        // Итерируемся по параметрам запроса и добавляем фильтрацию по атрибутам
+        foreach ( $_GET as $key => $value ) {
+            if ( strpos( $key, 'attribute_' ) === 0 && ! empty( $value ) ) {
+                $attribute = str_replace( 'attribute_', '', $key );
+                $taxonomy = 'pa_' . $attribute;
+
+                // Добавляем фильтр в tax_query
+                $query_vars['tax_query'][] = array(
+                    'taxonomy' => $taxonomy,
+                    'field'    => 'slug',
+                    'terms'    => sanitize_title( $value ),
+                    'operator' => 'IN',
+                );
+            }
+        }
+
+        // Устанавливаем измененные параметры обратно в запрос
+        $query->set( 'tax_query', $query_vars['tax_query'] );
+    }
+}
+add_action( 'pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args_not_cardany' );
+
 
 
 function custom_woocommerce_ajax_add_to_cart() {
