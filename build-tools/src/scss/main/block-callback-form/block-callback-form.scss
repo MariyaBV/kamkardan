@@ -6,6 +6,45 @@
     max-width: 400px;
     width: 100%;
 
+    &.contacts {
+        padding: 40px;
+
+        .block-callback-form__title {
+            text-align: center;
+        }
+
+        
+        button {
+            max-width: 200px;
+        }
+        
+
+        .block-callback-form__block-input,
+        .callback-form-block__block-input {
+            flex-direction: column;
+            gap: 0;
+            align-items: flex-start;
+            display: flex;
+
+            label {
+                font-size: var(--txt-mobile-xs-font-size);
+                font-weight: var(--txt-mobile-xs-font-weight);
+                line-height: var(--txt-mobile-xs-line-height);
+            }
+
+            input,
+            textarea {
+                max-width: 100%;
+                width: 100%;
+                border: 1px solid #acacac;
+            }
+
+            textarea {
+                min-height: 80px;
+            }
+        }
+    }
+
     .red-text {
         color: var(--red);
     }
@@ -36,6 +75,7 @@
         align-items: center;
         gap: 10px;
         margin-bottom: 16px;
+
 
         div {
             display: none;
