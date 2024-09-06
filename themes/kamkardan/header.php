@@ -114,6 +114,7 @@ $options = get_fields('option');
 							// Если есть дети, создаем подменю
 							if (!empty($node['children'])) {
 								echo '<ul class="sub-menu">';
+								
 								foreach ($node['children'] as $child) {
 									$child_classes = implode(' ', $child->classes);
 									echo '<li class="' . esc_attr($child_classes) . '">';
@@ -164,8 +165,66 @@ $options = get_fields('option');
 					</form>
 				</div>
 				<button class="menu-burger" id="burger-menu"><span class="middle"></span></button>
-				<nav id="site-navigation" class="header-block-nav">
+				<?php /*<nav id="site-navigation" class="header-block-nav">
 					<?php wp_nav_menu('menu=top-menu');?>
+				</nav>*/?>
+				<nav id="site-navigation" class="header-block-nav">
+					<div class="menu-top-menu-container">
+						<?php
+						// Строим мобильное меню
+						$menu_name = 'top-menu';
+						$menu_items = get_menu_items_with_classes($menu_name);
+						$menu_tree = array();
+						
+						// Строим дерево меню
+						foreach ($menu_items as $menu_item) {
+							if (!$menu_item->menu_item_parent) {
+								$menu_tree[$menu_item->ID] = array(
+									'item' => $menu_item,
+									'children' => array()
+								);
+							} else {
+								$menu_tree[$menu_item->menu_item_parent]['children'][] = $menu_item;
+							}
+						}
+
+						// Выводим дерево мобильного меню с кнопкой "Назад"
+						echo '<ul id="menu-top-menu" class="menu">';
+						foreach ($menu_tree as $node) {
+							$menu_item = $node['item'];
+							$classes = implode(' ', $menu_item->classes);
+							
+							if (!empty($node['children'])) {
+								// Если есть дочерние элементы, добавляем класс для выпадающего списка
+								echo '<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children ' . esc_attr($classes) . '">';
+							} else {
+								echo '<li class="menu-item menu-item-type-post_type menu-item-object-page ' . esc_attr($classes) . '">';
+							}
+
+							echo '<a class="menu-item__link" href="' . esc_url($menu_item->url) . '">' . esc_html($menu_item->title) . '</a>';
+
+							// Если есть дети, создаем подменю с кнопкой "Назад"
+							if (!empty($node['children'])) {
+								echo '<ul class="sub-menu">';
+								
+								// Вставляем кнопку "Назад" в подменю
+								echo '<li class="menu-back-item"><a id="close-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Left-2"></span><p class="txt-normal">Назад</p></a></li>';
+								
+								// Выводим дочерние элементы
+								foreach ($node['children'] as $child) {
+									$child_classes = implode(' ', $child->classes);
+									echo '<li class="menu-item menu-item-type-post_type menu-item-object-page ' . esc_attr($child_classes) . '">';
+									echo '<a class="sub-menu-item__link" href="' . esc_url($child->url) . '">' . esc_html($child->title) . '</a>';
+									echo '</li>';
+								}
+								echo '</ul>';
+							}
+
+							echo '</li>';
+						}
+						echo '</ul>';
+						?>
+					</div>
 				</nav>
 			</div>
 		</div>

@@ -31,7 +31,7 @@ get_header();
                 $child_pages = get_pages($args);
 
                 if (!empty($child_pages)) {
-                    echo '<div class="steps">';
+                    echo '<div class="steps bottom">';
 
                     foreach ($child_pages as $itm) {
                         $GLOBALS['post'] = $itm;

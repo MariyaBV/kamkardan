@@ -1,19 +1,29 @@
 .woocommerce nav.woocommerce-pagination {
-    padding: 10px 0;
-    margin-bottom: 64px;
-  
-    a.page-numbers {
-      padding: 4px 7px;
-      text-decoration: none;
-  
-      &:hover {
-        cursor: pointer;
-      }
-  
-      &.current {
-        background: var(--light-red);
-        color: var(--white);
-        border-radius: var(--button-border-radius);
-      }
+  padding: 10px 0;
+  margin-bottom: 64px;
+
+  a.page-numbers {
+    padding: 0px 5px;
+    text-decoration: none;
+    border: 1px solid var(--dark-grey);
+    border-radius: 4px;
+    margin: 0 2px;
+    color: var(--dark-grey);
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.current {
+      background: var(--dark-red);
+      color: var(--white);
+      border-radius: var(--button-border-radius);
+      border-color: var(--dark-red);
+    }
+
+    &.prev,
+    &.next {
+      border: none;
     }
   }
+}

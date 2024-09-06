@@ -13,7 +13,11 @@ if ( $r['block_img_text'] == '1' ) {
     <?php foreach ($r['img-text'] as $item): ?>
         <div class="step-item">
             <img src="<?php echo $item['img']; ?>"  />
-            <p class="step-subtitle"><?php echo $item['text']; ?></p>
+            <?php if ( $r['block_img_text'] == '2' ): ?>
+                <p class="step-subtitle"><?php echo $item['text']; ?></p>
+            <?php else: ?>
+                <h3 class="step-title"><?php echo $item['text']; ?></h3>
+            <?php endif; ?>
             <a href="<?php echo $item['link']; ?>"></a>
         </div>
     <?php endforeach; ?>

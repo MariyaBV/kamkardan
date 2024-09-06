@@ -41,3 +41,9 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number]{
   -moz-appearance: textfield;
 }
+
+input:invalid,
+input:invalid:focus {
+  border: 1px solid var(--light-red);
+}
+

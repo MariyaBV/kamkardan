@@ -246,6 +246,7 @@ function handle_callback_request() {
         $name = sanitize_text_field($_POST['name']);
         $phone = sanitize_text_field($_POST['phone']);
         $type = sanitize_text_field($_POST['type']);
+        $email = sanitize_text_field($_POST['email']);
         $comment = isset($_POST['comment']) ? sanitize_textarea_field($_POST['comment']) : '';
 
         $to = 'mari.mv2008@gmail.com'; // ЗАМЕНИТЬ!!!!! на email клиента
@@ -269,6 +270,9 @@ function handle_callback_request() {
         if (!empty($comment)) {
             $message .= "\nКомментарий: " . $comment;
         }
+        if (!empty($email)) {
+            $message .= "\nEmail: " . $email;
+        }
         $message .= "\n";
 
         wp_mail($to, $subject, $message);
@@ -278,7 +282,6 @@ function handle_callback_request() {
         wp_send_json_error('Заполните все поля');
     }
 }
-
 add_action('wp_ajax_callback_request', 'handle_callback_request');
 add_action('wp_ajax_nopriv_callback_request', 'handle_callback_request');
 
@@ -675,6 +678,22 @@ function custom_woocommerce_attr_num_cardan() {
 }
 add_action('custom_woocommerce_attr_num_cardan', 'custom_woocommerce_attr_num_cardan');
 add_action('woocommerce_before_shop_loop_item_title', 'custom_woocommerce_attr_num_cardan', 15);
+
+function custom_woocommerce_sku_on_product_card() {
+    if ( is_product() || is_shop() || is_product_category() || is_front_page() || is_product_tag()) {
+        global $product;
+
+        // Получаем артикул (SKU) товара
+        $sku = $product->get_sku();
+
+        // Проверяем, если артикул существует
+        if ( ! empty( $sku ) ) {
+            echo '<p class="product-attribute-cardan-shaft-number">Артикул кардана: <span>' . esc_html( $sku ) . '</span></p>';
+        }
+    }
+}
+add_action('woocommerce_before_shop_loop_item_title', 'custom_woocommerce_sku_on_product_card', 15);
+
 
 //вывод аттрибутов на карточке товаров
 // Функция для вывода атрибутов
@@ -1952,3 +1971,26 @@ function true_empty_cart() {
 	}
 }
 //добавление кнопки очистить корзину конец
+
+function add_back_button_to_sub_menu($items, $args) {
+    // Применяем фильтр только для меню с ID 'site-navigation'
+    if ($args->menu_id == 'site-navigation') {
+        var_dump($args->menu_id);
+        foreach ($items as $item) {
+            // Проверяем, есть ли у элемента класс 'menu-item-has-children'
+            if (in_array('menu-item-has-children', $item->classes)) {
+                // Создаем HTML-код кнопки 'Назад'
+                $back_button = '<li class="menu-back-item"><a id="close-menu-back" class="block-catalog__mobile-button-back"><span class="icon-Left-2"></span><p class="txt-normal">Назад</p></a></li>';
+
+                // Если у элемента есть подменю, добавляем кнопку 'Назад' в начало подменю
+                if (strpos($item->title, '<ul class="sub-menu">') === false) {
+                    $item->title .= '<ul class="sub-menu">' . $back_button . '</ul>';
+                }
+            }
+        }
+    }
+
+    return $items;
+}
+add_filter('wp_nav_menu_objects', 'add_back_button_to_sub_menu', 10, 2);
+

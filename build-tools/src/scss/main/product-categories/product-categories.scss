@@ -19,16 +19,12 @@
             width: calc(50% - 24px);
         }
 
-        @media screen and (max-width: 530px) {
-            width: 100%;
-        }
-
         &::marker {
             content: none;
         }
 
         img {
-            margin: 0 auto 16px;
+            margin: 0 auto 22px;
         }
 
         &__link {
@@ -45,7 +41,7 @@
 
         &__title {
             border-top: 1px solid var(--grey);
-            padding-top: 16px;
+            padding-top: 25px;
             text-align: center;
         }
 
@@ -59,7 +55,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 
     .product-category__img {
         max-width: 104px;

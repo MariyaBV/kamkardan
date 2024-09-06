@@ -5,12 +5,16 @@
     margin-bottom: 32px;
 
     &__white {
-        padding: 48px 0 64px 0;
+        padding: 46px 0 64px 0;
         display: flex;
         justify-content: center;
 
         .header-search {
             max-width: 640px;
+
+            @media screen and (max-width: 500px) {
+                width: 100%;
+            }
         }
 
         h3 {

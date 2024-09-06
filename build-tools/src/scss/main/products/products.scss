@@ -125,7 +125,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 16px 0;
+            margin: 6px 0 16px;
             font-size: var(--txt-s-font-size);
             font-weight: var(--txt-s-font-weight);
             line-height: var(--txt-s-line-height);
@@ -180,7 +180,7 @@
                 letter-spacing: var(--button-m-letter-spacing);
                 color: var(--white);
                 padding: 11px 0;
-                max-width: 105px;
+                max-width: 110px;
                 width: 100%;
                 background-color: var(--main-color);
                 text-align: center;
@@ -194,23 +194,23 @@
         }
 
         .price {
-            font-size: var(--price-L-font-size);
-            font-weight: var(--price-L-font-weight);
-            line-height: var(--price-L-line-height);
+            font-size: var(--price-main-font-size);
+            font-weight: var(--price-main-font-weight);
+            line-height: var(--price-main-line-height);
             color: var(--main-color);
-            margin: 16px 0;
+            margin: 5px 0 13px;
 
             ins {
                 text-decoration: none;
             }
 
             del {
-                color: var(--red-price);
+                color: var(--dark-red);
                 opacity: 1;
-                font-size: var(--price-s-old-font-size);
-                font-weight: var(--price-s-old-font-weight);
-                line-height: var(--price-s-old-line-height);
-                letter-spacing: var(--price-letter-spacing);
+                font-size: var(--price-old-font-size);
+                font-weight: var(--price-old-font-weight);
+                line-height: var(--price-old-line-height);
+                letter-spacing: var(--price-old-letter-spacing);
             }
         }
 
@@ -218,6 +218,7 @@
 
         h5 {
             margin: 8px 0;
+            padding: 0;
         }
 
         img {

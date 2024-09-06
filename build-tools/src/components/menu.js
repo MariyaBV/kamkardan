@@ -193,20 +193,40 @@ $(document).ready(function ($) {
 
 //выпадающий список
 $(document).ready(function () {
+    // Открытие и закрытие подменю при клике на ссылку "Все услуги"
     $('a[href="#uslugi"]').on('click', function (event) {
         event.preventDefault();
+        
+        var $menu = $(this).closest('.menu-item-has-children').find('ul.sub-menu');
 
-        var $menu = $('.sub-menu');
-
+        // Проверяем состояние меню (открытое/закрытое)
         if ($menu.hasClass('show')) {
-            $menu.removeClass('show');
-            $(this).removeClass('selected-item-menu');
+            $menu.removeClass('show'); // Закрываем меню
+            $(this).removeClass('selected-item-menu'); // Снимаем активный класс
         } else {
+            // Закрываем все открытые подменю, чтобы не было множественного открытия
+            $('.sub-menu').removeClass('show');
+            $('a.selected-item-menu').removeClass('selected-item-menu');
+
+            // Открываем текущее подменю и добавляем активный класс
             $menu.addClass('show');
             $(this).addClass('selected-item-menu');
         }
     });
+
+    // Кнопка "Назад" для возврата на предыдущий уровень меню
+    $('#site-navigation').on('click', '#close-menu-back', function(e) {
+        e.preventDefault();
+        
+        var $currentSubMenu = $(this).closest('.menu-item-has-children').find('ul.sub-menu');
+        var $currentSubMenuLink = $(this).closest('.menu-item-has-children').find('a.selected-item-menu');
+
+        // Закрываем текущее подменю и удаляем активный класс
+        $currentSubMenu.removeClass('show');
+        $currentSubMenuLink.removeClass('selected-item-menu');
+    });
 });
+
 
 $(document).ready(function () {
     $('#block-sort-mobile-button').click(function () {
