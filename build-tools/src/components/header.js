@@ -37,6 +37,6 @@ document.getElementById('callbackRequestForm').addEventListener('submit', functi
     })
     .catch(error => {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при отправке запроса.');
+        //alert('Произошла ошибка при отправке запроса.');
     });
 });
