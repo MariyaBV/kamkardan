@@ -2,9 +2,12 @@ document.getElementById('callbackButton').addEventListener('click', function() {
     document.getElementById('callbackForm').style.display = 'block';
 });
 
-document.getElementById('callbackButtonCart').addEventListener('click', function() {
-    document.getElementById('callbackForm').style.display = 'block';
+jQuery(document).ready(function($) {
+    $('#callbackButtonCart').on('click', function() {
+        $('#callbackForm').show();
+    });
 });
+
 
 document.getElementById('closeCallbackForm').addEventListener('click', function() {
     document.getElementById('callbackForm').style.display = 'none';
