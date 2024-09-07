@@ -7,30 +7,46 @@ jQuery(document).ready(function($) {
 
         // Получаем данные корзины через Ajax
         $.ajax({
-            url: custom_ajax_obj.ajax_url, // Используем переданный URL admin-ajax.php
+            url: custom_ajax_obj.ajax_url,
             type: 'POST',
             dataType: 'json',
             data: {
-                action: 'get_cart_data', // Действие для получения данных корзины
+                action: 'get_cart_data',
             },
             success: function(response) {
                 if (response.success) {
-                    var cart_data = response.data; // Данные корзины
+                    var cart_data = response.data;
 
                     // Отправляем данные формы и корзины на сервер для создания заказа
                     $.ajax({
-                        url: custom_ajax_obj.ajax_url, // Используем переданный URL admin-ajax.php
+                        url: custom_ajax_obj.ajax_url,
                         type: 'POST',
                         data: {
                             action: 'submit_callback_order',
                             name: name,
                             phone: phone,
-                            cart_data: cart_data // Данные корзины
+                            cart_data: cart_data
                         },
                         success: function(response) {
                             if (response.success) {
-                                alert(response.data); // Уведомляем пользователя об успехе
-                                $('#closeCallbackForm').trigger('click'); // Закрыть форму
+                                alert('Заказ успешно создан. ID: ' + response.data);
+                                
+                                // Очистить корзину
+                                $.ajax({
+                                    url: custom_ajax_obj.ajax_url,
+                                    type: 'POST',
+                                    data: {
+                                        action: 'clear_cart'
+                                    },
+                                    success: function() {
+                                        // Закрыть форму и перезагрузить страницу корзины
+                                        $('#closeCallbackForm').trigger('click');
+                                        location.reload();
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('Ошибка при очистке корзины:', xhr.responseText);
+                                    }
+                                });
                             } else {
                                 alert('Ошибка: ' + response.data);
                             }

@@ -2007,7 +2007,7 @@ function get_cart_data() {
     }
 
     wp_send_json_success($cart_data); // Отправляем данные корзины в формате JSON
-    wp_die(); // Завершаем Ajax-запрос
+    wp_die();
 }
 
 // Добавляем обработчик для отправки заказа
@@ -2046,6 +2046,14 @@ function submit_callback_order() {
     $order->save();
 
     // Возвращаем ID заказа для дальнейшей обработки
-    wp_send_json_success('Заказ успешно создан. ID: ' . $order->get_id());
+    wp_send_json_success($order->get_id());
     wp_die(); // Завершаем Ajax запрос
 }
+
+// Обработка очистки корзины
+function clear_cart() {
+    WC()->cart->empty_cart(); // Очистить корзину
+    wp_die();
+}
+add_action('wp_ajax_clear_cart', 'clear_cart');
+add_action('wp_ajax_nopriv_clear_cart', 'clear_cart');
