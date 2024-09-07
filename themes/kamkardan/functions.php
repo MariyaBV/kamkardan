@@ -1994,3 +1994,58 @@ function add_back_button_to_sub_menu($items, $args) {
 }
 add_filter('wp_nav_menu_objects', 'add_back_button_to_sub_menu', 10, 2);
 
+// Обработчик Ajax для отправки заказа из корзины
+// Добавляем обработчик для получения данных корзины
+add_action('wp_ajax_get_cart_data', 'get_cart_data');
+add_action('wp_ajax_nopriv_get_cart_data', 'get_cart_data');
+function get_cart_data() {
+    // Получаем данные корзины
+    $cart_data = WC()->cart->get_cart();
+
+    if (empty($cart_data)) {
+        wp_send_json_error('Корзина пуста или данные недоступны');
+    }
+
+    wp_send_json_success($cart_data); // Отправляем данные корзины в формате JSON
+    wp_die(); // Завершаем Ajax-запрос
+}
+
+// Добавляем обработчик для отправки заказа
+add_action('wp_ajax_submit_callback_order', 'submit_callback_order');
+add_action('wp_ajax_nopriv_submit_callback_order', 'submit_callback_order');
+function submit_callback_order() {
+    // Проверка данных из формы
+    $name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+    $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+    $cart_data = isset($_POST['cart_data']) ? $_POST['cart_data'] : [];
+
+    if (empty($name) || empty($phone) || empty($cart_data)) {
+        wp_send_json_error('Не все данные заполнены');
+    }
+
+    // Создаем заказ
+    $order = wc_create_order();
+
+    // Добавляем товары из корзины в заказ
+    foreach ($cart_data as $cart_item_key => $cart_item) {
+        $product_id = $cart_item['product_id']; // ID продукта
+        $quantity = $cart_item['quantity']; // Количество
+
+        // Добавляем продукт в заказ
+        $order->add_product( wc_get_product($product_id), $quantity );
+    }
+
+    // Добавляем данные пользователя в заказ
+    $order->set_billing_first_name($name);
+    $order->set_billing_phone($phone);
+
+    // Устанавливаем статус заказа
+    $order->set_status('pending'); // Или другой статус, например 'processing'
+
+    // Сохраняем заказ
+    $order->save();
+
+    // Возвращаем ID заказа для дальнейшей обработки
+    wp_send_json_success('Заказ успешно создан. ID: ' . $order->get_id());
+    wp_die(); // Завершаем Ajax запрос
+}

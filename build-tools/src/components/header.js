@@ -2,6 +2,10 @@ document.getElementById('callbackButton').addEventListener('click', function() {
     document.getElementById('callbackForm').style.display = 'block';
 });
 
+document.getElementById('callbackButtonCart').addEventListener('click', function() {
+    document.getElementById('callbackForm').style.display = 'block';
+});
+
 document.getElementById('closeCallbackForm').addEventListener('click', function() {
     document.getElementById('callbackForm').style.display = 'none';
 });
