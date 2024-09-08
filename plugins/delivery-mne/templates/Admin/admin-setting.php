@@ -4,7 +4,7 @@
     <form method="post" action="">
         <?php wp_nonce_field('mne_delivery_settings_nonce');
 
-        var_dump(WC()->countries->get_base_address());
+        var_dump(WC()->countries->get_base_country());
         ?>
 
         <table class="form-table">

@@ -19,6 +19,6 @@ class Sbl implements DeliveryTypeInterface
     }
     public static function calculateShipping(array $data): array
     {
-
+        $store_city = get_option('woocommerce_store_city');
     }
 }
