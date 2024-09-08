@@ -40,6 +40,6 @@ class SettingsPage
         $option_value = get_option('mne_delivery_option', '');
 
         // Подключаем шаблон страницы настроек
-        require_once MNE_DELIVERY_PLUGIN_DIR . 'templates/Admin/admin-settings.php';
+        require_once MNE_DELIVERY_PLUGIN_DIR . 'templates/Admin/admin-setting.php';
     }
 }
