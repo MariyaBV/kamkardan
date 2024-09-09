@@ -25,13 +25,22 @@ $(document).ready(function() {
                 method: 'POST',
                 body: data
             })
-            .then(response => response.json())
-            .then(result => {
-                //alert('Заявка отправлена! Имя: ' + name + ', Телефон: ' + phone);
-                $('.block-callback-form__thanks').addClass('active');
-                $('.block-callback-form__block form').hide();
-                $('.vacancy-callback.block-callback-form').hide();
-                $('#callbackFormThanks').show();
+            .then(response => response.text())
+            .then(text => {
+                try {
+                    const result = JSON.parse(text);  // Попробуем распарсить как JSON
+                    if (result.success) {
+                        $('.block-callback-form__thanks').addClass('active');
+                        $('.block-callback-form__block form').hide();
+                        $('.vacancy-callback.block-callback-form').hide();
+                        $('#callbackFormThanks').show();
+                    } else {
+                        throw new Error(result.data);  // Выводим ошибку сервера
+                    }
+                } catch (e) {
+                    console.error('Ошибка при парсинге JSON:', e);
+                    alert('Ошибка при обработке ответа от сервера.');
+                }
             })
             .catch(error => {
                 console.error('Ошибка:', error);
