@@ -450,7 +450,7 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
     }
 
     @media screen and (max-width: 500px) {
-        padding: 24px;
+        padding: 23px;
         border-radius: 16px;
     }
 
@@ -464,6 +464,7 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
         li {
             display: flex;
             margin-bottom: 16px;
+            align-items: center;
 
             &:last-child {
                 margin-bottom: 0;
@@ -473,9 +474,13 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
                 content: none;
             }
 
-            span {
-                font-size: 40px;
+            img {
+                max-width: 40px;
                 margin-right: 16px;
+            }
+
+            @media screen and (max-width: 500px) {
+                align-items: flex-start;
             }
         }
         

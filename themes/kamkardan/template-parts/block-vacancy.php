@@ -30,17 +30,29 @@
                 <input type="hidden" id="callback-type-<?php echo $block['id']; ?>" value="job_application" />
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-name-<?php echo $block['id']; ?>">Имя <span class="red-text">*</span></label>
-                    <input type="text" id="callback-name-<?php echo $block['id']; ?>" name="name" required>
+                    <input placeholder="Иван" type="text" id="callback-name-<?php echo $block['id']; ?>" name="name" required>
                 </div>
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-phone-<?php echo $block['id']; ?>">Телефон <span class="red-text">*</span></label>
-                    <input type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required>
+                    <input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required>
                 </div>
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-comment-<?php echo $block['id']; ?>">Комментарий <span class="red-text">*</span></label>
-                    <textarea type="text" id="callback-comment-<?php echo $block['id']; ?>" name="phone" required></textarea>
+                    <textarea placeholder="Комментарий" type="text" id="callback-comment-<?php echo $block['id']; ?>" name="phone" required></textarea>
                 </div>
                 <button class="red-button-medium mrg-0-auto mrg-top-32" type="submit">Откликнуться</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="header-block-contacts__callback-form" id="callbackFormThanks" style="display:none;">
+        <div class="callback-form-block">
+            <form id="callbackFormThanksForm">
+                <?php /*<a class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></a>*/ ?>
+                <img src="<?= $options['blok_otvety_na_formy']['otvet_vsplyvashka']['kartinka'] ?>"/>
+                <h3 class="callback-form-block__title">Спасибо!</h3>
+                <p class="txt-normal">Мы перезвоним вам в рабочее время, чтобы уточнить детали</p>
+                <button id="OKCallbackFormThanks" class="red-button-medium mrg-0-auto mrg-top-32" type="submit">OK</button>
             </form>
         </div>
     </div>

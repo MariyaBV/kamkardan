@@ -17,9 +17,6 @@ global $wp_query;
 
 	<?php kamkardan_post_thumbnail(); ?>
 
-
-
-
 		<div class="entry-content content-page">
 			<?php
 			the_content();

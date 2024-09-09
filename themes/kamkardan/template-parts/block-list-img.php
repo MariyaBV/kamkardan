@@ -1,5 +1,6 @@
 <?php
   $fields = get_fields();
+  $options = get_fields('options');
 ?>
 
 <div class="list-img">
@@ -45,6 +46,11 @@
                     <button class="red-button-medium margin-top-16" type="submit"><?= $fields['blok_obratnaya_svyaz']['nazvanie_knopki'] ?></button>
                     <a class="block-callback-form__policy-link" href="<?= $fields['blok_obratnaya_svyaz']['ssylka_na_politiku_konfidiczialnosti'] ?>"><?= $fields['blok_obratnaya_svyaz']['tekst_politiki_konfidiczialnosti'] ?></a>
                 </form>
+                <div class="block-callback-form__thanks">
+                    <img src="<?= $options['blok_otvety_na_formy']['otvet_na_stranicze']['kartinka'] ?>"/>
+                    <h3><?= $options['blok_otvety_na_formy']['otvet_na_stranicze']['zagolovok'] ?></h3>
+                    <p class="txt-normal"><?= $options['blok_otvety_na_formy']['otvet_na_stranicze']['tekst'] ?></p>
+                </div>
             </div>
         </div>
     </div>

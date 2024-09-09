@@ -10,8 +10,23 @@
             flex-wrap: wrap;
         }
 
+        @media screen and (max-width: 500px) {
+            border: 1px solid #dadada;
+            border-radius: var(--border-radius);
+            padding: 24px 16px;
+            flex-direction: column;
+        }
+
         .button-vacancy {
             padding: 10px 0;
+
+            @media screen and (max-width: 500px) {
+                background-color: #A10A00;
+                width: 100%;
+                max-width: 100%;
+                color: var(--white);
+                padding: 19px 0;
+            }
         }
     }
 
@@ -37,9 +52,14 @@
         line-height: var(--button-L-line-height);
         letter-spacing: var(--button-L-letter-spacing);
         text-wrap: nowrap;
+        margin-bottom: 16px;
 
         @media screen and (max-width: 1024px) {
             text-wrap: unset;
+        }
+
+        @media screen and (max-width: 500px) {
+            color: var(--dark-red);
         }
     }
 
@@ -76,6 +96,18 @@
                 input {
                     border: 1px solid #acacac;
                     padding: 10px 16px;
+
+                    &::placeholder {
+                        color: #acacac;
+                    }
+
+                    &:focus:invalid::placeholder {
+                        color: var(--light-red);
+                    }
+
+                    &:focus:invalid {
+                        border: 1px solid var(--light-red);
+                    }
                 }
 
                 textarea {
@@ -83,6 +115,28 @@
                     padding: 8px;
                     border-color: #acacac;
                     border-radius: var(--button-border-radius);
+                    font-family: "Inter", sans-serif;
+                    font-size: var(--txt-normal-font-size);
+
+                    &::placeholder {
+                        color: #acacac;
+                        font-family: "Inter", sans-serif;
+                        font-size: var(--txt-normal-font-size);
+                    }
+
+                    &:focus,
+                    &:focus-visible {
+                        border: 1px solid var(--light-red);
+                        outline: unset;
+                    }
+
+                    &:focus:invalid::placeholder {
+                        color: var(--light-red);
+                    }
+
+                    &:focus:invalid {
+                        border: 1px solid var(--light-red);
+                    }
                 }
             }
 
@@ -116,6 +170,10 @@
                 -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .0784313725);
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .0784313725);
                 border: 1px solid #eee;
+
+                @media screen and (max-width: 480px) {
+                    width: calc(100% - 20px);
+                }
             }
         }
     }

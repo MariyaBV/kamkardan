@@ -8,12 +8,13 @@ get_header();
 <main id="primary" class="site-page">
 		<div class="wrap">
 			<?php
-			while ( have_posts() ) :
-				the_post();
+            the_title( '<h2 class="entry-title">', '</h2>' );
+			// while ( have_posts() ) :
+			// 	the_post();
 
-				get_template_part( 'template-parts/content', 'page' );
+			// 	get_template_part( 'template-parts/content', 'page' );
 
-			endwhile; // End of the loop.
+			// endwhile; // End of the loop.
 			?>
 
                 <?php
@@ -46,7 +47,7 @@ get_header();
                 ?>
 
 		</div>
-		
+		<?php the_content(); ?>
 	</main><!-- #main -->
 
 <?php

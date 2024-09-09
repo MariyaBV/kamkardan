@@ -16,7 +16,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-
+$options = get_fields('options');
 ?>
 <div class="cart_totals custom-cart-totals <?php echo ( WC()->customer->has_calculated_shipping() ) ? 'calculated_shipping' : ''; ?>">
 
@@ -83,28 +83,24 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 	
 	<a href="<?= get_privacy_policy_url()?>" class="custom-privacy-policy subtitle">
-		Нажимая кнопку «Оформить заказ», вы соглашаетесь с обработкой своих персональных данных в соответстии с нашей Политикой конфеденциальности.
-	</a>
+		<?php echo $options['after_checkout']; ?>
+		</a>
 	
 	<?php do_action( 'woocommerce_after_cart_totals' ); ?>
 
 </div>
 
 <div class="block-about-delivery">
-	<h3>Доставка по России </h3>
+	<h3><?php echo $options['block-about-delivery']['zagolovok']; ?></h3>
 	<ul>
+		<?php foreach ($options['block-about-delivery']['blok_dostavka'] as $itm): ?>
 		<li>
-			<span class="icon-carbon_delivery-3"></span>
-			Доставка по России с помощью транспортных компаний - ПЭК, Байкал, ДЛ, Энергия, Мэйджик Транс, КИТ. Возможна доставка через другие транспортные компании, по договоренности с заказчиком.
+			<img src="<?php echo $itm['logo']; ?>" alt="">
+			<p><?php echo $itm['tekst']; ?></p>
 		</li>
-		<li>
-			<span class="icon-iconoir_box-iso-3"></span>
-			Отгрузка товара в транспортную компанию в течение 1-2 рабочих дней с момента оплаты, при условии наличия товара на складе. Для спецзаказов отгрузка в транспортную компанию в строго оговоренное время с заказчиком.
-		</li>
-		<li>
-			<span class="icon-deliver-hand-2"></span>
-			Доставка транспортной компанией оплачивается за счет заказчика. При наличии спецусловий, доставка может быть осуществлена за счет компании.
-		</li>
+		<?php endforeach; ?>
 	</ul>
 </div>
 
+<div class="ec-delivery"></div>
+<script id="dcsbl" src="https://dostavka.sbl.su/api/delivery.js?comp=0&startCt=Набережные Челны&startCntr=RU&btn=no&dopInsure=1&innerDeliv=1&startPick=1&title=Предварительный расчет доставки&autoEnd=1"></script>

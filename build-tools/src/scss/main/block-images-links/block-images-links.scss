@@ -28,5 +28,9 @@
                 cursor: pointer;
             }
         }
+
+        @media screen and (max-width: 500px) {
+            flex: calc(100% / 2 - 20px);
+        }
     }
 }

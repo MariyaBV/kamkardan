@@ -1,42 +1,42 @@
-const callBackBlocks = document.querySelectorAll('.block-callback-form');
+$(document).ready(function() {
+    $('.block-callback-form').each(function() {
+        const $callBackBlock = $(this);
+        const callBackBlockID = $callBackBlock.attr('id');
 
-callBackBlocks.forEach(callBackBlock => {
-    const callBackBlockID = callBackBlock.getAttribute('id');
+        $callBackBlock.on('submit', function(event) {
+            event.preventDefault();
 
-    document.getElementById(callBackBlockID).addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        var name = document.getElementById('callback-name-'+callBackBlockID).value;
-        var phone = document.getElementById('callback-phone-'+callBackBlockID).value;
-        var type = document.getElementById('callback-type-'+callBackBlockID).value;
-
-        var commentElement = document.getElementById('callback-comment-'+callBackBlockID);
-        var comment = commentElement ? commentElement.value : '';
-        
-        var data = new FormData();
-        data.append('name', name);
-        data.append('phone', phone);
-        data.append('type', type);
-        if (comment.trim()) {
-            data.append('comment', comment);
-        }
-        data.append('action', 'callback_request');
-        
-        fetch('/wp-admin/admin-ajax.php', {
-            method: 'POST',
-            body: data
-        })
-        .then(response => response.json())
-        .then(result => {
-            alert('Заявка отправлена! Имя: ' + name + ', Телефон: ' + phone);
-            var vacancyBlock = document.querySelector('.vacancy-callback.block-callback-form');
-            if (vacancyBlock) {
-                vacancyBlock.style.display = 'none';
+            const name = $(`#callback-name-${callBackBlockID}`).val();
+            const phone = $(`#callback-phone-${callBackBlockID}`).val();
+            const type = $(`#callback-type-${callBackBlockID}`).val();
+            const commentElement = $(`#callback-comment-${callBackBlockID}`);
+            const comment = commentElement.length ? commentElement.val() : '';
+            
+            const data = new FormData();
+            data.append('name', name);
+            data.append('phone', phone);
+            data.append('type', type);
+            if (comment.trim()) {
+                data.append('comment', comment);
             }
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при отправке заявки.');
+            data.append('action', 'callback_request');
+            
+            fetch('/wp-admin/admin-ajax.php', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.json())
+            .then(result => {
+                //alert('Заявка отправлена! Имя: ' + name + ', Телефон: ' + phone);
+                $('.block-callback-form__thanks').addClass('active');
+                $('.block-callback-form__block form').hide();
+                $('.vacancy-callback.block-callback-form').hide();
+                $('#callbackFormThanks').show();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке заявки.');
+            });
         });
     });
 });

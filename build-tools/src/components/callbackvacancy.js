@@ -1,14 +1,9 @@
-var callbackVacancyButtons = document.querySelectorAll('.button-vacancy');
-
-callbackVacancyButtons.forEach(callbackVacancyButton => { 
-    callbackVacancyButton.addEventListener('click', function() {
-        document.querySelector(`.vacancy-callback.block-callback-form`).style.display = 'block';
+$(document).ready(function() {
+    $('.button-vacancy').on('click', function() {
+        $('.vacancy-callback.block-callback-form').show();
     });
 
-    const closeButton = document.getElementById('closeCallbackFormVacancy');
-    if (closeButton) {
-        closeButton.addEventListener('click', function() {
-            document.querySelector(`.vacancy-callback.block-callback-form`).style.display = 'none';
-        });
-    }
+    $('#closeCallbackFormVacancy').on('click', function() {
+        $('.vacancy-callback.block-callback-form').hide();
+    });
 });

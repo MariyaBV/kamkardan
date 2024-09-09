@@ -118,3 +118,14 @@ $(document).ready(function ($) {
     });
 });
 
+function validatePhone(phone) {
+    // Проверяем номер телефона на соответствие формату +7 (999) 999-9999 или 89999999999
+    const phoneRegex = /^(\+7|8)\d{10}$/;
+    return phoneRegex.test(phone);
+}
+
+function validateEmail(email) {
+    // Регулярное выражение для проверки email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}

@@ -53,25 +53,39 @@ $options = get_fields('option');
 					<?php endif; ?>
 				</div>
 				<button class="red-button-L" id="callbackButton">Обратный звонок</button>
-				<div class="header-block-contacts__callback-form" id="callbackForm" style="display:none;">
-					<div class="callback-form-block">
-						<form id="callbackRequestForm">
-							<a class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></a>
-							<h3 class="callback-form-block__title">Оформление заказа</h3>
-							<input type="hidden" id="callback-type" value="callback_request" />
-							<div class="callback-form-block__block-input">
-								<label class="txt-normal" for="callback-name">Имя <span class="red-text">*</span></label>
-								<input placeholder="Иван" type="text" id="callback-name" name="name" required>
-							</div>
-							<div class="callback-form-block__block-input">
-								<label class="txt-normal" for="callback-phone">Телефон <span class="red-text">*</span></label>
-								<input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone" name="phone" required>
-							</div>
-							<button class="red-button-medium mrg-0-auto mrg-top-32" type="submit">Оставить заявку</button>
-							<a class="block-callback-form__policy-link callback-form-block__policy-link" href="/privacy-policy/">Нажимая кнопку «Оформить заявку», вы&nbsp;соглашаетесь с&nbsp;обработкой своих персональных данных в&nbsp;соответствии с&nbsp;нашей Политикой конфиденциальности.</a>
-						</form>
+
+			</div>
+		</div>
+
+		<div class="header-block-contacts__callback-form" id="callbackForm" style="display:none;">
+			<div class="callback-form-block">
+				<form id="callbackRequestForm">
+					<a class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></a>
+					<h3 class="callback-form-block__title">Оформление заказа</h3>
+					<input type="hidden" id="callback-type" value="callback_request" />
+					<div class="callback-form-block__block-input">
+						<label class="txt-normal" for="callback-name">Имя <span class="red-text">*</span></label>
+						<input placeholder="Иван" type="text" id="callback-name" name="name" required>
 					</div>
-				</div>
+					<div class="callback-form-block__block-input">
+						<label class="txt-normal" for="callback-phone">Телефон <span class="red-text">*</span></label>
+						<input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone" name="phone" required>
+					</div>
+					<button class="red-button-medium mrg-0-auto mrg-top-32" type="submit">Оставить заявку</button>
+					<a class="block-callback-form__policy-link callback-form-block__policy-link" href="/privacy-policy/">Нажимая кнопку «Оформить заявку», вы&nbsp;соглашаетесь с&nbsp;обработкой своих персональных данных в&nbsp;соответствии с&nbsp;нашей Политикой конфиденциальности.</a>
+				</form>
+			</div>
+		</div>
+
+		<div class="header-block-contacts__callback-form" id="callbackRequestFormThanks" style="display:none;">
+			<div class="callback-form-block">
+				<form id="callbackRequestFormThanksForm">
+					<?php /*<a class="callback-form-block__close" id="closeCallbackForm"><span class="icon-Close-3"></span></a>*/ ?>
+					<img src="<?= $options['blok_otvety_na_formy']['otvet_vsplyvashka']['kartinka'] ?>"/>
+					<h3 class="callback-form-block__title"><?= $options['blok_otvety_na_formy']['otvet_vsplyvashka']['zagolovok'] ?></h3>
+					<p class="txt-normal"><?= $options['blok_otvety_na_formy']['otvet_vsplyvashka']['tekst'] ?></p>
+					<button id="OKCallbackFormThanks" class="red-button-medium mrg-0-auto mrg-top-32" type="submit"><?= $options['blok_otvety_na_formy']['otvet_vsplyvashka']['tekst_knopki'] ?></button>
+				</form>
 			</div>
 		</div>
 

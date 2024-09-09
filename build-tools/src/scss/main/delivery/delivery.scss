@@ -1,0 +1,345 @@
+.cart-collaterals .ec-delivery {
+    margin: 64px 0;
+
+    @media screen and (max-width: 768px) {
+        margin: 40px 0;
+    }
+
+    @media screen and (max-width: 500px) {
+        margin: 24px 0;
+    }
+
+    .ec-calc-layout {
+        max-width: 100%;
+        border: unset;
+        box-shadow: unset;
+    }
+
+    .ec-calc-layout * {
+        font-family: "Inter", sans-serif;
+        font-size: 16px;
+    }
+
+    .ec-calc-border {
+        background-color: #dadada;
+        height: 1px;
+        margin: 0;
+        margin-bottom: 40px;
+    }
+
+    .ec-calc {
+        padding: 0;
+        padding-bottom: 30px;
+
+        .ec-calc-agree {
+            font-size: 16px !important;
+            font-weight: 400;
+            line-height: 19.6px !important;
+            color: #202020;
+            margin-bottom: 40px;
+            display: flex;
+            bottom: unset !important;
+            margin-top: 10px;
+
+            span {
+                margin-left: 8px;
+            }
+
+            &::before {
+                content: "";
+                background-image: url("/wp-content/themes/kamkardan/css/img/warning.svg");
+                background-repeat: no-repeat;
+                background-size: contain;
+                width: 30px;
+                display: block;
+                margin-right: 8px;
+            }
+        }
+
+        .ec-calc-result {
+            &__header {
+                font-size: var(--h2-font-size);
+                font-weight: var(--h2-font-weight);
+                line-height: var(--h2-line-height);
+                letter-spacing: -.03em;
+                color: var(--main-color);
+                font-family: var(--h2-font-family);
+                margin-bottom: 24px;
+
+                @media screen and (max-width: 768px) {
+                    font-size: var(--h3-font-size);
+                    font-weight: var(--h3-font-weight);
+                    line-height: var(--h3-line-height);
+                }
+            }
+
+            .ec-calc-result-table {
+                a {
+                    text-decoration: none;
+
+                }
+
+                tbody td {
+                    border: none;
+                    border-bottom: 1px solid #dfdfdf;
+
+
+                    @media screen and (max-width: 768px) {
+                        &:first-child {
+                            background-color: #f5f5f5;
+                            border-bottom: none;
+                        }
+
+                        a {
+                            color: var(--black);
+                        }
+                    }
+                }
+
+                @media screen and (max-width: 768px) {
+                    tbody tr {
+                        border: none;
+                        margin-bottom: 32px;
+                    }
+                }
+
+                thead tr th {
+                    background-color: #f7f7f7;
+                    color: #202020;
+                    font-size: 16px !important;
+                    font-weight: 400;
+                    padding: 10px 10px !important;
+                    text-transform: none !important;
+                }
+            }
+        }
+
+        .ec-calc-made {
+            display: none !important;
+        }
+
+        .ec-calc-form-to {
+            display: flex;
+            gap: 37px;
+            align-items: center;
+
+            @media screen and (max-width: 768px) {
+                width: 100%;
+            }
+        }
+
+        .ec-calc-form-row:first-child {
+            float: left;
+            width: 50%;
+
+            @media screen and (max-width: 768px) {
+                width: 100%;
+                float: none;
+            }
+        }
+
+        .ec-calc-form-clone,
+        .ec-calc-form-dop {
+            .ec-calc-form-row {
+                float: none;
+                width: 100%;
+
+                @media screen and (max-width: 768px) {
+                    &.ec-calc-wrap-item {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                    }
+                }
+
+                .ec-calc-form-weight,
+                .ec-calc-form-value {
+                    display: flex;
+                    align-items: center;
+                    gap: 13.5px;
+
+                    @media screen and (max-width: 768px) {
+                        width: 100%;
+
+                        .ec-calc-form__label {
+                            min-width: 100px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .ec-calc-form-dop-checks {
+            input[type="checkbox"]:checked+label {
+
+                &::before {
+                    content: "";
+                    background-image: url("/wp-content/themes/kamkardan/css/img/checked=yes.svg");
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    width: 18px;
+                    height: 18px;
+                    display: block;
+                    margin-right: 8px;
+                    left: 3px;
+                    top: 14px;
+                    background-color: transparent;
+
+                    @media screen and (max-width: 400px) {
+                        top: 0;
+                    }
+                }
+
+                &::after {
+                    display: none;
+                }
+
+            }
+
+            .ec-calc-form__label {
+                &::after {
+                    top: 13px;
+                    left: 3px;
+
+                    @media screen and (max-width: 400px) {
+                        top: 0;
+                    }
+                }
+
+                @media screen and (max-width: 400px) {
+                    display: flex !important;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    input[type=text] {
+                        margin-left: 0 !important;
+                        width: 100% !important;
+                        max-width: unset;
+                    }
+                }
+            }
+
+            &__comment {
+                display: none;
+            }
+        }
+
+        .ec-calc-form-delivery {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 24px;
+
+            @media screen and (max-width: 400px) {
+                padding: 0;
+                flex-direction: column;
+            }
+
+            &__comment {
+                color: #1E1E1E;
+                font-size: 13px;
+                display: flex;
+
+                &::before {
+                    content: "";
+                    background-image: url("/wp-content/themes/kamkardan/css/img/warning.svg");
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    width: 30px;
+                    display: block;
+                    margin-right: 8px;
+                }
+            }
+
+            .ec-calc-form__label {
+                max-width: 160px;
+                width: 100%;
+
+                @media screen and (max-width: 400px) {
+                    max-width: 100%;
+                    padding-left: 25px !important;
+                }
+            }
+        }
+
+        .ec-calc-form-submit {
+            background-color: var(--dark-red) !important;
+            border-radius: 8px !important;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 20.8px;
+            letter-spacing: 0.01;
+            font-family: 'Inter';
+            padding: 15.5px 0 !important;
+            max-width: 220px;
+            width: 100%;
+            text-align: center;
+            margin: 40px 0;
+
+            &:hover {
+                background-color: var(--light-red) !important;
+                cursor: pointer;
+            }
+
+            @media screen and (max-width: 400px) {
+                max-width: 100%;
+            }
+        }
+
+        .ec-calc-form {
+            input[type="text"] {
+                padding: 13.3px 16px !important;
+                height: auto !important;
+                font-size: 14px;
+                line-height: 19.6px;
+                min-width: 173px;
+
+                &:focus {
+                    border-color: var(--dark-red) !important;
+                }
+            }
+        }
+
+        .ec-calc-form-delivery input[type="checkbox"]:checked+label,
+        .ec-calc-form-pickup input[type="checkbox"]:checked+label {
+            &::before {
+                content: "";
+                background-image: url("/wp-content/themes/kamkardan/css/img/checked=yes.svg");
+                background-repeat: no-repeat;
+                background-size: contain;
+                width: 18px;
+                height: 18px;
+                display: block;
+                left: 0;
+                top: 0;
+                background-color: transparent;
+            }
+
+            &:after {
+                display: none;
+            }
+
+        }
+
+        &__header {
+            border-bottom: 1px solid #dadada;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+
+            &__text {
+                font-size: var(--h2-font-size);
+                font-weight: var(--h2-font-weight);
+                line-height: var(--h2-line-height);
+                letter-spacing: -0.03em;
+                color: var(--main-color);
+                font-family: var(--h2-font-family);
+
+                @media screen and (max-width: 768px) {
+                    font-size: var(--h3-font-size);
+                    font-weight: var(--h3-font-weight);
+                    line-height: var(--h3-line-height);
+                }
+            }
+        }
+    }
+}

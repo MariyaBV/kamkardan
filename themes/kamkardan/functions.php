@@ -2057,3 +2057,133 @@ function clear_cart() {
 }
 add_action('wp_ajax_clear_cart', 'clear_cart');
 add_action('wp_ajax_nopriv_clear_cart', 'clear_cart');
+
+
+// Добавляем скрипт чисто для корзины
+function enqueue_callback_form_script() {
+    if (is_cart()) { 
+        ?>
+        <script>
+            jQuery(document).ready(function($) {
+                $('#callbackButton').hide();
+                $('#callbackRequestForm').submit(function(e) {
+                    e.preventDefault();
+
+                    var name = $('#callback-name').val();
+                    var phone = $('#callback-phone').val();
+
+                    // Получаем данные корзины через Ajax
+                    $.ajax({
+                        url: custom_ajax_obj.ajax_url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'get_cart_data',
+                        },
+                        success: function(response) {
+                            var cart_data = response.success ? response.data : {};  // Если ошибка, отправляем пустые данные корзины
+
+                            // Отправляем данные формы и корзины на сервер для создания заказа
+                            $.ajax({
+                                url: custom_ajax_obj.ajax_url,
+                                type: 'POST',
+                                data: {
+                                    action: 'submit_callback_order',
+                                    name: name,
+                                    phone: phone,
+                                    cart_data: cart_data  // Может быть либо данные корзины, либо пустой объект
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        // Показать сообщение об успешном создании заказа
+                                        $('#callbackRequestFormThanks').show();
+                                        $('#closeCallbackForm').trigger('click');
+                                        
+                                        // Привязываем клик на кнопке "ОК" во всплывающем окне
+                                        $('#OKCallbackFormThanks').click(function() {
+                                            $('#callbackRequestFormThanks').hide();
+
+                                            // Очистить корзину через Ajax
+                                            console.log('Очистка корзины...');
+                                            $.ajax({
+                                                url: custom_ajax_obj.ajax_url,
+                                                type: 'POST',
+                                                data: {
+                                                    action: 'clear_cart'
+                                                },
+                                                success: function() {
+                                                    location.reload();
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    console.error('Ошибка при очистке корзины:', xhr.responseText);
+                                                }
+                                            });
+                                        });
+                                    } else {
+                                        console.error('Ошибка при создании заказа: ' + response.data);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Ошибка при отправке данных формы:', xhr.responseText);
+                                    console.error('Ошибка при отправке данных формы.');
+                                }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // В случае ошибки получения данных корзины, отправляем только имя и телефон
+                            console.error('Ошибка при получении данных корзины:', xhr.responseText);
+
+                            // Отправляем только имя и телефон без данных корзины
+                            $.ajax({
+                                url: custom_ajax_obj.ajax_url,
+                                type: 'POST',
+                                data: {
+                                    action: 'submit_callback_order',
+                                    name: name,
+                                    phone: phone,
+                                    cart_data: {}  // Пустой объект для данных корзины
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        // Показать сообщение об успешном создании заказа
+                                        $('#callbackRequestFormThanks').show();
+                                        $('#closeCallbackForm').trigger('click');
+                                        
+                                        // Привязываем клик на кнопке "ОК" во всплывающем окне
+                                        $('#OKCallbackFormThanks').click(function() {
+                                            $('#callbackRequestFormThanks').hide();
+
+                                            // Очистить корзину через Ajax
+                                            console.log('Очистка корзины...');
+                                            $.ajax({
+                                                url: custom_ajax_obj.ajax_url,
+                                                type: 'POST',
+                                                data: {
+                                                    action: 'clear_cart'
+                                                },
+                                                success: function() {
+                                                    location.reload();
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    console.error('Ошибка при очистке корзины:', xhr.responseText);
+                                                }
+                                            });
+                                        });
+                                    } else {
+                                        alert('Ошибка при создании заказа: ' + response.data);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Ошибка при отправке данных формы:', xhr.responseText);
+                                    alert('Ошибка при отправке данных формы.');
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+}
+add_action('wp_footer', 'enqueue_callback_form_script');
