@@ -3,12 +3,15 @@
 Template Name: шаблон для страницы подобрать
 */
 get_header();
+$fields = get_fields();
 ?>
 
 <main id="primary" class="site-page">
 		<div class="wrap">
+            <h2 class="wp-block-heading has-text-align-center margin-bottom-24"><?= $fields['zagolovok']; ?></h2>
+            <h3 class="wp-block-heading has-text-align-center margin-bottom-24"><?= $fields['podzagolovok']; ?></h3>
 			<?php
-            the_title( '<h2 class="entry-title">', '</h2>' );
+            //the_title( '<h2 class="entry-title">', '</h2>' );
 			// while ( have_posts() ) :
 			// 	the_post();
 
