@@ -11,7 +11,8 @@
 if (!defined('ABSPATH')) {
     exit; // Завершаем выполнение скрипта
 }
-
+define('MNE_DELIVERY_PLUGIN_DIR', plugin_dir_path(__FILE__));
+require_once MNE_DELIVERY_PLUGIN_DIR . 'vendor/autoload.php';
 function mne_check_woocommerce()
 {
     // Проверяем, активен ли плагин WooCommerce
@@ -28,3 +29,5 @@ function mne_woocommerce_not_active_notice()
     _e('Плагин требует активный WooCommerce для работы.', 'delivery-mne');
     echo '</p></div>';
 }
+
+add_action('admin_menu', ['mne\\Admin\\SettingsPage', 'init']);
