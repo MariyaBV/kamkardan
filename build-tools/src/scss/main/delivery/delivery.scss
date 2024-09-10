@@ -18,6 +18,11 @@
     .ec-calc-layout * {
         font-family: "Inter", sans-serif;
         font-size: 16px;
+        min-width: 140px;
+
+        @media screen and (max-width: 768px) {
+            min-width: unset;
+        }
     }
 
     .ec-calc-border {
@@ -120,17 +125,21 @@
 
         .ec-calc-form-to {
             display: flex;
-            gap: 37px;
             align-items: center;
+            width: 100%;
 
             @media screen and (max-width: 768px) {
-                width: 100%;
+                justify-content: space-between;
+
+                .ec-calc-form__label {
+                    min-width: 100px;
+                }
             }
         }
 
         .ec-calc-form-row:first-child {
             float: left;
-            width: 50%;
+            width: calc(50% - 10px);
 
             @media screen and (max-width: 768px) {
                 width: 100%;
@@ -156,14 +165,23 @@
                 .ec-calc-form-value {
                     display: flex;
                     align-items: center;
-                    gap: 13.5px;
+                    width: calc(50% - 10px);
 
                     @media screen and (max-width: 768px) {
                         width: 100%;
+                        justify-content: space-between;
 
                         .ec-calc-form__label {
                             min-width: 100px;
                         }
+                    }
+                }
+
+                .ec-calc-form-value {
+                    padding-left: 10px;
+
+                    @media screen and (max-width: 768px) {
+                        padding-left: 0;
                     }
                 }
             }
@@ -229,6 +247,11 @@
             flex-direction: row;
             width: 100%;
             gap: 24px;
+            margin-left: 10px;
+
+            @media screen and (max-width: 768px) {
+                margin-left: 0;
+            }
 
             @media screen and (max-width: 400px) {
                 padding: 0;
@@ -293,6 +316,8 @@
                 font-size: 14px;
                 line-height: 19.6px;
                 min-width: 173px;
+                width: 100% !important;
+                max-width: 430px;
 
                 &:focus {
                     border-color: var(--dark-red) !important;

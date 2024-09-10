@@ -28,24 +28,32 @@ $options = get_fields('options');
 				</div>
 
 				<div class="footer-right txt">
-					<a href="tel:<?= $options['phone']; ?>" class="icon-container">
-						<span class="icon-phone-3"></span>
-						<div>
-							<p class="txt-s"><?= $options['phone']; ?></p>
-							<p class="subtitle-xs">
-								<?= $options['operating_mode']; ?>
-							</p>
-						</div>
-					</a>
-					<a class="icon-container" href= "mailto: <?= $options['email']; ?>">
-						<span class="icon-Frame-44"></span>
-						<p><?= $options['email']; ?></p>
-					</a>
-					<a href="/contacts/" class="icon-container">
-						<span class="icon-Frame-43"></span>
-						<p><?= $options['address']; ?></p>
-					</a>
+					<div class="footer-contacts">
+						<a href="tel:<?= $options['phone']; ?>" class="icon-container">
+							<span class="icon-phone-3"></span>
+							<div>
+								<p class="txt-s"><?= $options['phone']; ?></p>
+								<p class="subtitle-xs">
+									<?= $options['operating_mode']; ?>
+								</p>
+							</div>
+						</a>
+						<a class="icon-container" href= "mailto: <?= $options['email']; ?>">
+							<span class="icon-Frame-44"></span>
+							<p><?= $options['email']; ?></p>
+						</a>
+						<a href="/contacts/" class="icon-container">
+							<span class="icon-Frame-43"></span>
+							<p><?= $options['address']; ?></p>
+						</a>
+					</div>
+					<a class="footer-made-in" href="https://ars-creative.com/" class="txt-company-name">"Сделано в  ARS CREATIVE"</a>
 				</div>
+			</div>
+			<div class="made-in-mobile">
+				<a class="footer-made-in" href="https://ars-creative.com/" class="txt-company-name">"Сделано в  ARS CREATIVE"</a>
+				<p class="txt-company-name">© 2013–2024 <br>
+				<?= $options['company-name']; ?></p>
 			</div>
 		</div>
 	</footer>

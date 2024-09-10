@@ -6,6 +6,39 @@
     line-height: var(--txt-normal-line-height);
     color: var(--white);
 
+    .made-in-mobile {
+        display: none;
+
+        .txt-company-name {
+            font-family: "Wix Madefor Display", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 15.6px;
+            letter-spacing: 0.01em; 
+        }
+
+        .footer-made-in {
+            color: var(--white);
+            text-decoration: none;
+            font-family: "Wix Madefor Display", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 15.6px;
+            letter-spacing: 0.01em;
+
+            @media screen and (max-width: 500px) {
+                text-align: end;
+            }
+        }
+
+        @media screen and (max-width: 900px) {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row-reverse;
+            padding: 20px;
+        }
+    }
+
     .custom {
         display: flex;
         justify-content: space-between;
@@ -34,6 +67,10 @@
                 font-weight: 600;
                 line-height: 15.6px;
                 letter-spacing: 0.01em;
+
+                @media screen and (max-width: 900px) {
+                    display: none;
+                }
             }
 
             .logo-container {
@@ -114,6 +151,23 @@
 
         .footer-right {
             flex: 25%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .footer-made-in {
+                color: var(--white);
+                text-decoration: none;
+                font-family: "Wix Madefor Display", sans-serif;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 15.6px;
+                letter-spacing: 0.01em;
+
+                @media screen and (max-width: 900px) {
+                    display: none;
+                }
+            }
         }
 
         .icon-container {
