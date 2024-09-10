@@ -2020,57 +2020,11 @@ function cart_change_quantity() {
                 });
 
                 // Обновление корзины при изменении количества
-                $( 'body' ).on( 'change', '.qty', function() { 
-                    
+                $('body').on('click', '.plus, .minus', function() { 
                     $( '[name="update_cart"]' ).trigger( 'click' );
-                    location.reload();
-                 
-                } );
+                });
             });
-            // jQuery(document).ready(function($) {
-            //     // Обработка кликов на кнопки плюс/минус
-            //     $('body').on('click', 'button.plus, button.minus', function() {
-            //         var qty = $(this).parent().find('input.qty');
-            //         var val = parseInt(qty.val());
-            //         var min = parseInt(qty.attr('min'));
-            //         var max = parseInt(qty.attr('max'));
-            //         var step = parseInt(qty.attr('step'));
 
-            //         // Меняем количество в зависимости от кнопки
-            //         if ($(this).hasClass('plus')) {
-            //             if (max && val >= max) {
-            //                 qty.val(max);
-            //             } else {
-            //                 qty.val(val + step);
-            //             }
-            //         } else {
-            //             if (min && val <= min) {
-            //                 qty.val(min);
-            //             } else if (val > 1) {
-            //                 qty.val(val - step);
-            //             }
-            //         }
-
-            //         // Триггерим событие "change" для обновления
-            //         qty.trigger('change');
-            //     });
-
-            //     // Обновление корзины при изменении количества
-            //     $('body').on('change', '.qty', function() { 
-            //         var $form = $(this).closest('form.woocommerce-cart-form');
-            //         var $updateCartButton = $form.find('[name="update_cart"]');
-
-            //         // Отладочный вывод
-            //         console.log('Form data:', $form.serialize());
-            //         console.log('Update cart button:', $updateCartButton);
-
-            //         // Включение кнопки, если она отключена
-            //         $updateCartButton.prop('disabled', false);
-
-            //         // Отправка формы
-            //         $form.submit();
-            //     });
-            // });
         </script>
         <?php
     }
