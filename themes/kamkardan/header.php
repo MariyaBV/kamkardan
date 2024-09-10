@@ -44,7 +44,7 @@ $options = get_fields('option');
 				</div>
 				<div class="header-block-contacts">
 					<?php if (!empty($options['phone'])): ?>
-						<p class="header-block-contacts__phone"><?php echo esc_html($options['phone']); ?></p>
+						<a href="tel:<?= $options['phone']; ?>" class="header-block-contacts__phone"><?php echo esc_html($options['phone']); ?></a>
 					<?php endif; ?>
 					<?php if (!empty($options['operating_mode'])): ?>
 						<p class="header-block-contacts__operating-mode">

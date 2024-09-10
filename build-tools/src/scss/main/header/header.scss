@@ -323,6 +323,7 @@ header#main-header {
             color: var(--light-red);
             font-weight: 800;
             text-wrap: nowrap;
+            text-decoration: none;
         }
 
         &__operating-mode {
@@ -868,6 +869,7 @@ header#main-header {
         color: var(--light-red);
         font-weight: 800;
         text-wrap: nowrap;
+        text-decoration: none;
     }
 
     &__operating-mode {
