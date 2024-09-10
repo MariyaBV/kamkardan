@@ -18,6 +18,7 @@ $(document).ready(function () {
 
         function quantityMinus() {
             var currentValue = parseInt($quantityNum.val());
+            console.log(currentValue);
             if (currentValue > 1) {
                 $quantityNum.val(currentValue - 1);
             }
@@ -25,12 +26,25 @@ $(document).ready(function () {
 
         function quantityPlus() {
             var currentValue = parseInt($quantityNum.val());
+            console.log(currentValue);
             $quantityNum.val(currentValue + 1);
         }
     }
 
     quantityProducts();
 });
+
+function validatePhone(phone) {
+    // Проверяем номер телефона на соответствие формату +7 (999) 999-9999 или 89999999999
+    const phoneRegex = /^(\+7|8)\d{10}$/;
+    return phoneRegex.test(phone);
+}
+
+function validateEmail(email) {
+    // Регулярное выражение для проверки email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 // Обработчик для кнопки "Купить"
 $(document).ready(function ($) {
@@ -117,15 +131,3 @@ $(document).ready(function ($) {
         console.log("Cart totals updated.");
     });
 });
-
-function validatePhone(phone) {
-    // Проверяем номер телефона на соответствие формату +7 (999) 999-9999 или 89999999999
-    const phoneRegex = /^(\+7|8)\d{10}$/;
-    return phoneRegex.test(phone);
-}
-
-function validateEmail(email) {
-    // Регулярное выражение для проверки email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}

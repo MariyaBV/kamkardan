@@ -273,6 +273,15 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
     display: none;
 }
 
+.woocommerce-message {
+    border-top-color: var(--dark-red);
+    background-color: transparent;
+
+    &::before {
+        color: var(--dark-red);
+    }
+}
+
 #primary .wrap .woocommerce {
     .woocommerce-info {
         padding: 0;

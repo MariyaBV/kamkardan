@@ -616,7 +616,9 @@ table.tablepress {
 }
 
 #page #primary button.quantity-arrow-minus,
-#page #primary button.quantity-arrow-plus {
+#page #primary button.quantity-arrow-plus,
+.plus,
+.minus {
   &:hover {
     cursor: pointer;
     background-color: var(--grey);

@@ -100,6 +100,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 						</td>
 
 						<td class="product-quantity" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
+							<div class="block-quantity-button">
+						<button class="minus"> <span class="icon-1"></span> </button>
 						<?php
 						if ( $_product->is_sold_individually() ) {
 							$min_quantity = 1;
@@ -123,6 +125,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ); // PHPCS: XSS ok.
 						?>
+						<button class="plus"><span class="icon-uniE936"></span></button>
+					</div>
 						</td>
 
 						<td class="product-subtotal" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
@@ -155,7 +159,23 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 			<?php do_action( 'woocommerce_cart_contents' ); ?>
 
-			
+			<tr>
+				<td colspan="6" class="actions">
+
+					<?php if ( wc_coupons_enabled() ) { ?>
+						<div class="coupon">
+							<label for="coupon_code" class="screen-reader-text"><?php esc_html_e( 'Coupon:', 'woocommerce' ); ?></label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
+							<?php do_action( 'woocommerce_cart_coupon' ); ?>
+						</div>
+					<?php } ?>
+
+					<button type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
+
+					<?php do_action( 'woocommerce_cart_actions' ); ?>
+
+					<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
+				</td>
+			</tr>
 
 			<?php do_action( 'woocommerce_after_cart_contents' ); ?>
 		</tbody>

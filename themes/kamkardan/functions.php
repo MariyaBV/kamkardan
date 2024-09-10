@@ -414,16 +414,6 @@ function genius_alter_price_cart( $cart ) {
       }
     }
 }
-// вывод скидки в % на картинке карточки товара
-// add_action( 'woocommerce_before_shop_loop_item_title', 'genius_display_discount_badge', 10 );
-// function genius_display_discount_badge() {
-//     global $product;
-    
-//     $discount = get_post_meta( $product->get_id(), '_pc_discount', true );
-//     if ( $discount && $discount > 0 ) {
-//         echo '<span class="discount-badge"><span class="square"></span>-' . esc_html( $discount ) . '%</span>';
-//     }
-// }
 
 function genius_display_discount_badge_return() {
     global $product;
@@ -497,63 +487,6 @@ class Walker_Category_Thumbnails extends Walker_Category {
         $output .= "</li>\n";
     }
 }
-/*function add_product_category_sidebar() {
-    // Получаем текущую категорию
-    $current_category = get_queried_object();
-
-    // Список ID категорий, которые нужно исключить (например, крестовины и комплектующие)
-    $excluded_categories = array('crosspieces', 'accessories');
-
-    // Не выводим на страницах крестовины и комплектующие
-    if (is_product_category($excluded_categories)) {
-        return;
-    }
-
-    // Получаем отсортированные категории
-    $sorted_terms = get_sorted_product_categories();
-
-    // Исключаем категории по их ID
-    $excluded_category_ids = array();
-    foreach ($excluded_categories as $slug) {
-        $category = get_term_by('slug', $slug, 'product_cat');
-        if ($category) {
-            $excluded_category_ids[] = $category->term_id;
-        }
-    }
-
-    // Фильтруем отсортированные категории, чтобы исключить нежелательные
-    $filtered_terms = array_filter($sorted_terms, function($term) use ($excluded_category_ids) {
-        return !in_array($term->term_id, $excluded_category_ids);
-    });
-
-    // Если после фильтрации остались категории, выводим их
-    if (!empty($filtered_terms)) {
-        ?>
-        <aside class="product-category-sidebar">
-            <div id="catalog-sidebar" class="category-list-categories mobile">
-                <h3>Карданы</h3>
-                <ul class="category-list">
-                    <?php
-                    foreach ($filtered_terms as $category) {
-                        $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
-                        $image_url = wp_get_attachment_url($thumbnail_id);
-                        $link = get_term_link($category);
-                        ?>
-                        <li id="cat-item-<?php echo esc_attr($category->term_id); ?>" class="cat-item cat-item-<?php echo esc_attr($category->term_id); ?>">
-                            <a class="cat-link" href="<?php echo esc_url($link); ?>">
-                                <img class="cat-image" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>" />
-                                <span class="cat-name"><?php echo esc_html($category->name); ?></span>
-                            </a>
-                        </li>
-                        <?php
-                    }
-                    ?>
-                </ul>
-            </div>
-        </aside>
-        <?php
-    }
-}*/
 //конец делаем sidebar с категориями на странице продукта и продуктов
 
 //начало вывод меток и подкатегорий категории карданы
@@ -652,8 +585,6 @@ function add_kardany_tags_and_subcategories_sidebar() {
     }
 }
 add_shortcode('kardany_tags_and_subcategories', 'add_kardany_tags_and_subcategories_sidebar');
-
-
 
 
 //вывод номера кардана из атрибутов на странице товара и карточке
@@ -1059,106 +990,13 @@ if ( ! function_exists( 'woocommerce_template_loop_product_title' ) ) {
 	}
 }
 
-//получаем картинку из категории
-// function get_image_from_category() {
-//     global $product;
-	
-//     if ( empty( $product ) ) {
-//         return;
-//     }
-
-//     // Получаем ID продукта
-// 	$product_id = $product->get_id();
-
-// 	// Получаем категории продукта
-// 	$product_categories = get_the_terms( $product_id, 'product_cat' );
-
-// 	if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
-// 		echo '<div class="product-category__img">';
-
-// 		foreach ( $product_categories as $category ) {
-// 			$thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
-// 			$image_url = wp_get_attachment_url( $thumbnail_id );
-
-// 			if ( $image_url ) {
-// 				echo '<div class="category-image">';
-// 				echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
-// 				echo '</div>';
-// 			}
-// 		}
-
-// 		echo '</div>';
-// 	}
-// }
-
-// function get_image_from_category() {
-//     global $product;
-
-//     if ( empty( $product ) ) {
-//         return;
-//     }
-
-//     $product_id = $product->get_id();
-//     $product_categories = get_the_terms( $product_id, 'product_cat' );
-
-//     if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) {
-//         echo '<div class="product-category__img">';
-
-//         foreach ( $product_categories as $category ) {
-
-//             // Проверка, если текущая категория является карданы
-//             if ( ( strtolower($category->name) == 'карданы') || (strtolower($category->slug) == 'kardany' ) ) {
-//                 $current_tag = get_queried_object();
-                
-//                 // Получаем URL изображения для текущей метки
-//                 $logo_field = get_field('logo', 'product_cat_' . $current_tag->term_id);
-                
-//                 // Обрабатываем различные типы значений
-//                 if ( is_string($logo_field) && filter_var($logo_field, FILTER_VALIDATE_URL) ) {
-//                     // Если это строка и является URL
-//                     $logo_image = esc_url($logo_field);
-//                 }  elseif ( is_array($logo_field) && isset($logo_field['url']) ) {
-//                     // Если это массив, получаем URL из ключа 'url'
-//                     $logo_image = esc_url($logo_field['url']);
-//                 } elseif ( is_numeric($logo_field) ) {
-//                     // Если это числовой ID, преобразуем в URL
-//                     $logo_image = wp_get_attachment_url($logo_field);
-//                 } else {
-//                     $logo_image = esc_url($logo_field); // Неверный формат
-//                 }
-
-//                 if ( $logo_image ) {
-//                     echo '<div class="category-image">';
-//                     echo '<img src="' . esc_url( $logo_image ) . '" alt="' . esc_attr( $category->name ) . '" />';
-//                     echo '</div>';
-//                 }
-//             } else {
-//                 // Обрабатываем остальные категории и подкатегории
-//                 $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
-//                 $image_url = wp_get_attachment_url( $thumbnail_id );
-
-//                 if ( $image_url ) {
-//                     echo '<div class="category-image">';
-//                     echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $category->name ) . '" />';
-//                     echo '</div>';
-//                 }
-//             }
-//         }
-
-//         echo '</div>';
-//     }
-// }
-
 function get_image_from_category() {
     // Получаем текущий объект (метку, категорию или подкатегорию)
     $current_object = get_queried_object();
 
-    
-
     if ( ! empty( $current_object ) && ! is_wp_error( $current_object ) ) {
         $image_url = '';
 
-        
         // Проверяем, что текущий объект — это категория или метка
         if ( ! empty( $current_object ) && ! is_wp_error( $current_object ) ) {
             $image_url = '';
@@ -1616,6 +1454,10 @@ add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', 'custom_woocommerce_aj
 
 //Обработчик для обновления количества товаров в корзине
 function update_cart_count() {
+    if (!isset($_POST['action']) || $_POST['action'] !== 'update_cart_count') {
+        wp_send_json_error('Неверный запрос');
+    }
+
     wp_send_json_success(array(
         'cart_count' => WC()->cart->get_cart_contents_count()
     ));
@@ -2091,28 +1933,32 @@ function enqueue_callback_form_script() {
                                     action: 'submit_callback_order',
                                     name: name,
                                     phone: phone,
-                                    cart_data: cart_data  // Может быть либо данные корзины, либо пустой объект
+                                    cart_data: cart_data
                                 },
                                 success: function(response) {
                                     if (response.success) {
                                         // Показать сообщение об успешном создании заказа
                                         $('#callbackRequestFormThanks').show();
                                         $('#closeCallbackForm').trigger('click');
-                                        
+
                                         // Привязываем клик на кнопке "ОК" во всплывающем окне
                                         $('#OKCallbackFormThanks').click(function() {
                                             $('#callbackRequestFormThanks').hide();
 
                                             // Очистить корзину через Ajax
-                                            console.log('Очистка корзины...');
                                             $.ajax({
                                                 url: custom_ajax_obj.ajax_url,
                                                 type: 'POST',
                                                 data: {
                                                     action: 'clear_cart'
                                                 },
-                                                success: function() {
-                                                    location.reload();
+                                                success: function(response) {
+                                                    if (response.success) {
+                                                        console.log('Корзина успешно очищена');
+                                                        location.reload();  // Обновляем страницу после очистки
+                                                    } else {
+                                                        console.error('Ошибка при очистке корзины:', response.data);
+                                                    }
                                                 },
                                                 error: function(xhr, status, error) {
                                                     console.error('Ошибка при очистке корзины:', xhr.responseText);
@@ -2125,59 +1971,11 @@ function enqueue_callback_form_script() {
                                 },
                                 error: function(xhr, status, error) {
                                     console.error('Ошибка при отправке данных формы:', xhr.responseText);
-                                    console.error('Ошибка при отправке данных формы.');
                                 }
                             });
                         },
                         error: function(xhr, status, error) {
-                            // В случае ошибки получения данных корзины, отправляем только имя и телефон
                             console.error('Ошибка при получении данных корзины:', xhr.responseText);
-
-                            // Отправляем только имя и телефон без данных корзины
-                            $.ajax({
-                                url: custom_ajax_obj.ajax_url,
-                                type: 'POST',
-                                data: {
-                                    action: 'submit_callback_order',
-                                    name: name,
-                                    phone: phone,
-                                    cart_data: {}  // Пустой объект для данных корзины
-                                },
-                                success: function(response) {
-                                    if (response.success) {
-                                        // Показать сообщение об успешном создании заказа
-                                        $('#callbackRequestFormThanks').show();
-                                        $('#closeCallbackForm').trigger('click');
-                                        
-                                        // Привязываем клик на кнопке "ОК" во всплывающем окне
-                                        $('#OKCallbackFormThanks').click(function() {
-                                            $('#callbackRequestFormThanks').hide();
-
-                                            // Очистить корзину через Ajax
-                                            console.log('Очистка корзины...');
-                                            $.ajax({
-                                                url: custom_ajax_obj.ajax_url,
-                                                type: 'POST',
-                                                data: {
-                                                    action: 'clear_cart'
-                                                },
-                                                success: function() {
-                                                    location.reload();
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    console.error('Ошибка при очистке корзины:', xhr.responseText);
-                                                }
-                                            });
-                                        });
-                                    } else {
-                                        alert('Ошибка при создании заказа: ' + response.data);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('Ошибка при отправке данных формы:', xhr.responseText);
-                                    alert('Ошибка при отправке данных формы.');
-                                }
-                            });
                         }
                     });
                 });
@@ -2187,3 +1985,96 @@ function enqueue_callback_form_script() {
     }
 }
 add_action('wp_footer', 'enqueue_callback_form_script');
+
+
+function cart_change_quantity() {
+    if (is_cart()) {
+        ?>
+        <script>
+            jQuery(document).ready(function($) {
+                // Обработка кликов на кнопки плюс/минус
+                $('body').on('click', 'button.plus, button.minus', function() {
+                    var qty = $(this).parent().find('input.qty');
+                    var val = parseInt(qty.val());
+                    var min = parseInt(qty.attr('min'));
+                    var max = parseInt(qty.attr('max'));
+                    var step = parseInt(qty.attr('step'));
+
+                    // Меняем количество в зависимости от кнопки
+                    if ($(this).hasClass('plus')) {
+                        if (max && val >= max) {
+                            qty.val(max);
+                        } else {
+                            qty.val(val + step);
+                        }
+                    } else {
+                        if (min && val <= min) {
+                            qty.val(min);
+                        } else if (val > 1) {
+                            qty.val(val - step);
+                        }
+                    }
+
+                    // Триггерим событие "change" для обновления
+                    qty.trigger('change');
+                });
+
+                // Обновление корзины при изменении количества
+                $( 'body' ).on( 'change', '.qty', function() { 
+                    
+                    $( '[name="update_cart"]' ).trigger( 'click' );
+                    location.reload();
+                 
+                } );
+            });
+            // jQuery(document).ready(function($) {
+            //     // Обработка кликов на кнопки плюс/минус
+            //     $('body').on('click', 'button.plus, button.minus', function() {
+            //         var qty = $(this).parent().find('input.qty');
+            //         var val = parseInt(qty.val());
+            //         var min = parseInt(qty.attr('min'));
+            //         var max = parseInt(qty.attr('max'));
+            //         var step = parseInt(qty.attr('step'));
+
+            //         // Меняем количество в зависимости от кнопки
+            //         if ($(this).hasClass('plus')) {
+            //             if (max && val >= max) {
+            //                 qty.val(max);
+            //             } else {
+            //                 qty.val(val + step);
+            //             }
+            //         } else {
+            //             if (min && val <= min) {
+            //                 qty.val(min);
+            //             } else if (val > 1) {
+            //                 qty.val(val - step);
+            //             }
+            //         }
+
+            //         // Триггерим событие "change" для обновления
+            //         qty.trigger('change');
+            //     });
+
+            //     // Обновление корзины при изменении количества
+            //     $('body').on('change', '.qty', function() { 
+            //         var $form = $(this).closest('form.woocommerce-cart-form');
+            //         var $updateCartButton = $form.find('[name="update_cart"]');
+
+            //         // Отладочный вывод
+            //         console.log('Form data:', $form.serialize());
+            //         console.log('Update cart button:', $updateCartButton);
+
+            //         // Включение кнопки, если она отключена
+            //         $updateCartButton.prop('disabled', false);
+
+            //         // Отправка формы
+            //         $form.submit();
+            //     });
+            // });
+        </script>
+        <?php
+    }
+}
+add_action('wp_footer', 'cart_change_quantity');
+
+

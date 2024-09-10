@@ -239,7 +239,9 @@
         max-width: 240px;
 
         .quantity-arrow-minus,
-        .quantity-arrow-plus {
+        .quantity-arrow-plus,
+        .plus,
+        .minus {
             background-color: var(--light-grey);
             border-radius: var(--border-radius);
             font-size: 44px;
