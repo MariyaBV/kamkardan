@@ -701,7 +701,11 @@ table.tablepress {
 
 .block-link-img {
   position: relative;
+  display: none;
 
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
 
   a.banner-link {
     position: absolute;
