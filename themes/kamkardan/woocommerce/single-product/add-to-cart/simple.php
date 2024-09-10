@@ -51,9 +51,10 @@ if ( $product->is_in_stock() ) : ?>
 			<a class="add-to-cart button add_to_cart_button ajax_add_to_cart" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"><span class="add-to-cart-text">Купить</span></a>
 		</div>
 	</div>
-	<hr class="hr-line">
-	<p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
-    
+	<div class="image-single-product-block__desktop">
+		<hr class="hr-line">
+		<p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
+    </div>
 	<?php /*do_action( 'woocommerce_after_add_to_cart_form' );*/ ?>
 
 <?php endif; ?>

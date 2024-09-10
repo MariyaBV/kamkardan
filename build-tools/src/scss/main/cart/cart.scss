@@ -229,8 +229,8 @@ a.clear-filters-cart {
 
                 @media screen and (max-width: 768px) {
                     span.icon-Close-1:before {
-                        content: "\e933";
-                        color: var(--dark-red);
+                        content: "\e937";
+                        color: #a20a00;
                     }
                 }
             }
@@ -445,6 +445,10 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
     padding: 40px 80px;
     margin-top: 64px;
 
+    &.mobile {
+        display: none;
+    }
+
     @media screen and (max-width: 768px) {
         padding: 24px 40px;
     }
@@ -452,6 +456,14 @@ form.custom-cart-form>table.shop_table>tbody.cart-body>tr.block-cart-button-subt
     @media screen and (max-width: 500px) {
         padding: 23px;
         border-radius: 16px;
+
+        &.desktop {
+            display: none;
+        }
+
+        &.mobile {
+            display: block;
+        }
     }
 
     h3 {

@@ -90,7 +90,7 @@ $options = get_fields('options');
 
 </div>
 
-<div class="block-about-delivery">
+<div class="block-about-delivery desktop">
 	<h3><?php echo $options['block-about-delivery']['zagolovok']; ?></h3>
 	<ul>
 		<?php foreach ($options['block-about-delivery']['blok_dostavka'] as $itm): ?>
@@ -104,3 +104,16 @@ $options = get_fields('options');
 
 <div class="ec-delivery"></div>
 <script id="dcsbl" src="https://dostavka.sbl.su/api/delivery.js?comp=0&startCt=Набережные Челны&startCntr=RU&btn=no&dopInsure=1&innerDeliv=1&startPick=1&title=Предварительный расчет доставки&autoEnd=1"></script>
+
+
+<div class="block-about-delivery mobile">
+	<h3><?php echo $options['block-about-delivery']['zagolovok']; ?></h3>
+	<ul>
+		<?php foreach ($options['block-about-delivery']['blok_dostavka'] as $itm): ?>
+		<li>
+			<img src="<?php echo $itm['logo']; ?>" alt="">
+			<p><?php echo $itm['tekst']; ?></p>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</div>

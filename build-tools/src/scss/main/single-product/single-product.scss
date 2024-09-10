@@ -33,6 +33,22 @@
     }
 
     .image-single-product-block {
+
+        &__desktop {
+            @media screen and (max-width: 768px) {
+                display: none;
+            }
+        }
+
+        &__mobile {
+            display: none;
+            margin-top: 16px;
+
+            @media screen and (max-width: 768px) {
+                display: block;
+            }
+        }
+
         &__img {
             position: relative;
             border: 1px solid var(--grey);

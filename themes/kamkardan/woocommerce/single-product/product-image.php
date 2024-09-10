@@ -69,5 +69,7 @@ $wrapper_classes   = apply_filters(
             </div>
         </div>
     </div>
-
+    <div class="image-single-product-block__mobile">
+		<p class="subtitle image-single-product-block__text">Некоторые изображения носят исключительно уведомительный характер. Для уточнения параметров <?php if ((strpos($product_categories_plain, 'Крестовины') === false) && (strpos($product_categories_plain, 'Комплектующие') === false)):?> вала <?php endif; ?> обращайтесь к менеджерам</p>
+    </div>
 </div>
