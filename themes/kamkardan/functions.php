@@ -1890,13 +1890,15 @@ function submit_callback_order() {
 // Обработка очистки корзины
 function clear_cart() {
     WC()->cart->empty_cart(); // Очистить корзину
+    // Возвращаем успешный JSON-ответ
+    wp_send_json_success('Корзина успешно очищена');
     wp_die();
 }
 add_action('wp_ajax_clear_cart', 'clear_cart');
 add_action('wp_ajax_nopriv_clear_cart', 'clear_cart');
 
 
-// Добавляем скрипт чисто для корзины
+// Добавляем скрипт заказ из корзины + данные из всплывашки чисто для стр корзины
 function enqueue_callback_form_script() {
     if (is_cart()) { 
         ?>
@@ -1940,6 +1942,7 @@ function enqueue_callback_form_script() {
                                         $('#OKCallbackFormThanks').click(function() {
                                             $('#callbackRequestFormThanks').hide();
 
+                                            console.log('Заказ создан успешно. ID: ' + response.data);
                                             // Очистить корзину через Ajax
                                             $.ajax({
                                                 url: custom_ajax_obj.ajax_url,
@@ -1950,7 +1953,7 @@ function enqueue_callback_form_script() {
                                                 success: function(response) {
                                                     if (response.success) {
                                                         console.log('Корзина успешно очищена');
-                                                        location.reload();  // Обновляем страницу после очистки
+                                                        location.reload(true);  // Обновляем страницу после очистки
                                                     } else {
                                                         console.error('Ошибка при очистке корзины:', response.data);
                                                     }
@@ -1981,7 +1984,7 @@ function enqueue_callback_form_script() {
 }
 add_action('wp_footer', 'enqueue_callback_form_script');
 
-
+// Обработка изменения количества
 function cart_change_quantity() {
     if (is_cart()) {
         ?>
