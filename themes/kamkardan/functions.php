@@ -1789,7 +1789,7 @@ function style_mobile() {
     if (is_front_page() || is_cart() || is_checkout() || is_account_page() || is_singular('product')) {
         ?> 
             <style>
-                @media screen and (max-width: 960px) {
+                @media screen and (max-width: 990px) {
                     #primary {
                         margin-top: 136px;
                     }
@@ -1800,19 +1800,14 @@ function style_mobile() {
 }
 add_action('wp_head', 'style_mobile');
 
-//добавление кнопки очистить корзину начало
-add_action( 'woocommerce_before_cart', 'true_empty_cart_btn' );
-function true_empty_cart_btn(){
-	echo '<a class="clear-filters clear-filters-cart" href="' . WC()->cart->get_cart_url() . '?empty-cart">Очистить корзину</a>';
-}
- 
-add_action( 'init', 'true_empty_cart' );
+//добавление кнопки очистить корзину 
 function true_empty_cart() {
-	if ( isset( $_GET[ 'empty-cart' ] ) ) {
-		WC()->cart->empty_cart();
-	}
+    if ( isset( $_GET['empty-cart'] ) && $_GET['empty-cart'] === 'true' ) {
+        WC()->cart->empty_cart();
+    }
 }
-//добавление кнопки очистить корзину конец
+add_action( 'init', 'true_empty_cart' );
+
 
 function add_back_button_to_sub_menu($items, $args) {
     // Применяем фильтр только для меню с ID 'site-navigation'

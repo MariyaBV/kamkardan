@@ -102,9 +102,9 @@ $options = get_fields('options');
 	</ul>
 </div>
 
-<?php /*<div class="ec-delivery"></div>
+<div class="ec-delivery"></div>
 <script id="dcsbl" src="https://dostavka.sbl.su/api/delivery.js?comp=0&startCt=Набережные Челны&startCntr=RU&btn=no&dopInsure=1&innerDeliv=1&startPick=1&title=Предварительный расчет доставки&autoEnd=1"></script>
-*/?>
+
 
 <div class="block-about-delivery mobile">
 	<h3><?php echo $options['block-about-delivery']['zagolovok']; ?></h3>
