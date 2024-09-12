@@ -1273,6 +1273,7 @@ function get_category_product_attributes($category_id) {
 
     return $attributes;
 }
+
 function print_filters() {
     // Получаем текущий URL
     $current_url = $_SERVER['REQUEST_URI'];
@@ -1339,31 +1340,11 @@ function print_filters() {
         $attribute_label = $attribute->attribute_label;
         $selected_value = isset($current_params['attribute_' . esc_attr($attribute_name)]) ? $current_params['attribute_' . esc_attr($attribute_name)] : '';
 
-        $terms = get_terms(array(
-            'taxonomy' => 'pa_' . $attribute_name,
-            'hide_empty' => true,
-        ));
-
-        if (!empty($terms) && !is_wp_error($terms)) {
-            echo '<div class="attribute-filters__select" data-attribute="' . esc_attr($attribute_name) . '">';
-            echo '<div class="custom-select">';
-            $selected_label = $selected_value ? get_term_by('slug', $selected_value, 'pa_' . esc_attr($attribute_name))->name : esc_html($attribute_label);
-            echo '<div class="custom-select-trigger" data-attribute-label="' . esc_html($attribute_label) . '">' . esc_html($selected_label) . '</div>';
-            echo '<span class="icon-Down-3"></span>';
-            echo '<ul class="custom-options">';
-
-            foreach ($terms as $term) {
-                $selected = $selected_value === $term->slug ? ' selected' : '';
-                echo '<li class="custom-option' . ($selected ? ' selected' : '') . '" data-value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</li>';
-            }
-
-            echo '</ul>';
-            echo '</div>';
-            echo '<span class="vertical-line"></span>';
-            echo '<span class="reset-button">×</span>';
-            echo '<input type="hidden" name="attribute_' . esc_attr($attribute_name) . '" value="' . esc_attr($selected_value) . '">';
-            echo '</div>';
-        }
+        // Используем input вместо select для ввода числового значения
+        echo '<div class="attribute-filters__input" data-attribute="' . esc_attr($attribute_name) . '">';
+        echo '<label for="attribute_' . esc_attr($attribute_name) . '">' . esc_html($attribute_label) . '</label>';
+        echo '<input type="number" name="attribute_' . esc_attr($attribute_name) . '" id="attribute_' . esc_attr($attribute_name) . '" value="' . esc_attr($selected_value) . '" placeholder="mm">';
+        echo '</div>';
     }
 
     echo '<input class="submit-button" type="submit" value="Применить">';
@@ -1375,6 +1356,7 @@ function print_filters() {
 
     echo '</div>';
 }
+
 function custom_woocommerce_get_catalog_ordering_attr_args_not_cardany( $query ) {
     // Проверяем, что это основной запрос и не в админке
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') ) ) {

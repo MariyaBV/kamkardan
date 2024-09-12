@@ -93,7 +93,12 @@ $product_categories_plain = strip_tags($product_categories);
 
 
                 
-            <div class="block-sort-mobile"><a id="block-sort-mobile-button"><span class="icon-rivet-icons_filter-1"></span></a></div>
+            <div class="block-sort-mobile">
+                <a id="block-sort-mobile-button">
+                    <span class="icon-rivet-icons_filter-1"></span>
+                </a>
+                <span class="fillters-count">0</span>
+            </div>
             </div>
             <?php endif; ?>
             <?php if (strpos($product_categories_plain, 'Комплектующие') === false) :?>

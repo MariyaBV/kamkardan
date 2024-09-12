@@ -151,6 +151,13 @@
             &:hover {
                 cursor: pointer;
             }
+
+            @media screen and (max-width: 768px) {
+                position: absolute;
+                top: 27px;
+                right: 50px;
+                z-index: 1;
+            }
         }
 
         .length-filter {

@@ -130,3 +130,47 @@ $(document).ready(function () {
 
     observeURLChanges(checkSelectValues);
 });
+
+$(document).ready(function() {
+    // получаем все параметры из URL
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return params;
+    }
+
+    // считаем количество активных фильтров
+    function countFilters() {
+        const params = getUrlParams();
+        let filterCount = 0;
+
+        // Перебираем параметры и считаем только те, которые являются фильтрами
+        params.forEach(function(value, key) {
+            if (key.startsWith('attribute_') || key === 'min_length' || key === 'max_length') {
+                if (value !== '') {
+                    filterCount++;
+                }
+            }
+        });
+
+        return filterCount;
+    }
+
+    // Обновляем счётчик фильтров на странице
+    function updateFilterCount() {
+        const filterCount = countFilters();
+        $('.fillters-count').text(filterCount); // Обновляем цифру в блоке
+    }
+
+    // Обновляем счётчик при загрузке страницы
+    updateFilterCount();
+
+    // Отслеживаем изменение URL при применении фильтров
+    window.addEventListener('popstate', function() {
+        updateFilterCount();
+    });
+
+    // Опционально: если фильтры применяются через AJAX
+    $(document).ajaxComplete(function() {
+        updateFilterCount();
+    });
+});

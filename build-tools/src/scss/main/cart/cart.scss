@@ -225,6 +225,11 @@ a.clear-filters-cart {
                         max-height: 20px;
                         border-radius: var(--button-border-radius);
 
+                        &:hover {
+                            cursor: pointer;
+                            background-color: var(--grey);
+                        }
+
                         span {
                             font-size: 12px;
                         }

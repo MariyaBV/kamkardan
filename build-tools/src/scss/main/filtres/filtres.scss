@@ -216,12 +216,63 @@
             border-radius: var(--button-border-radius);
             margin: 0;
             border: none;
+
+            @media screen and (max-width: 655px) {
+                max-width: 100%;
+                
+            }
         }
     }
 }
 
 .attribute-filters {
     flex: 70%;
+
+    &__input {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 15.6px;
+
+        @media screen and (max-width: 655px) {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        label {
+            @media screen and (max-width: 655px) {
+                max-width: 210px;
+                width: 100%;
+            }
+        }
+
+        input {
+            max-width: 80px;
+            border: 1px solid #DADADA;
+            border-radius: var(--border-radius);
+            padding: 8px;
+            margin-left: 8px;
+            font-size: 12px;
+
+            &::placeholder {
+                font-size: 12px;
+            }
+
+            @media screen and (max-width: 655px) {
+                max-width: 100%;
+                width: calc(100% - 210px);
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        display: block;
+    }
+
+    @media screen and (max-width: 655px) {
+        width: 100%;
+        flex: 100%;
+    }
 }
 
 #primary .custom-ordering.mobile {
