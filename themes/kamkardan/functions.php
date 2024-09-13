@@ -249,7 +249,7 @@ function handle_callback_request() {
         $email = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
         $comment = isset($_POST['comment']) ? sanitize_textarea_field($_POST['comment']) : '';
 
-        $to = 'mari.mv2008@gmail.com'; // ЗАМЕНИТЬ!!!!! на email клиента
+        $to = 'info@kamkardan.ru'; // email клиента
         
         switch($type) {
             case 'job_application':
