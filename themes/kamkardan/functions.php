@@ -636,10 +636,10 @@ function display_product_attribute($product, $attribute_key) {
         $terms = wc_get_product_terms( $product->get_id(), 'pa_application', array( 'fields' => 'names' ) );
         $attribute_name = wc_attribute_label( 'pa_application', $product );
 
-        if ( ! empty( $terms ) ) {
-            $value = implode( ', ', $terms );
-            echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . '<br><span class="product-attribute-application">' . esc_html( $value ) . '</span></p>';
-        }
+        // if ( ! empty( $terms ) ) {
+        //     $value = implode( ', ', $terms );
+        //     echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . '<br><span class="product-attribute-application">' . esc_html( $value ) . '</span></p>';
+        // }
     }
 
     // Вывод для всех остальных атрибутов
@@ -647,10 +647,10 @@ function display_product_attribute($product, $attribute_key) {
         $terms = wc_get_product_terms( $product->get_id(), $attribute_key, array( 'fields' => 'names' ) );
         $attribute_name = wc_attribute_label( $attribute_key, $product );
 
-        if ( ! empty( $terms ) ) {
-            $value = implode( ', ', $terms );
-            echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . ' <span>' . esc_html( $value ) . '</span></p>';
-        }
+        // if ( ! empty( $terms ) ) {
+        //     $value = implode( ', ', $terms );
+        //     echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . ' <span>' . esc_html( $value ) . '</span></p>';
+        // }
     }
 }
 
@@ -1218,8 +1218,8 @@ function custom_orderby_option( $sortby ) {
     }
 
     // Добавляем новые параметры сортировки, если текущая страница не является категорией "crosspieces"
-    $sortby['length_asc'] = 'Длина, мм ⬆'; 
-    $sortby['length_desc'] = 'Длина, мм ⬇';
+    $sortby['length_asc'] = 'Длина, мм &uarr;'; 
+    $sortby['length_desc'] = 'Длина, мм &darr;';
     return $sortby;
 }
 add_filter( 'woocommerce_default_catalog_orderby_options', 'custom_orderby_option' );
@@ -1280,7 +1280,8 @@ function print_filters() {
 
     $category = get_queried_object();
 
-    if (!$category) {
+    // Проверяем, является ли объект категорией (WP_Term)
+    if (!$category || !($category instanceof WP_Term)) {
         return;
     }
 
@@ -2010,5 +2011,3 @@ function cart_change_quantity() {
     }
 }
 add_action('wp_footer', 'cart_change_quantity');
-
-

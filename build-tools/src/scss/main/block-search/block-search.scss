@@ -4,6 +4,10 @@
     margin-top: 32px;
     margin-bottom: 32px;
 
+    @media screen and (max-width: 990px) {
+        display: none;
+    }
+
     &__white {
         padding: 46px 0 64px 0;
         display: flex;

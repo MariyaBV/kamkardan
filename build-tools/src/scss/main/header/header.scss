@@ -533,6 +533,7 @@ header#main-header {
                     top: 50%;
                     transform: translateY(-50%);
                     font-size: large;
+                    z-index: -1;
                 }
             }
 
