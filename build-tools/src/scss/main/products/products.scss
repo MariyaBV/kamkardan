@@ -70,6 +70,18 @@
             cursor: pointer;
         }
 
+        @media screen and (max-width: 1240px) {
+            width: calc((100% / 2) - 15px);
+        }
+
+        @media screen and (max-width: 768px) {
+            width: calc((100% / 2) - 7.5px);
+        }
+
+        @media screen and (max-width: 530px) {
+            width: calc((100% / 2) - 2.5px);
+        }
+
         a.woocommerce-loop-product__link {
             position: relative;
             width: 100%;
@@ -229,14 +241,6 @@
             aspect-ratio: 1 / 1;
             object-fit: scale-down;
             border: 1px solid var(--light-grey);
-        }
-
-        @media screen and (max-width: 1240px) {
-            width: calc((100% / 2) - 30px);
-        }
-
-        @media screen and (max-width: 768px) {
-            width: calc((100% / 2) - 15px);
         }
     }
 }

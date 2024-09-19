@@ -163,6 +163,11 @@
                 border-color: transparent;
             }
 
+            &:hover {
+                cursor: pointer;
+                border-color: var(--dark-grey);
+            }
+
             span[class^=icon-] {
                 font-size: 16px;
                 vertical-align: bottom;
@@ -241,8 +246,9 @@
 
         label {
             @media screen and (max-width: 655px) {
-                max-width: 210px;
+                max-width: 190px;
                 width: 100%;
+                font-size: var(--subtitle-font-size);
             }
         }
 
@@ -260,7 +266,7 @@
 
             @media screen and (max-width: 655px) {
                 max-width: 100%;
-                width: calc(100% - 210px);
+                width: calc(100% - 177px);
             }
         }
     }

@@ -12,6 +12,11 @@
                 content: none;
             }
 
+            &:hover {
+                cursor: pointer;
+                background: linear-gradient(90deg, #fff 18.33%, #f6f6f6 84.5%);
+            }
+
             .cat-link {
                 text-decoration: none;
                 display: flex;

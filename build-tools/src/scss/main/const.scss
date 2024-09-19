@@ -730,3 +730,20 @@ table.tablepress {
     width: 100%;
   }
 }
+
+/* Для Chrome, Safari, Edge */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Для Firefox */
+input[type="search"] {
+  /* Убираем иконку очистки */
+  -moz-appearance: textfield;
+}
+
+/* Общий стиль для input */
+input[type="search"] {
+  outline: none; /* Убираем синюю рамку при фокусе */
+}

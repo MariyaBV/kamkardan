@@ -34,7 +34,7 @@
                 </div>
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-phone-<?php echo $block['id']; ?>">Телефон <span class="red-text">*</span></label>
-                    <input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required>
+                    <input class="tel" placeholder="+x(ххх)ххх-хх-хх" type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required>
                 </div>
                 <div class="callback-form-block__block-input">
                     <label class="txt-normal" for="callback-comment-<?php echo $block['id']; ?>">Комментарий <span class="red-text">*</span></label>

@@ -15,6 +15,16 @@ jQuery(document).ready(function ($) {
         $('#callbackForm').hide();
     });
 
+    $(document).mouseup(function(e) {
+        var $formContent = $('#callbackRequestForm');
+    
+        // Если клик не по форме и не по её дочерним элементам
+        if (!$formContent.is(e.target) && $formContent.has(e.target).length === 0) {
+            $('#callbackForm').hide(); // Скрываем фон с формой
+        }
+    });
+    
+
     // Обработка отправки формы callbackRequestForm
     $('#callbackRequestForm').on('submit', function (event) {
         event.preventDefault();

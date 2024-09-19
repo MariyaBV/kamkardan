@@ -47,6 +47,10 @@
         border-radius: var(--border-radius);
         padding: 12px 10px;
 
+        &:hover {
+            box-shadow: 0 8px 16px -8px rgba(182, 155, 153, .4);
+        }
+
         a {
             position: absolute;
             top: 0;

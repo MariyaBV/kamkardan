@@ -131,6 +131,10 @@
                         display: block;
                     }
 
+                    &:hover a {
+                        color: var(--grey);
+                    }
+
                     @media screen and (max-width: 655px) {
                         flex: 100%;
                     }
@@ -162,6 +166,10 @@
                 letter-spacing: 0.01em;
                 padding: 5px 0 5px 12px;
 
+                &:hover {
+                    color: var(--grey);
+                }
+
                 @media screen and (max-width: 900px) {
                     display: none;
                 }
@@ -175,6 +183,10 @@
             margin-bottom: 16px;
             color: var(--white);
             text-decoration: none;
+
+            &:hover {
+                color: var(--grey);
+            }
 
             &:last-child {
                 align-items: flex-start;

@@ -180,8 +180,9 @@ header#main-header {
             }
 
             li {
-                &:hover {
+                &:hover a {
                     cursor: pointer;
+                    color: var(--dark-red);
                 }
             }
         }

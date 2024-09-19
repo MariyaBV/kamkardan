@@ -1980,7 +1980,9 @@ function cart_change_quantity() {
                     var min = parseInt(qty.attr('min'));
                     var max = parseInt(qty.attr('max'));
                     var step = parseInt(qty.attr('step'));
+                    var remove_link = $(this).closest('.woocommerce-cart-form__cart-item').find('.remove'); // Ссылка для удаления товара
 
+                    //сonsole.log(remove_link);
                     // Меняем количество в зависимости от кнопки
                     if ($(this).hasClass('plus')) {
                         if (max && val >= max) {
@@ -1993,6 +1995,10 @@ function cart_change_quantity() {
                             qty.val(min);
                         } else if (val > 1) {
                             qty.val(val - step);
+                        } else if (val === 1) {
+                            // Если количество становится 1 и нажимают минус - удаляем товар
+                            remove_link.trigger('click'); // Триггерим стандартный запрос удаления WooCommerce
+                            return;
                         }
                     }
 
@@ -2005,7 +2011,6 @@ function cart_change_quantity() {
                     $( '[name="update_cart"]' ).trigger( 'click' );
                 });
             });
-
         </script>
         <?php
     }

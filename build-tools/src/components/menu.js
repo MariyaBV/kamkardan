@@ -238,4 +238,14 @@ $(document).ready(function () {
             $('#overlay').removeClass('visible');
         })
     });
+
+    $('#overlay').on('click', function(e) {
+        var $blockSort = $('#block-sort');
+        
+        // Проверяем, что клик произошел за пределами блока сортировки
+        if (!$blockSort.is(e.target) && $blockSort.has(e.target).length === 0) {
+            $('#overlay').removeClass('visible');
+            $blockSort.removeClass('visible');
+        }
+    });
 });

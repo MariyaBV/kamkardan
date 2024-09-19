@@ -18,7 +18,7 @@
 
             <div class="block-callback-form__block-input">
                 <label class="txt-normal" for="callback-phone-<?php echo $block['id']; ?>">Телефон <span class="red-text">*</span></label>
-                <input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required/>
+                <input class="tel" placeholder="+x(ххх)ххх-хх-хх" type="text" id="callback-phone-<?php echo $block['id']; ?>" name="phone" required/>
             </div>
             
             <button class="red-button-medium mrg-top-32" type="submit"><?= $fields['title-button'] ?></button>

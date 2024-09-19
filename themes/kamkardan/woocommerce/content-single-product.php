@@ -38,7 +38,7 @@ $is_accessories_category = has_term( 'accessories', 'product_cat', $product->get
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
 	<div class="container">
 		<?php if((!$is_crosspieces_category) && (!$is_accessories_category)):?>
-			<div class="row 11111">
+			<div class="row">
 				<div class="col-md-3 col-sm-0">
 					<?php
 					if ( function_exists( 'add_kardany_tags_and_subcategories_sidebar' ) ) {

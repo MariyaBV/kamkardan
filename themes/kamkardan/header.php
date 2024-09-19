@@ -69,7 +69,7 @@ $options = get_fields('option');
 					</div>
 					<div class="callback-form-block__block-input">
 						<label class="txt-normal" for="callback-phone">Телефон <span class="red-text">*</span></label>
-						<input placeholder="+7(ххх)ххх-хх-хх" type="text" id="callback-phone" name="phone" required>
+						<input class="tel" placeholder="+x(ххх)ххх-хх-хх" type="text" id="callback-phone" name="phone" required>
 					</div>
 					<button class="red-button-medium mrg-0-auto mrg-top-32" type="submit">Оставить заявку</button>
 					<a class="block-callback-form__policy-link callback-form-block__policy-link" href="/privacy-policy/">Нажимая кнопку «Оформить заявку», вы&nbsp;соглашаетесь с&nbsp;обработкой своих персональных данных в&nbsp;соответствии с&nbsp;нашей Политикой конфиденциальности.</a>
