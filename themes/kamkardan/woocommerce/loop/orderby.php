@@ -78,7 +78,7 @@ $product_categories_plain = strip_tags($product_categories);
                                     break;
                                 }
                             }
-                            if ($category->slug === 'kardany' || $parent_is_kardans) {
+                            if ( $parent_is_kardans) { //$category->slug === 'kardany' ||
                                 $header_title = 'Карданы для ' . esc_html($category->name);
                             } else {
                                 $header_title = esc_html($category->name);
