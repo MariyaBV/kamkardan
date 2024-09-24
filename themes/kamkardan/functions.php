@@ -424,6 +424,8 @@ function genius_display_discount_badge_return() {
     }
     return '';
 }
+
+
 //конец делаем выбор в админке скидки в % и вывод на карточке товара
 
 
@@ -720,6 +722,59 @@ function wrap_woocommerce_breadcrumbs_link_text($crumbs) {
     return $crumbs;
 }
 add_filter('woocommerce_get_breadcrumb', 'wrap_woocommerce_breadcrumbs_link_text');
+
+//фильтр меняем /product-category/kardany/ на /all-cardans/
+add_filter('woocommerce_get_breadcrumb', 'custom_woocommerce_breadcrumb', 20, 2);
+
+function custom_woocommerce_breadcrumb($crumbs, $breadcrumb) {
+    // ID категории "Карданы"
+    $target_category_id = 154; 
+    $replacement_url = '/all-cardans/';
+    $replacement_label = 'Все карданы';
+
+    // Проверяем, находимся ли мы на странице товара
+    if (is_product()) {
+        global $post;
+
+        // Получаем категории товара
+        $terms = get_the_terms($post->ID, 'product_cat');
+
+        // Проверяем, принадлежит ли товар к категории "Карданы" или ее подкатегориям
+        if ($terms && !is_wp_error($terms)) {
+            // Получаем подкатегории категории "Карданы"
+            $all_kardan_categories = get_term_children($target_category_id, 'product_cat');
+            // Добавляем основную категорию "Карданы"
+            $all_kardan_categories[] = $target_category_id;
+
+            // Флаг для проверки, принадлежит ли товар к категории "Карданы" или ее подкатегориям
+            $is_kardan_product = false;
+
+            foreach ($terms as $term) {
+                // Проверяем, находится ли текущая категория в массиве подкатегорий или основной категории
+                if (in_array($term->term_id, $all_kardan_categories)) {
+                    $is_kardan_product = true; // Устанавливаем флаг
+                    break; // Прерываем цикл, если нашли соответствие
+                }
+            }
+
+            // Если товар принадлежит к категории "Карданы" или её подкатегориям
+            if ($is_kardan_product) {
+                foreach ($crumbs as $key => $crumb) {
+                    // Проверяем, является ли текущая хлебная крошка категорией "Карданы"
+                    if (strpos($crumb[1], '/product-category/kardany/') !== false) {
+                        // Заменяем ссылку и название хлебной крошки только на основную категорию "Карданы"
+                        $crumbs[$key][0] = $replacement_label; // Меняем текст
+                        $crumbs[$key][1] = $replacement_url;   // Меняем ссылку
+                        break; // Прерываем цикл после первой замены
+                    }
+                }
+            }
+        }
+    }
+
+    return $crumbs;
+}
+
 
 //хлебные крошки yoast seo
 function custom_breadcrumb_home_text($link_output) {
