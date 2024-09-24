@@ -498,7 +498,7 @@ header#main-header {
     left: 0;
     right: 0;
     bottom: 0;
-    top: 138.2px;
+    top: 136px;
     width: 100%;
     height: 100%;
     transition: all 0.3s ease;
@@ -575,6 +575,7 @@ header#main-header {
             top: 50%;
             transform: translateY(-50%);
             font-size: large;
+            z-index: -1;
         }
     }
 
