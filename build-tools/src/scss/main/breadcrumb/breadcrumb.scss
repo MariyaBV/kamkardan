@@ -1,4 +1,5 @@
-.woocommerce .woocommerce-breadcrumb {
+.woocommerce .woocommerce-breadcrumb,
+.wrap-breadcrumbs .woocommerce-breadcrumb {
     color: var(--dark-red);
     margin: 0;
     padding: 16px 0;

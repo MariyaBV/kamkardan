@@ -254,7 +254,12 @@ $options = get_fields('option');
 		</div>
 	</header><!-- #masthead -->
 
-	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page() && !is_singular('product')) : ?>
+	<?php if (is_product_category()) : ?>
+		<div class="wrap-breadcrumbs">
+			<?php woocommerce_breadcrumb(); ?>
+		</div>
+	<?php endif; ?>
+	<?php if (!is_front_page() && !is_cart() && !is_checkout() && !is_account_page() && !is_singular('product') && !is_product_category()) : ?>
 		<div class="wrap-breadcrumbs">
 			<?php if (function_exists('yoast_breadcrumb')) {
 				yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
