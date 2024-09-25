@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", function() {
     function mask(event) {
       event.keyCode && (keyCode = event.keyCode);
       var pos = this.selectionStart;
+      var prevLength = this.value.length;
 
       if (pos < 1 && event.keyCode !== 8 && event.keyCode !== 46) { // Allow backspace (8) and delete (46) keys
         event.preventDefault();
@@ -24,7 +25,7 @@ window.addEventListener("DOMContentLoaded", function() {
       }
 
       var reg = matrix.substr(0, this.value.length).replace(/_+/g, function(a) {
-          return "\\d{1," + a.length + "}";
+          return "\\d{1," + a.length + "}"; 
       }).replace(/[+()]/g, "\\$&");
 
       reg = new RegExp("^" + reg + "$");
@@ -37,9 +38,10 @@ window.addEventListener("DOMContentLoaded", function() {
         this.value = "";
       }
 
-      // Fix cursor position
-      if (pos < this.value.length) {
-        this.setSelectionRange(pos, pos);
+      // Correct the cursor position after input
+      var newPos = pos + (this.value.length - prevLength);
+      if (newPos > 0 && newPos < this.value.length) {
+        this.setSelectionRange(newPos, newPos);
       }
     }
 
