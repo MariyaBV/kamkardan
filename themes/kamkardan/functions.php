@@ -1088,8 +1088,7 @@ add_filter( 'woocommerce_default_catalog_orderby_options', 'remove_orderby_optio
 add_filter( 'woocommerce_catalog_orderby', 'remove_orderby_options' );
 
 
-//начало добавляем сортировку длина мм
-// Вывод формы фильтрации
+//начало добавляем сортировку и фильтрацию по длине мм
 // Функция для отображения фильтра длины
 function print_length_filter() {
     $min_length = isset($_GET['min_length']) && $_GET['min_length'] !== '' ? intval($_GET['min_length']) : 0;
@@ -1127,26 +1126,36 @@ function print_length_filter() {
     }
 }
 
-
-// Фильтрация продуктов по длине
-function filter_products_by_length( $query ) {
+// Фильтрация продуктов по длине и/или сортировка
+function filter_and_sort_products( $query ) {
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
         global $wpdb;
+
+        // Получаем параметры из URL
         $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
         $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
+        $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
 
+        // Добавляем JOIN для получения атрибутов
+        add_filter('posts_join', 'custom_posts_join');
+
+        // Если указаны параметры длины, добавляем фильтры
         if ($min_length || $max_length) {
-            // Добавляем фильтры
-            add_filter('posts_join', 'custom_posts_join');
             add_filter('posts_where', 'custom_posts_where', 10, 2);
-            add_filter('posts_distinct', 'custom_posts_distinct');
-
-            // Удаляем фильтры после запроса
-            add_action('wp', 'remove_custom_filters');
         }
+
+        // Применение сортировки
+        if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+            add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
+        }
+
+        // Удаляем фильтры после выполнения запроса
+        add_action('wp', 'remove_custom_filters');
     }
 }
+add_action('pre_get_posts', 'filter_and_sort_products', 10);
 
+//join-им нужные таблицы
 function custom_posts_join($join) {
     global $wpdb;
     $join .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id";
@@ -1155,6 +1164,7 @@ function custom_posts_join($join) {
     return $join;
 }
 
+//фильтр по длине where часть запроса для фильтрации от и до
 function custom_posts_where($where, $query) {
     global $wpdb;
     $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
@@ -1170,6 +1180,7 @@ function custom_posts_where($where, $query) {
     return $where;
 }
 
+//удалние дубликатов
 function custom_posts_distinct($distinct) {
     return 'DISTINCT';
 }
@@ -1178,66 +1189,10 @@ function remove_custom_filters() {
     remove_filter('posts_join', 'custom_posts_join');
     remove_filter('posts_where', 'custom_posts_where');
     remove_filter('posts_distinct', 'custom_posts_distinct');
+    remove_filter('posts_clauses', 'custom_posts_clauses_for_ordering');
 }
-add_action('pre_get_posts', 'filter_products_by_length', 20);
-
-
-// Проверка наличия товаров перед запросом
-function check_products_exist_for_length_filter() {
-    if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
-        global $wpdb;
-
-        $min_length = isset($_GET['min_length']) ? intval($_GET['min_length']) : 0;
-        $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
-
-        if ($min_length || $max_length) {
-            $query = "SELECT DISTINCT p.ID
-                      FROM {$wpdb->posts} p
-                      LEFT JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
-                      LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-                      LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
-                      WHERE p.post_type = 'product'
-                        AND p.post_status = 'publish'
-                        AND tt.taxonomy = 'pa_length-compressed-position'";
-
-            if ($min_length) {
-                $query .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) >= %d", $min_length);
-            }
-            if ($max_length) {
-                $query .= $wpdb->prepare(" AND CAST(t.name AS UNSIGNED) <= %d", $max_length);
-            }
-
-            $results = $wpdb->get_col($query);
-
-            if (empty($results)) {
-                // Отменяем стандартный запрос
-                add_filter('pre_get_posts', function($query) {
-                    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
-                        $query->set('post__in', array(0)); // Возвращаем пустые результаты
-                    }
-                });
-            }
-        }
-    }
-}
-add_action('wp', 'check_products_exist_for_length_filter');
-
-// Сортировка по длине
-// function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
-//     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
-//         $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
-
-//         if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
-//             add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
-            
-//             // Удаляем фильтр после запроса
-//             add_action('wp', 'remove_custom_posts_clauses_for_ordering');
-//         }
-//     }
-// }
 
 function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
-    // Проверяем, что это не админка и это главный запрос на страницах магазина или категории
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
         // Получаем выбранный параметр сортировки
         $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
@@ -1247,22 +1202,64 @@ function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
             // Сортировка по цене (учет цены со скидкой)
             add_filter('posts_clauses', 'custom_sort_by_discounted_price', 10, 2);
 
+            // Удаляем фильтр после запроса для того чтобы не влиял н-р на подтягивание картинок из меток
             add_action('wp', 'remove_custom_posts_clauses_for_ordering');
 
-        // Если выбрана сортировка по атрибуту длины
-        } elseif ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
-            // Сортировка по кастомному атрибуту длины
-            add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
-
-            // Удаляем фильтр после запроса
-            add_action('wp', 'remove_custom_posts_clauses_for_ordering');
         }
     }
 }
 add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
 
+//сортировка по длине
+function custom_posts_clauses_for_ordering($clauses, $wp_query) {
+    global $wpdb;
 
-//сортировка по цене
+    // Сортировка по длине (числовое значение из term.name)
+    $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'length_asc';
+    $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
+
+    return $clauses;
+}
+
+function remove_custom_posts_clauses_for_ordering() {
+    remove_filter('posts_clauses', 'custom_posts_clauses_for_ordering');
+    remove_filter('posts_clauses', 'custom_sort_by_discounted_price');
+}
+add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
+
+// Добавление кастомных параметров сортировки
+function custom_orderby_option( $sortby ) {
+    global $wp_query;
+
+    $sortby['default'] = '<span class="icon-Frame-10"></span>Сортировать'; 
+    
+    $default_sort = array('default' => '<span class="icon-Frame-10"></span>Сортировать');
+    $sortby = array_merge($default_sort, $sortby);
+
+
+    if ( is_product_category() ) {
+        $current_category_id = get_queried_object_id();
+        $excluded_category_slug = 'crosspieces'; 
+        $excluded_category = get_term_by( 'id', $current_category_id, 'product_cat' );
+
+        //если крестовины то не выводим
+        if ( $excluded_category && $excluded_category->slug === $excluded_category_slug ) {
+            return $sortby;
+        }
+    }
+
+    // Добавляем новые параметры сортировки, если текущая страница не является категорией "crosspieces"
+    $sortby['length_asc'] = 'Длина, мм &uarr;'; 
+    $sortby['length_desc'] = 'Длина, мм &darr;';
+    return $sortby;
+}
+add_filter( 'woocommerce_default_catalog_orderby_options', 'custom_orderby_option' );
+add_filter( 'woocommerce_catalog_orderby', 'custom_orderby_option' );
+//конец добавляем сортировку и фильтрацию по длине мм
+
+
+
+//начало сортировка по цене с учетом скидок
 function custom_sort_by_discounted_price($clauses, $wp_query) {
     global $wpdb;
 
@@ -1277,9 +1274,8 @@ function custom_sort_by_discounted_price($clauses, $wp_query) {
 
     return $clauses;
 }
-
-//сортировка по цене с учетом скидок
 add_action('save_post_product', 'genius_save_discounted_price', 20, 1);
+
 function genius_save_discounted_price($product_id) {
     // Избегаем автосохранений
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
@@ -1313,81 +1309,9 @@ function genius_update_all_discounted_prices() {
         genius_save_discounted_price($product->get_id());
     }
 }
-// add_filter('woocommerce_get_catalog_ordering_args', 'custom_catalog_ordering_args');
-// function custom_catalog_ordering_args($args) {
-//     // Проверяем, что сортировка происходит по цене
-//     if (isset($_GET['orderby']) && ('price' === $_GET['orderby'] || 'price-desc' === $_GET['orderby'])) {
-        
-//         // Устанавливаем, что сортировка будет по метаполю со скидкой
-//         $args['orderby'] = 'meta_value_num';
-//         $args['meta_key'] = '_discounted_price'; // Используем метаполе с ценой со скидкой
-        
-//         // Устанавливаем порядок сортировки
-//         if (isset($_GET['orderby']) && $_GET['orderby'] === 'price-desc') {
-//             $args['order'] = 'DESC';
-//         } else {
-//             $args['order'] = 'ASC';
-//         }
-//     }
-    
-//     return $args;
-// }
+//конец сортировка по цене с учетом скидок
 
-function custom_posts_clauses_for_ordering($clauses, $wp_query) {
-    global $wpdb;
-
-    if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
-        $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
-                                LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-                                LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id";
-
-        $clauses['where'] .= $wpdb->prepare(" AND tt.taxonomy = %s", 'pa_length-compressed-position');
-
-        // Сортировка по длине (числовое значение из term.name)
-        $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'length_asc';
-        $clauses['orderby'] = "CAST(t.name AS UNSIGNED) " . ('length_asc' === $orderby ? 'ASC' : 'DESC');
-    }
-
-    return $clauses;
-}
-
-function remove_custom_posts_clauses_for_ordering() {
-    remove_filter('posts_clauses', 'custom_posts_clauses_for_ordering');
-    remove_filter('posts_clauses', 'custom_sort_by_discounted_price');
-}
-add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
-
-// Добавление пользовательских параметров сортировки
-function custom_orderby_option( $sortby ) {
-    global $wp_query;
-
-    $sortby['default'] = '<span class="icon-Frame-10"></span>Сортировать'; 
-    
-    $default_sort = array('default' => '<span class="icon-Frame-10"></span>Сортировать');
-    $sortby = array_merge($default_sort, $sortby);
-
-
-    if ( is_product_category() ) {
-        $current_category_id = get_queried_object_id();
-        $excluded_category_slug = 'crosspieces'; 
-        $excluded_category = get_term_by( 'id', $current_category_id, 'product_cat' );
-
-        //если крестовины то не выводим
-        if ( $excluded_category && $excluded_category->slug === $excluded_category_slug ) {
-            return $sortby;
-        }
-    }
-
-    // Добавляем новые параметры сортировки, если текущая страница не является категорией "crosspieces"
-    $sortby['length_asc'] = 'Длина, мм &uarr;'; 
-    $sortby['length_desc'] = 'Длина, мм &darr;';
-    return $sortby;
-}
-add_filter( 'woocommerce_default_catalog_orderby_options', 'custom_orderby_option' );
-add_filter( 'woocommerce_catalog_orderby', 'custom_orderby_option' );
-//конец добавляем сортировку длина мм
-
-//фильтры по аттриьбутам
+//фильтры по аттрибутам
 function get_category_product_attributes($category_id) {
     global $wpdb;
 
@@ -1557,8 +1481,6 @@ function custom_woocommerce_get_catalog_ordering_attr_args_not_cardany( $query )
     }
 }
 add_action( 'pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args_not_cardany' );
-
-
 
 function custom_woocommerce_ajax_add_to_cart() {
     // Получаем идентификатор товара и количество из POST-запроса

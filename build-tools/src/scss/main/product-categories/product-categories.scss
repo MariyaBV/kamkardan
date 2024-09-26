@@ -115,6 +115,7 @@
         align-items: flex-start;
         flex-wrap: wrap;
         flex-direction: row;
+        margin-bottom: 24px;
 
         @media screen and (max-width: 768px) {
             flex-direction: column;
@@ -138,6 +139,9 @@
                 border-top-left-radius: 16px;
                 border-top-right-radius: 16px;
             }
+        }
+        .woocommerce-ordering.custom-ordering {
+            margin-bottom: 0;
         }
 
         .clear-filters {
