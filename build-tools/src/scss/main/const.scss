@@ -577,23 +577,23 @@ p {
   line-height: 21px;
 }
 
-// .product-attribute-length-compressed-position {
-//   color: var(--dark-grey);
-//   font-size: var(--subtitle-font-size);
-//   font-weight: var(--subtitle-font-weight);
-//   line-height: var(--subtitle-line-height);
-//   margin-bottom: 4px;
+.product-attribute-length-compressed-position {
+  color: var(--dark-grey);
+  font-size: var(--subtitle-font-size);
+  font-weight: var(--subtitle-font-weight);
+  line-height: var(--subtitle-line-height);
+  margin-bottom: 4px;
 
-//   .product-attribute-application {
-//     display: -webkit-box;
-//     -webkit-line-clamp: 2;
-//     -webkit-box-orient: vertical;
-//     overflow: hidden;
-//     text-decoration: underline;
-//     margin-bottom: 8px;
-//     //text-underline-position: under;
-//   }
-// }
+  .product-attribute-application {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-decoration: underline;
+    margin-bottom: 8px;
+    //text-underline-position: under;
+  }
+}
 
 table.tablepress {
   width: 100%;

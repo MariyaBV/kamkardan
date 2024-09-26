@@ -424,8 +424,6 @@ function genius_display_discount_badge_return() {
     }
     return '';
 }
-
-
 //конец делаем выбор в админке скидки в % и вывод на карточке товара
 
 
@@ -649,10 +647,10 @@ function display_product_attribute($product, $attribute_key) {
         $terms = wc_get_product_terms( $product->get_id(), $attribute_key, array( 'fields' => 'names' ) );
         $attribute_name = wc_attribute_label( $attribute_key, $product );
 
-        // if ( ! empty( $terms ) ) {
-        //     $value = implode( ', ', $terms );
-        //     echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . ' <span>' . esc_html( $value ) . '</span></p>';
-        // }
+        if ( ! empty( $terms ) ) {
+            $value = implode( ', ', $terms );
+            echo '<p class="product-attribute-length-compressed-position">' . esc_html($attribute_name) . ' <span>' . esc_html( $value ) . '</span></p>';
+        }
     }
 }
 
@@ -724,55 +722,6 @@ function wrap_woocommerce_breadcrumbs_link_text($crumbs) {
 add_filter('woocommerce_get_breadcrumb', 'wrap_woocommerce_breadcrumbs_link_text');
 
 //фильтр меняем /product-category/kardany/ на /all-cardans/
-// add_filter('woocommerce_get_breadcrumb', 'custom_woocommerce_breadcrumb', 20, 2);
-// function custom_woocommerce_breadcrumb($crumbs, $breadcrumb) {
-//     // ID категории "Карданы"
-//     $target_category_id = 154; 
-//     $replacement_url = '/all-cardans/';
-//     $replacement_label = 'Все карданы';
-
-//     // Проверяем, находимся ли мы на странице товара
-//     if (is_product()) {
-//         global $post;
-
-//         // Получаем категории товара
-//         $terms = get_the_terms($post->ID, 'product_cat');
-
-//         // Проверяем, принадлежит ли товар к категории "Карданы" или ее подкатегориям
-//         if ($terms && !is_wp_error($terms)) {
-//             // Получаем подкатегории категории "Карданы"
-//             $all_kardan_categories = get_term_children($target_category_id, 'product_cat');
-//             // Добавляем основную категорию "Карданы"
-//             $all_kardan_categories[] = $target_category_id;
-
-//             // Флаг для проверки, принадлежит ли товар к категории "Карданы" или ее подкатегориям
-//             $is_kardan_product = false;
-
-//             foreach ($terms as $term) {
-//                 // Проверяем, находится ли текущая категория в массиве подкатегорий или основной категории
-//                 if (in_array($term->term_id, $all_kardan_categories)) {
-//                     $is_kardan_product = true; // Устанавливаем флаг
-//                     break; // Прерываем цикл, если нашли соответствие
-//                 }
-//             }
-
-//             // Если товар принадлежит к категории "Карданы" или её подкатегориям
-//             if ($is_kardan_product) {
-//                 foreach ($crumbs as $key => $crumb) {
-//                     // Проверяем, является ли текущая хлебная крошка категорией "Карданы"
-//                     if (strpos($crumb[1], '/product-category/kardany/') !== false) {
-//                         // Заменяем ссылку и название хлебной крошки только на основную категорию "Карданы"
-//                         $crumbs[$key][0] = $replacement_label; // Меняем текст
-//                         $crumbs[$key][1] = $replacement_url;   // Меняем ссылку
-//                         break; // Прерываем цикл после первой замены
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     return $crumbs;
-// }
 function custom_woocommerce_breadcrumb($crumbs, $breadcrumb) {
     $target_category_id = 154; // ID категории "Карданы"
     $replacement_url = '/all-cardans/';
@@ -1258,23 +1207,64 @@ function check_products_exist_for_length_filter() {
 add_action('wp', 'check_products_exist_for_length_filter');
 
 // Сортировка по длине
+// function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
+//     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
+//         $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
+
+//         if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+//             add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
+            
+//             // Удаляем фильтр после запроса
+//             add_action('wp', 'remove_custom_posts_clauses_for_ordering');
+//         }
+//     }
+// }
+
 function custom_woocommerce_get_catalog_ordering_attr_args( $query ) {
+    // Проверяем, что это не админка и это главный запрос на страницах магазина или категории
     if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_tax('product_cat') || is_tax('product_tag') ) ) {
+        // Получаем выбранный параметр сортировки
         $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
 
-        if ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+        // Если выбрана сортировка по цене
+        if ( 'price' === $orderby || 'price-desc' === $orderby ) {
+            // Сортировка по цене (учет цены со скидкой)
+            add_filter('posts_clauses', 'custom_sort_by_discounted_price', 10, 2);
+
+            add_action('wp', 'remove_custom_posts_clauses_for_ordering');
+
+        // Если выбрана сортировка по атрибуту длины
+        } elseif ( 'length_asc' === $orderby || 'length_desc' === $orderby ) {
+            // Сортировка по кастомному атрибуту длины
             add_filter('posts_clauses', 'custom_posts_clauses_for_ordering', 10, 2);
-            
+
             // Удаляем фильтр после запроса
             add_action('wp', 'remove_custom_posts_clauses_for_ordering');
         }
     }
 }
+add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
+
+
+//сортировка по цене
+function custom_sort_by_discounted_price($clauses, $wp_query) {
+    global $wpdb;
+
+    // Проверяем, что это страницы магазина или категории товаров
+    if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
+        // Добавляем сортировку по цене со скидкой
+        $clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} pm ON {$wpdb->posts}.ID = pm.post_id";
+        $clauses['where'] .= $wpdb->prepare(" AND pm.meta_key = %s", '_discounted_price');
+        $orderby = isset($_GET['orderby']) && $_GET['orderby'] === 'price-desc' ? 'DESC' : 'ASC';
+        $clauses['orderby'] = "CAST(pm.meta_value AS UNSIGNED) $orderby";
+    }
+
+    return $clauses;
+}
 
 function custom_posts_clauses_for_ordering($clauses, $wp_query) {
     global $wpdb;
 
-    // Убедитесь, что фильтр применяется только к основному запросу WooCommerce
     if (is_shop() || is_tax('product_cat') || is_tax('product_tag')) {
         $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id 
                                 LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
@@ -1292,11 +1282,9 @@ function custom_posts_clauses_for_ordering($clauses, $wp_query) {
 
 function remove_custom_posts_clauses_for_ordering() {
     remove_filter('posts_clauses', 'custom_posts_clauses_for_ordering');
+    remove_filter('posts_clauses', 'custom_sort_by_discounted_price');
 }
-
 add_action('pre_get_posts', 'custom_woocommerce_get_catalog_ordering_attr_args', 20);
-
-
 
 // Добавление пользовательских параметров сортировки
 function custom_orderby_option( $sortby ) {
