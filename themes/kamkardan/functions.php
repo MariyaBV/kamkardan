@@ -1262,6 +1262,61 @@ function custom_sort_by_discounted_price($clauses, $wp_query) {
     return $clauses;
 }
 
+//сортировка по цене с учетом скидок
+add_action('save_post_product', 'genius_save_discounted_price', 20, 1);
+function genius_save_discounted_price($product_id) {
+    // Избегаем автосохранений
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    // Проверяем, является ли это товаром
+    if (get_post_type($product_id) !== 'product') return;
+
+    // Получаем объект продукта
+    $product = wc_get_product($product_id);
+    $base_price = (float) $product->get_regular_price();
+
+    // Получаем значение скидки
+    $discount_percentage = (float) get_post_meta($product_id, '_pc_discount', true);
+    
+    // Если есть скидка, вычисляем цену со скидкой, иначе сохраняем базовую цену
+    if ($discount_percentage > 0) {
+        $discounted_price = $base_price * (1 - ($discount_percentage / 100));
+    } else {
+        $discounted_price = $base_price;
+    }
+
+    // Сохраняем цену со скидкой в метаполе '_discounted_price'
+    update_post_meta($product_id, '_discounted_price', $discounted_price);
+}
+// Обновляем цены со скидкой для всех существующих товаров
+// Вызываем функцию при активации плагина или темы
+add_action('init', 'genius_update_all_discounted_prices');
+function genius_update_all_discounted_prices() {
+    $products = wc_get_products(array('limit' => -1));
+    foreach ($products as $product) {
+        genius_save_discounted_price($product->get_id());
+    }
+}
+// add_filter('woocommerce_get_catalog_ordering_args', 'custom_catalog_ordering_args');
+// function custom_catalog_ordering_args($args) {
+//     // Проверяем, что сортировка происходит по цене
+//     if (isset($_GET['orderby']) && ('price' === $_GET['orderby'] || 'price-desc' === $_GET['orderby'])) {
+        
+//         // Устанавливаем, что сортировка будет по метаполю со скидкой
+//         $args['orderby'] = 'meta_value_num';
+//         $args['meta_key'] = '_discounted_price'; // Используем метаполе с ценой со скидкой
+        
+//         // Устанавливаем порядок сортировки
+//         if (isset($_GET['orderby']) && $_GET['orderby'] === 'price-desc') {
+//             $args['order'] = 'DESC';
+//         } else {
+//             $args['order'] = 'ASC';
+//         }
+//     }
+    
+//     return $args;
+// }
+
 function custom_posts_clauses_for_ordering($clauses, $wp_query) {
     global $wpdb;
 
