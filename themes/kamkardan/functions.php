@@ -1095,7 +1095,23 @@ function print_length_filter() {
     $min_length = isset($_GET['min_length']) && $_GET['min_length'] !== '' ? intval($_GET['min_length']) : 0;
     $max_length = isset($_GET['max_length']) ? intval($_GET['max_length']) : '';
 
+    // Собираем все параметры запроса, кроме min_length и max_length
+    $query_params = $_GET;
+    unset($query_params['min_length'], $query_params['max_length']);
+
     echo '<form class="length-filter subtitle" method="get">';
+
+    // Добавляем скрытые поля для всех существующих параметров, чтобы не терялись сортировки и другие фильтры
+    foreach ($query_params as $key => $value) {
+        if (is_array($value)) {
+            foreach ($value as $v) {
+                echo '<input type="hidden" name="' . esc_attr($key) . '[]" value="' . esc_attr($v) . '">';
+            }
+        } else {
+            echo '<input type="hidden" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '">';
+        }
+    }
+
     echo '<span>Длина в сжатом положении:</span>';
     echo '<div class="length-filter__block"><input class="subtitle" placeholder="от" type="number" id="min_length" name="min_length" value="' . esc_attr($min_length) . '" />';
     echo '<input class="subtitle" placeholder="до" type="number" id="max_length" name="max_length" value="' . esc_attr($max_length) . '" /></div>';
@@ -1104,13 +1120,13 @@ function print_length_filter() {
 
     // Создаем URL для очистки фильтров
     if ($min_length || $max_length) {
-        $query_params = $_GET;
         unset($query_params['min_length'], $query_params['max_length']);
         $clear_filters_url = '?' . http_build_query($query_params);
 
         echo '<a href="' . esc_url($clear_filters_url) . '" class="clear-filters subtitle">Очистить фильтры</a>';
     }
 }
+
 
 // Фильтрация продуктов по длине
 function filter_products_by_length( $query ) {
