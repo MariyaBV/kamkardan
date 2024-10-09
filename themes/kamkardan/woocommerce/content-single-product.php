@@ -111,7 +111,7 @@ $is_accessories_category = has_term( 'accessories', 'product_cat', $product->get
 <?php
 	$seo_description = get_field('seo');
 	if ( $seo_description ) {
-		echo '<div class="seo-text txt-s">';
+		echo '<div class="seo-text txt-s wrap">';
 		echo $seo_description;
 		echo '</div>';
 	}

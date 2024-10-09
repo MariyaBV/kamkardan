@@ -88,7 +88,7 @@ $is_accessories_category = is_product_category('accessories');
 <?php
 
 if( $seo_text ) {
-    echo '<div class="seo-text txt-s">';
+    echo '<div class="seo-text txt-s wrap">';
     echo $seo_text;
     echo '</div>';
 }
