@@ -171,6 +171,11 @@
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .0784313725);
                 border: 1px solid #eee;
 
+                @media screen and (max-width: 991px) {
+                   padding-top: 55px;
+                   top: calc(50% + 65px);
+                }
+
                 @media screen and (max-width: 480px) {
                     width: calc(100% - 20px);
                 }

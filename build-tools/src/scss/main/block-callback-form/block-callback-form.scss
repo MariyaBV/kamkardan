@@ -12,6 +12,7 @@
 
     @media screen and (max-width: 480px) {
         width: calc(100% - 20px);
+        margin: 0 auto;
     }
 
     &__thanks {
@@ -123,6 +124,10 @@
 
     button {
         margin-left: auto;
+
+        @media screen and (max-width: 768px) {
+            margin: 16px auto 0;
+        }
     }
 
 
@@ -135,6 +140,10 @@
         margin-top: 16px;
         display: block;
         text-align: end;
+
+        @media screen and (max-width: 768px) {
+            text-align: center;
+        }
     }
 
     &__title {
