@@ -1300,15 +1300,15 @@ function genius_save_discounted_price($product_id) {
     // Сохраняем цену со скидкой в метаполе '_discounted_price'
     update_post_meta($product_id, '_discounted_price', $discounted_price);
 }
-// Обновляем цены со скидкой для всех существующих товаров
+// Обновляем цены со скидкой для всех существующих товаров только если нужно все обновить если некоторые даннные не пересчитались
 // Вызываем функцию при активации плагина или темы
-add_action('init', 'genius_update_all_discounted_prices');
-function genius_update_all_discounted_prices() {
-    $products = wc_get_products(array('limit' => -1));
-    foreach ($products as $product) {
-        genius_save_discounted_price($product->get_id());
-    }
-}
+// add_action('init', 'genius_update_all_discounted_prices');
+// function genius_update_all_discounted_prices() {
+//     $products = wc_get_products(array('limit' => -1));
+//     foreach ($products as $product) {
+//         genius_save_discounted_price($product->get_id());
+//     }
+// }
 //конец сортировка по цене с учетом скидок
 
 //фильтры по аттрибутам
